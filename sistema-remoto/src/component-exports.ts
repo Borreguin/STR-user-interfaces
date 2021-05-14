@@ -12,9 +12,9 @@
  import ZDireflowNavigate from './direflow-components/zdireflow-navigate/App';
  import ZDireflowTemplate from './direflow-components/zdireflow-template/App';
  import NodeManagement from './direflow-components/manejo-nodos/App';
- //import UTRandTagsManagement from './direflow-components/manejo-utr-tags/App';
+ import UTRandTagsManagement from './direflow-components/manejo-utr-tags/App';
  
  
  export { 
-   ZDireflowNavigate, ZDireflowTemplate, NodeManagement, //UTRandTagsManagement
+   ZDireflowNavigate, ZDireflowTemplate, NodeManagement, UTRandTagsManagement
  };

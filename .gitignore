@@ -2,23 +2,25 @@
 
 
 # dependencies
-/node_modules
-/.pnp
-.pnp.js
+sistema-remoto/node_modules
+sistema-remoto/.pnp
+sistema-remoto/.pnp.js
 
 # testing
-/coverage
+coverage
 
 # production
-/build
+sistema-remoto/build
 
 # misc
-.DS_Store
-.env.local
-.env.development.local
-.env.test.local
-.env.production.local
+sistema-remoto/.DS_Store
+sistema-remoto/.env.local
+sistema-remoto/.env.development.local
+sistema-remoto/.env.test.local
+sistema-remoto/.env.production.local
 
-npm-debug.log*
-yarn-debug.log*
-yarn-error.log*
+# logs
+sistema-remoto/npm-debug.log*
+sistema-remoto/yarn-debug.log*
+sistema-remoto/yarn-error.log*
+sistema-remoto/package-lock.json

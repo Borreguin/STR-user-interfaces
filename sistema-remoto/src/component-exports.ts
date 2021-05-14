@@ -9,8 +9,12 @@
  * this file can be safely deleted.
  */
 
-import App from './direflow-components/sistema-remoto/App';
-
-export { 
-  App 
-};
+ import ZDireflowNavigate from './direflow-components/zdireflow-navigate/App';
+ import ZDireflowTemplate from './direflow-components/zdireflow-template/App';
+ import NodeManagement from './direflow-components/manejo-nodos/App';
+ //import UTRandTagsManagement from './direflow-components/manejo-utr-tags/App';
+ 
+ 
+ export { 
+   ZDireflowNavigate, ZDireflowTemplate, NodeManagement, //UTRandTagsManagement
+ };

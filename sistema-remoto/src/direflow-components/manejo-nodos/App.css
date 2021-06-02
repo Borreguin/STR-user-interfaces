@@ -379,10 +379,6 @@
   float: left;
 }
 
-.table_input {
-  min-width: 300px;
-  border: 0px !important;
-}
 
 .btn-add-tag {
   height: 30px;
@@ -531,7 +527,7 @@
   max-height: 40px;
   min-width: 32px;
   padding: 3px;
-  border: 1px solid rgb(8, 8, 8);
+  border: 1px solid rgb(8, 8, 8) !important;
 
 }
 

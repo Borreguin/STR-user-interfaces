@@ -13,6 +13,7 @@ export interface SRConsigState {
   loading: boolean;
   nodes: Array<Node>;
   options: Object;
+  msg: string;
 }
 
 class FilterSTRNodes extends Component<SRConsigProps, SRConsigState> {
@@ -30,6 +31,7 @@ class FilterSTRNodes extends Component<SRConsigProps, SRConsigState> {
       loading: false,
       nodes: [],
       options: {},
+      msg: "Espere por favor, cargando... "
     };
     this.selected = {};
     this.entidades = [];
@@ -99,7 +101,10 @@ class FilterSTRNodes extends Component<SRConsigProps, SRConsigState> {
           this.selected_entity = undefined;
         }
       })
-      .catch(console.log);
+      .catch((e) => {
+        this.setState({ loading: true, msg: "Problema de conexión con la API-RMT" });
+        console.log(e);
+      });
     this._node_types();
     this._handle_filter_change();
   };
@@ -278,6 +283,7 @@ class FilterSTRNodes extends Component<SRConsigProps, SRConsigState> {
     let options = this.state.options;
     // El nodo ha sido seleccionado previamente:
     let node = this.selected_node;
+    if (node === undefined) { return }
     for (var idx in node.entidades) {
       let entidad = node.entidades[idx];
       if (
@@ -364,7 +370,7 @@ class FilterSTRNodes extends Component<SRConsigProps, SRConsigState> {
           <div>
             <br></br>
             <Spinner animation="border" role="status" size="sm" />
-            <span> Espere por favor, cargando ...</span>
+            <span> { this.state.msg}</span>
           </div>
         ) : (
           <Form className="tab-container">

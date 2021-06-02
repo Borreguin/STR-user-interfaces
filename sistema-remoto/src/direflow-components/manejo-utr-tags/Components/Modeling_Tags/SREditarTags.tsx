@@ -23,13 +23,13 @@ type SREditarTagsState = {
   utr: UTR | undefined;
 };
 
-
 export class SREditarTags extends Component<
   SREditarTagsProps,
   SREditarTagsState
 > {
   selected_utr: string;
   current_utr: undefined | UTR;
+  tags_table: Array<TAG>;
   constructor(props) {
     super(props);
     this.state = {
@@ -42,8 +42,10 @@ export class SREditarTags extends Component<
     };
     this.selected_utr = "";
     this.current_utr = undefined;
+    this.tags_table = [];
   }
 
+  // informar que han existido cambios:
   handle_RTU_changes = () => {
     if (this.props.handle_RTU_changes !== undefined) {
       this.props.handle_RTU_changes(this.state.utr);
@@ -51,6 +53,12 @@ export class SREditarTags extends Component<
   };
 
   componentDidUpdate() {
+    // Cuando se actualizan valores dentro de la tabla:
+    // Se permite guardar cualquier cambio en la tabla
+    if (this.tags_table !== this.state.filter_tags) {
+      this.setState({filter_tags: this.tags_table})
+    }
+
     // Cuando es actualizando el controlador de selección de UTRs
     if (this.selected_utr !== this.props.selected_id.utr) {
       this.selected_utr = this.props.selected_id.utr;
@@ -60,16 +68,16 @@ export class SREditarTags extends Component<
     if (this.props.utr === undefined && this.current_utr !== this.props.utr) {
       this.setState({ loading: true });
       this.current_utr = this.props.utr;
-      this._filter_tags(this.state.search);
+      // this._filter_tags(this.state.search);
     }
     // Cuando se actualiza la UTR referida:
     if (this.current_utr !== this.props.utr) {
-      this.setState({ loading: true });
       this.current_utr = this.props.utr;
       this.setState({ utr: this.props.utr, loading: false }, () =>
         this._filter_tags(this.state.search)
       );
     }
+    
   }
 
   _filter_tags = (e) => {
@@ -79,7 +87,7 @@ export class SREditarTags extends Component<
     } else {
       to_filter = String(e).toLowerCase();
     }
-    this.setState({ search: to_filter });
+    this.setState({ search: to_filter, loading: true });
     to_filter = to_filter.split("*").join(".*");
 
     let filter_tags = [];
@@ -97,19 +105,14 @@ export class SREditarTags extends Component<
     } catch (error) {
       console.log(error);
     }
-    this.setState({ loading: false, filter_tags: filter_tags });
+    this.tags_table = _.cloneDeep(filter_tags);
+    this.setState({ loading: false, filter_tags: _.cloneDeep(filter_tags) });
+    
   };
 
   _edit_tags = () => {
     this.setState({ msg: "Guardando en base de datos", success: false });
-    let path =
-      SRM_API_URL +
-      "/admin-sRemoto/tags/" +
-      this.props.selected_id.nodo +
-      "/" +
-      this.props.selected_id.entidad +
-      "/" +
-      this.props.selected_id.utr;
+    let path = `${SRM_API_URL}/admin-sRemoto/tags/${this.props.selected_id.nodo}/${this.props.selected_id.entidad}/${this.props.selected_id.utr}`;
     let edited_tags = [];
     for (var ix in this.state.filter_tags) {
       let tag = this.state.filter_tags[ix];
@@ -133,19 +136,96 @@ export class SREditarTags extends Component<
       .then((json) => {
         json.msg =
           (json.success ? "Operación exitosa en " : "Revise el detalle para ") +
-          this.props.selected.utr_nombre + " " +
           json.msg;
         if (json.success && this.props.utr !== undefined) {
           let utr = _.cloneDeep(this.props.utr);
           utr.tags = json.tags;
-          console.log("TEst me", utr);
-          this.setState({ utr: utr }, ()=> this.handle_RTU_changes());
+          this.setState({ utr: utr }, () => this.handle_RTU_changes());
           this._filter_tags(this.state.search);
         }
         this.setState({ success: json.success, msg: json.msg });
       })
       .catch(console.log);
   };
+
+  /// Manejo de la Tabla
+  // Definicion de headers para edición:
+  edit_columns = [
+    {
+      name: "Activado",
+      width: "80px",
+      //selector: "activado",
+      cell: (row, ix) => this._input_checkbox(row, ix, "activado"),
+    },
+    {
+      name: "Nombre de tag",
+      cell: (row, ix) => this._input_in_table(row, ix, "tag_name"),
+      //selector: "tag_name"
+    },
+    {
+      name: "Condición de indisponibilidad",
+      //selector: "filter_expression",
+      cell: (row, ix) => this._input_in_table(row, ix, "filter_expression"),
+    },
+  ];
+
+  // Permite edición de boleano:
+  _input_checkbox = (row, ix, field) => {
+    return (
+      <input
+        key={"ch_" + ix}
+        id={"ch_" + ix}
+        type="checkbox"
+        checked={row.activado}
+        onChange={(e) => this._handle_change_in_table(e, ix, row.tag_name, field, true)}
+      ></input>
+    );
+  };
+
+  // Permite edición en campos
+  _input_in_table = (row, ix, field) => {
+    return (
+      <input
+        key={field + ix}
+        id={field + ix}
+        className="table_input"
+        value={row[field]}
+        onChange={(e) => this._handle_change_in_table(e, ix, row.tag_name, field)}
+      ></input>
+    );
+  };
+
+  // Actualizar cambios en tabla
+  _handle_change_in_table = (e, ix, tag_name, field, isBoolean = false) => {
+    console.log("handle_change_in_table");
+    if (
+      this.tags_table === undefined ||
+      this.tags_table.length === 0
+    )
+      return;
+    // es necesario clonar el objeto, para perder la referencia del objeto:
+    let filter_tags = _.cloneDeep(this.tags_table);
+    
+    if (filter_tags[ix]["edited"] === undefined) {
+      filter_tags[ix]["edited"] = true;
+      filter_tags[ix]["tag_name_original"] = tag_name;
+    }
+    if (isBoolean) {
+      filter_tags[ix][field] = !filter_tags[ix][field];
+    } else {
+      filter_tags[ix][field] = e.target.value;
+    }
+    this.tags_table = _.cloneDeep(filter_tags);
+    this.setState({
+      loading: false,
+      msg:
+        "Tag editada: " +
+        filter_tags[ix]["tag_name_original"] +
+        ". Pulse 'Editar' para guardar todos los cambios",
+    });
+  };
+
+  // Fin de manejo de tabla
 
   _render_tag_edit = (edit_columns) => {
     return (
@@ -203,90 +283,11 @@ export class SREditarTags extends Component<
     );
   };
 
-
   render() {
-    // Permite edición de boleano:
-    let _input_checkbox = (row, field) => {
-      return (
-        <input
-          type="checkbox"
-          defaultChecked={row[field]}
-          onChange={(e) =>
-            _handle_change_in_table(e, row.tag_name, field, true)
-          }
-        ></input>
-      );
-    };
-
-    // Permite edición en campos
-    let _input_in_table = (row, field) => {
-      return (
-        <input
-          className="table_input"
-          defaultValue={row[field]}
-          onBlur={(e) => _handle_change_in_table(e, row.tag_name, field)}
-        ></input>
-      );
-    };
-
-    // Actualizar cambios en tabla
-    let _handle_change_in_table = (e, tag_name, field, isBoolean = false) => {
-      if (
-        this.state.filter_tags === undefined ||
-        this.state.filter_tags.length === 0
-      )
-        return;
-      let filter_tags = this.state.filter_tags;
-      let tag;
-      for (var ix in filter_tags) {
-        tag = filter_tags[ix];
-        if (tag.tag_name === tag_name) {
-          if (filter_tags[ix]["edited"] === undefined) {
-            filter_tags[ix]["edited"] = true;
-            filter_tags[ix]["tag_name_original"] = tag_name;
-          }
-          if (isBoolean) {
-            filter_tags[ix][field] = !filter_tags[ix][field];
-          } else {
-            filter_tags[ix][field] = e.target.value;
-          }
-          this.setState({
-            filter_tags: filter_tags,
-            msg:
-              "Tag editada: " +
-              filter_tags[ix]["tag_name_original"] +
-              ". Pulse 'Editar' para guardar todos los cambios",
-          });
-          return;
-        }
-      }
-    };
-
-    /// Manejo de la Tabla
-    // Definicion de headers para edición:
-    const edit_columns = [
-      {
-        name: "Activado",
-        width: "80px",
-        //selector: "activado",
-        cell: (row) => _input_checkbox(row, "activado"),
-      },
-      {
-        name: "Nombre de tag",
-        cell: (row) => _input_in_table(row, "tag_name"),
-      },
-      {
-        name: "Condición de indisponibilidad",
-        //selector: "filter_expression",
-        cell: (row) => _input_in_table(row, "filter_expression"),
-      },
-    ];
-    // Definición de headers para eliminación:
-
     /// Fin de Manejo de Tabla
     return (
       <>
-        {this._render_tag_edit(edit_columns)}
+        {this._render_tag_edit(this.edit_columns)}
         {this.state.msg.length === 0 ? (
           <></>
         ) : (

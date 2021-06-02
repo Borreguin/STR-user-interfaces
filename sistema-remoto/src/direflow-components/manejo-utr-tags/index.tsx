@@ -5,16 +5,16 @@ export default DireflowComponent.create({
   component: App,
   configuration: {
     tagname: 'manejo-utr-tags',
-    useShadow: false,
+    useShadow: true,
   },
   plugins: [
-    {
-      name: 'font-loader',
+      {
+      name: 'external-loader',
       options: {
-        google: {
-          families: ['Advent Pro', 'Noto Sans JP'],
-        },
+        paths: [
+          'https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css'
+        ],
       },
-    },
+    }
   ],
 });

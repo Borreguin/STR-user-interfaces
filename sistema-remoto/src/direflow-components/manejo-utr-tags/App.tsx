@@ -1,5 +1,5 @@
-import React, { Component, FC, useContext } from "react";
-import { EventContext, Styled } from "direflow-component";
+import React, { Component } from "react";
+import { Styled } from "direflow-component";
 import styles from "./App.css";
 import bootstrap from 'bootstrap/dist/css/bootstrap.min.css';
 import { Col, Tab, Tabs } from "react-bootstrap";
@@ -8,10 +8,7 @@ import SRModelingTag from "./Components/Modeling_Tags/SRModelingTags";
 import SRModelingRTU from "./Components/Modeling_RTUs/SRModeling_RTUs";
 import react_bootstrap from "../../../public/bootstrap.4.3.1.min.css"
 
-interface IProps {
-  componentTitle: string;
-  sampleList: string[];
-}
+
 
 // Pagina inicial de manejo de nodos:
 class UTRandTagsManagement extends Component {

@@ -1,0 +1,228 @@
+.toggle-btn{
+    background-color: transparent;
+    margin-left: -10px;
+    margin-right: 7px;
+}
+
+.src-port{
+    margin-top: 4px;
+    min-width: 12px;
+    height: 16px;
+    z-index: 10;
+    border-top-left-radius: 6px;
+    border-bottom-left-radius: 6px;
+    cursor: pointer;
+    float: right;
+    margin-left: 2px;
+}
+.src-port-connect{
+    max-width: 200px;
+    width: fit-content;
+    float: right;
+}
+
+.disconnect{
+    background: rgba(83, 83, 85, 0.781);
+}
+
+.connect{
+    background: rgba(135, 218, 135, 0.281);
+}
+
+.src-port:hover {
+    background: rgba(167, 89, 16, 0.753);
+}
+
+.src-port-block{
+    min-width: 200px;
+    font-size: 11pt;
+    font-family: Courier, monospace !important;
+    background-color: rgba(219, 219, 205, 0.418);
+    padding: 5px;
+    margin: 1px;
+    border-radius: 4px;
+}
+
+.src-port-label{
+    max-width: 80px;
+    border: transparent;
+}
+
+.src-block-tipo{
+    background-color: rgba(83, 94, 102, 0.418);
+    padding: 2%;
+    font-size: 9pt;
+}
+
+.src-node{
+    flex-grow: 1;
+    box-sizing: border-box;
+    white-space: nowrap;
+    cursor: move;
+    pointer-events: all;
+    background-color: hsla(195, 97%, 27%, 0.878);
+    color: white;
+    border-radius: 5px;
+    border: rgb(250, 12, 12) solid 2px;
+}
+
+.src-node-title{
+    background: rgba(5, 50, 109, 0.918); 
+    text-align: left;
+    max-width: 250px;
+}
+
+
+.src-input{
+    background: rgba(188, 190, 192, 0.274);
+    text-align: left;
+    font-weight: bolder;
+    font-size:12pt;
+    color: rgb(5, 5, 5);
+    border: black solid 0px;
+    padding: 2px;
+    max-width: 200px;
+    border-radius: 5px;
+    margin: 5px;
+}
+
+.src-input-entity{
+    font-family: Courier, monospace !important;
+    background:  rgba(188, 190, 192, 0.274);
+    text-align: left;
+    font-weight: bolder;
+    font-size:11pt;
+    color: rgb(5, 5, 5);
+    border: black solid 0px;
+    padding: 2px;
+    max-width: 200px;
+    border-radius: 5px;
+    margin: 2px;
+}
+
+.src-btn-right{
+    float: right;
+    margin: 2px;
+    max-height: 40px;
+   min-width: 32px;
+   padding: 3px;
+   border: 1px solid rgb(8, 8, 8);
+}
+
+.src-btn-active{
+   cursor: allowed;
+   pointer-events: all;
+   background-color: rgba(25, 153, 8, 0.932);
+   border: 1px solid rgb(8, 8, 8);
+}
+.src-btn-active:hover{
+    background-color: rgba(11, 88, 151, 0.664);
+}
+
+.src-btn-disabled{
+    cursor: not-allowed;
+    pointer-events: none;
+    background-color: rgba(55, 56, 49, 0.753);
+}
+
+.to-drag{
+    height: 6px;
+   background-color: rgb(2, 35, 54) ;
+}
+
+.src-btn-delete{
+    margin-right: 2px;
+    margin-top: -1px;
+    max-height: 22px;
+   max-width: 20px;
+   padding: 1px;
+   background-color: transparent;
+   border:0;
+   color: rgba(143, 10, 10, 0.966);
+}
+
+.src-btn-delete:hover{
+    color: red;
+    background-color: transparent;
+}
+
+.scr-btn-trash{
+    background-color: rgb(117, 31, 31);
+}
+.scr-btn-trash:hover{
+    background-color: rgba(209, 39, 39, 0.877);
+}
+
+.src-icon-off{
+    margin: 8px;
+    color: rgba(126, 121, 121, 0.89);
+    padding-top: 0;
+    cursor: pointer;
+    text-align: center; 
+    vertical-align: middle
+}
+
+.src-icon-on{
+    margin: 8px;
+    color: rgb(21, 87, 7);
+    padding-top: 0;
+    cursor: pointer;
+    text-align: center; 
+    vertical-align: middle
+}
+
+.chk-entity{
+    margin: 1px;
+    max-height: 20px;
+    display: inline-block;
+    text-align: center; 
+    vertical-align: middle
+}
+
+.file-seccion{
+    float: left;
+    min-width: 120px;
+    width: 28%;
+    background-color: rgba(219, 219, 205, 0.418);
+    border-radius: 5px;
+}
+.tile-file-seccion{
+    height: 30px;
+    background-color: rgb(69, 104, 150);
+    border-radius: 5px;
+    padding: 2px;
+    text-align: center;
+    font-weight: bolder;
+    color: cornsilk;
+}
+
+.entity-seccion{
+    min-width: 400px;
+    width: 70%;
+    float: right;
+}
+
+.src-btn-plus{
+   height: 30px;
+   width: 100%;
+   padding: 1px;
+   background-color: rgb(69, 104, 150);
+}
+
+.src-btn-plus:hover{
+    background-color: rgba(48, 158, 76, 0.849);
+}
+
+.alert-msg{
+    margin-bottom: 0px !important;
+    padding: 2px;
+}
+
+.sl-upload{
+    max-width: 40%;
+    max-height: 25px;
+    font-size: 10pt;
+    padding: 3px;
+    margin-left: 0px;
+    margin-bottom: 1px;
+}

@@ -1,0 +1,67 @@
+.badge-general {
+  font-size: 12pt;
+  margin-top: 12%;
+  min-width: 80px;
+}
+.sc-header {
+  padding-top: 3px;
+  padding-bottom: 3px;
+  pointer-events: all;
+}
+.sc-description {
+  float: left;
+  background: rgba(188, 190, 192, 0.274);
+  text-align: left;
+  font-weight: bolder;
+  font-size: 12pt;
+  color: rgb(5, 5, 5);
+  min-width: 30%;
+  border-radius: 5px;
+  display: flex;
+}
+.sc-badge-v {
+  align-self: flex-start;
+  min-width: 90px;
+  vertical-align: middle;
+}
+
+.sc-label {
+  float: left;
+  margin-left: 5px;
+}
+
+.sc-summary {
+  float: left;
+  max-width: 100px;
+  text-align: left;
+  margin-top: 5px;
+}
+
+.btn-cal-disp-small {
+  background-color: rgba(20, 57, 110, 0.685);
+}
+.btn-cal-disp-small:hover {
+  background-color: rgb(59, 179, 29);
+}
+
+.btn-cal-disp-dis-small {
+  background-color: rgba(88, 89, 92, 0.836);
+  pointer-events: none;
+  cursor: progress;
+}
+
+.src-btn-right {
+  float: right;
+  margin: 2px;
+  max-height: 40px;
+  min-width: 32px;
+  padding: 3px;
+  border: 1px solid rgb(8, 8, 8);
+}
+
+.scr-btn-trash{
+  background-color: rgb(117, 31, 31);
+}
+.scr-btn-trash:hover{
+  background-color: rgba(209, 39, 39, 0.877);
+}

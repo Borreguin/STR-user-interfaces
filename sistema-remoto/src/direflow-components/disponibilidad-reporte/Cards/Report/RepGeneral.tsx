@@ -1,11 +1,5 @@
 import React, { Component } from "react";
-import {
-  Card,
-  Button,
-  Badge,
-  OverlayTrigger,
-  Tooltip,
-} from "react-bootstrap";
+import { Card, Button, Badge, OverlayTrigger, Tooltip } from "react-bootstrap";
 import { Node, Entity } from "./ReportModel";
 import * as _ from "lodash";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
@@ -16,10 +10,10 @@ import {
   faPencilAlt,
   faPenFancy,
 } from "@fortawesome/free-solid-svg-icons";
-import { to_yyyy_mm_dd_hh_mm_ss } from "../../DatePicker/DateRange";
 import "./Report.css";
 import ReactJson from "react-json-view";
-import { SRM_API_URL } from "../../../Pages/sRemoto/Constantes";
+import { SRM_API_URL } from "../../../../Constantes";
+import { to_yyyy_mm_dd_hh_mm_ss } from "../../../Common/DatePicker/DateRange";
 
 export interface RepGeneralProps {
   node: Node;
@@ -55,7 +49,6 @@ class RepGeneral extends Component<RepGeneralProps, RepGeneralState> {
     this.lcl_node = _.cloneDeep(props.node);
     // this.bck_node = _.cloneDeep(props.node);
   }
-
 
   is_edited = () => {
     if (_.isEqual(this.bck_node, this.lcl_node)) {
@@ -134,13 +127,13 @@ class RepGeneral extends Component<RepGeneralProps, RepGeneralState> {
           delete json.report;
           json["estado"] = "Finalizado";
           this.setState({ log: json, edited: true, calculating: false });
-          
         }
-      }).catch((res) => { 
+      })
+      .catch((res) => {
         this.setState({
           log: { estado: "error", msg: "No es posible conectar con la API" },
-          calculating: false
-        })
+          calculating: false,
+        });
       });
   };
 
@@ -152,12 +145,13 @@ class RepGeneral extends Component<RepGeneralProps, RepGeneralState> {
         this.lcl_node.nombre
     );
     if (confirm) {
-      this.setState({calculating: true });
+      this.setState({ calculating: true });
       let path = `${SRM_API_URL}/disp-sRemoto/disponibilidad/nodos/${this._range_time()}`;
       await fetch(path, {
         method: "DELETE",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ nodos: [this.lcl_node.nombre] }) })
+        body: JSON.stringify({ nodos: [this.lcl_node.nombre] }),
+      })
         .then((res) => res.json())
         .then((json) => {
           this.setState({ log: json, edited: true, calculating: false });
@@ -182,7 +176,7 @@ class RepGeneral extends Component<RepGeneralProps, RepGeneralState> {
             key={this.lcl_node.nombre}
             placement="right"
             overlay={
-              <Tooltip id={"tooltip-"+ this.lcl_node.nombre}>
+              <Tooltip id={"tooltip-" + this.lcl_node.nombre}>
                 {this._n_entidades() + " entidades"}
                 <br></br> {this._n_rtus() + " rtus / "}
                 {this.lcl_node.n_tags + " tags"}
@@ -244,10 +238,11 @@ class RepGeneral extends Component<RepGeneralProps, RepGeneralState> {
             <FontAwesomeIcon icon={faPencilAlt} inverse size="sm" />
           </Button>
         </Card.Header>
-        <Card.Body className={this.state.open ? "collapse show" : "collapse"}
-          style={{padding:"5px"}}
+        <Card.Body
+          className={this.state.open ? "collapse show" : "collapse"}
+          style={{ padding: "5px" }}
         >
-          <div >
+          <div>
             <div
               className={this.state.edited ? "sc-log-changed" : "sc-log-normal"}
               onClick={() => {
@@ -272,4 +267,3 @@ class RepGeneral extends Component<RepGeneralProps, RepGeneralState> {
 }
 
 export default RepGeneral;
-

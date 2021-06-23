@@ -1,7 +1,7 @@
-import Upload, { UploadProps } from "../../Upload/Upload";
 import React from "react";
 import { Form } from "react-bootstrap";
-import { SRM_API_URL } from "../../../Pages/sRemoto/Constantes";
+import { SRM_API_URL } from "../../../../Constantes";
+import Upload, { UploadProps } from "../../../Common/Upload/Upload";
 
 export interface UploadNodeProps extends UploadProps {
   tipo: String;

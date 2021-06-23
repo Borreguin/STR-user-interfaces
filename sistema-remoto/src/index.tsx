@@ -17,7 +17,7 @@
  
  // importando Componentes:
 import {
-  ZDireflowNavigate, ZDireflowTemplate, NodeManagement, UTRandTagsManagement, SRBackupFiles
+  ZDireflowNavigate, ZDireflowTemplate, NodeManagement, UTRandTagsManagement, SRBackupFiles,  SRCalDisponibilidad
 } from './component-exports';
  import TemplateComp from './direflow-components/zdireflow-navigate';
  
@@ -29,7 +29,7 @@ import {
    { path: "/manejo-nodos", component: NodeManagement , description: "Manejo de nodos" },
    { path: "/manejo-utr-tags", component: UTRandTagsManagement , description: "Manejo de UTR y Tags" },
    { path: "/versionamiento-nodos", component: SRBackupFiles , description: "Versionamiento de Nodos" },
-   { path: "/disponibilidad-reporte", component: SRBackupFiles , description: "Versionamiento de Nodos" },
+   { path: "/disponibilidad-reporte", component:  SRCalDisponibilidad , description: "Reporte disponibilidad" },
  
  ]
  

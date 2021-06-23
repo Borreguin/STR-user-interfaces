@@ -1,5 +1,5 @@
-import React, { ChangeEvent, Component, FC, useContext } from "react";
-import { EventContext, Styled } from "direflow-component";
+import React, { Component } from "react";
+import { Styled } from "direflow-component";
 import styles from "./App.css";
 import { Spinner, Form, Row, Col, Button } from "react-bootstrap";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";

@@ -1,8 +1,7 @@
 import React, { Component } from "react";
-import "../styles.css";
-import { SummaryReport } from "../../../components/Reports/SRReport/Report";
-import IndividualReport from "../../../components/Reports/SRReport/IndividualReport";
-import StatusCalcReport from "../../../components/Reports/SRReport/StatusCalcReport";
+import { SummaryReport } from "./Cards/SRReport/Report";
+import IndividualReport from "./Cards/SRReport/IndividualReport";
+import StatusCalcReport from "./Cards/SRReport/StatusCalcReport";
 
 type NodeReportProps = {
   reports: Array<SummaryReport>;

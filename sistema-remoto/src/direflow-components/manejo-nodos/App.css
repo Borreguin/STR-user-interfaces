@@ -63,27 +63,13 @@
   background-color: rgb(59, 179, 29);
 }
 
-.btn-download-report {
-  float: left;
-  padding: 1px;
-  min-width: 80%;
-}
-.btn-download-report:hover {
-  background-color: rgb(59, 179, 29);
-}
-.input-report {
-  float: left;
-  margin-top: 1px;
-  margin-left: 3px;
-  max-width: 18%;
-  background-color: transparent;
-  color: white;
-}
 
 .sc-body-cal {
   width: 100%;
   padding-left: 0px;
   padding-right: 0px;
+  height: 400px;
+  background-color: chartreuse;
 }
 
 .sc-log-changed {
@@ -271,28 +257,6 @@
   background-color: rgb(59, 179, 29);
 }
 
-.btn-download-report {
-  float: left;
-  padding: 1px;
-  min-width: 80%;
-}
-.btn-download-report:hover {
-  background-color: rgb(59, 179, 29);
-}
-.input-report {
-  float: left;
-  margin-top: 1px;
-  margin-left: 3px;
-  max-width: 18%;
-  background-color: transparent;
-  color: white;
-}
-
-.sc-body-cal {
-  width: 100%;
-  padding-left: 0px;
-  padding-right: 0px;
-}
 
 .sc-log-changed {
   width: 100%;
@@ -658,3 +622,4 @@
   flex-wrap: wrap !important;
  justify-content: space-evenly !important;
 }
+

@@ -22,9 +22,10 @@ zDireflow-navigate{
 }
 
 .component-container{
-  width: calc(100% - var(--sbmenuwidth) - 40px);
+  width: calc(100% - var(--sbmenuwidth) - 0px);
   position: absolute;
   left: var(--sbmenuwidth);
   top: -5px;
   padding: 15px;
+  margin-left: 20px;
 }

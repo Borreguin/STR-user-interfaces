@@ -12,16 +12,24 @@ import ReactJson from "react-json-view";
 import NodeReport from "./SRCalDisponibilidad_nodes";
 import ReactTooltip from "react-tooltip";
 import * as _ from "lodash";
-import "react-date-range/dist/styles.css"; // main style file
-import "react-date-range/dist/theme/default.css"; // theme css file
+import ReactDateCSS from "react-date-range/dist/styles.css"; // main style file
+import ReactDateThemeCSS from "react-date-range/dist/theme/default.css"; // theme css file
 import { DateRange } from "react-date-range";
 import { es } from "date-fns/locale";
 import { Styled } from "direflow-component";
 import {
   get_last_month_dates,
+  to_yyyy_mm_dd,
   to_yyyy_mm_dd_hh_mm_ss,
 } from "../Common/DatePicker/DateRange";
 import { SRM_API_URL } from "../../Constantes";
+import SRGeneralReport from "./Cards/SRReport/GeneralReport";
+import { Report } from "./Cards/SRReport/Report";
+import styles from "./App.css";
+import ReportCSS from "./Cards/Report/Report.css";
+import SRCardCSS from "./Cards/SRCard/SRCard.css";
+import SRReportCSS from "./Cards/SRReport/style.css";
+// import ModalCSS from "./Modal.css"
 
 interface props {}
 
@@ -30,8 +38,8 @@ interface state {
   ini_date_str: string;
   end_date: Date;
   end_date_str: string;
-  filtered_reports: Object; // lista de reportes filtrados
-  report: Object; // reporte entero
+  filtered_reports: Array<any>; // lista de reportes filtrados
+  report: Report; // reporte entero
   search: string; // filtrar reportes
   loading: boolean;
   calculating: boolean;
@@ -44,7 +52,7 @@ interface state {
 }
 
 // Pagina inicial de manejo de nodos:
-class SRCalDisponibilidad extends Component<props,state> {
+class SRCalDisponibilidad extends Component<props, state> {
   /* Configuración de la página: */
   constructor(props) {
     super(props);
@@ -58,7 +66,7 @@ class SRCalDisponibilidad extends Component<props,state> {
       ini_date: r.first_day_month,
       ini_date_str: to_yyyy_mm_dd_hh_mm_ss(r.first_day_month),
       end_date: r.last_day_month,
-      end_date_str: to_yyyy_mm_dd_hh_mm_ss(r.first_day_month),
+      end_date_str: to_yyyy_mm_dd_hh_mm_ss(r.last_day_month),
       brand: { route: "/Pages/sRemoto", name: "Cálculo de disponibilidad " },
       navData: [],
       filtered_reports: undefined, // lista de reportes filtrados
@@ -74,7 +82,6 @@ class SRCalDisponibilidad extends Component<props,state> {
       show_date: false,
     };
   }
-
 
   async componentDidMount() {
     this._search_report_now();
@@ -231,18 +238,9 @@ class SRCalDisponibilidad extends Component<props,state> {
 
   // descargar reporte Excel:
   _download_excel_report = async () => {
-    let url =
-      SRM_API_URL +
-      "/sRemoto/disponibilidad/excel/" +
-      this._range_time() +
-      "?nid=" +
-      _.uniqueId(Math.random());
-    let filename =
-      "Reporte_" +
-      to_yyyy_mm_dd(this.state.ini_date) +
-      "@" +
-      to_yyyy_mm_dd(this.state.end_date) +
-      ".xlsx";
+    let url = `${SRM_API_URL}/sRemoto/disponibilidad/excel/${this._range_time()}?nid=${_.uniqueId(Math.random())}`;
+    let filename = `Reporte_${to_yyyy_mm_dd(this.state.ini_date)}@${to_yyyy_mm_dd(this.state.end_date)}.xlsx`;
+     
     this.setState({
       log: { estado: "Iniciando descarga de reporte, espere por favor" },
       loading: true,
@@ -264,24 +262,13 @@ class SRCalDisponibilidad extends Component<props,state> {
 
   // descargar reporte de tags:
   _download_tag_report = async () => {
-    let url =
-      SRM_API_URL +
-      "/sRemoto/indisponibilidad/tags/excel/" +
-      this._range_time() +
-      "/" +
-      this.state.umbral +
-      "?nid=" +
-      _.uniqueId(Math.random());
+    let url = `${SRM_API_URL}/sRemoto/indisponibilidad/tags/excel/${this._range_time()}/${this.state.umbral}?nid=${_.uniqueId(Math.random())}`;
     this.setState({
       log: { estado: "Iniciando descarga de reporte, espere por favor" },
       loading: true,
     });
-    let filename =
-      "IndispTag_" +
-      to_yyyy_mm_dd(this.state.ini_date) +
-      "@" +
-      to_yyyy_mm_dd(this.state.end_date) +
-      ".xlsx";
+    let filename = `IndispTag_${to_yyyy_mm_dd(this.state.ini_date)}@${to_yyyy_mm_dd(this.state.end_date)}.xlsx`;
+
     await fetch(url).then((response) => {
       response.blob().then((blob) => {
         let url = window.URL.createObjectURL(blob);
@@ -411,7 +398,17 @@ class SRCalDisponibilidad extends Component<props,state> {
     };
 
     return (
-      <Styled>
+      <Styled
+        styles={[
+          styles,
+          ReportCSS,
+          SRCardCSS,
+          SRReportCSS,
+          ReactDateThemeCSS,
+          ReactDateCSS,
+        ]}
+        scoped={false}
+      >
         <div className="page-content">
           <Form.Group as={Row} className="sc-search">
             <Form.Label column sm="5" className="sc-pick-menu">
@@ -421,7 +418,17 @@ class SRCalDisponibilidad extends Component<props,state> {
                 ></DateRangeTime>*/}
               <div
                 className="date-container"
-                onMouseLeave={() => {
+                onMouseLeave={(e) => {
+                  let class_name = e.target["className"];
+                  if (
+                    class_name === "" ||
+                    class_name === "rdrMonth" ||
+                    class_name === "rdrDays" ||
+                    class_name === "rdrYearPicker" ||
+                    class_name === "rdrDayHovered"
+                  ) {
+                    return;
+                  }
                   this.setState({ show_date: false });
                 }}
               >
@@ -434,16 +441,18 @@ class SRCalDisponibilidad extends Component<props,state> {
                 >
                   {!this.state.show_date ? "Seleccionar" : "Aceptar"}
                 </Button>
+                <div className="date-range">
                 <input
                   className="date-input"
                   value={this.state.ini_date_str}
                   onChange={(e) => this.onChangeDate(e, "ini_date")}
-                />{" "}
+                />
                 <input
                   className="date-input"
                   value={this.state.end_date_str}
                   onChange={(e) => this.onChangeDate(e, "end_date")}
                 />
+                </div>
                 <div
                   className={
                     this.state.show_date
@@ -476,7 +485,7 @@ class SRCalDisponibilidad extends Component<props,state> {
               </Button>
             </Form.Label>
 
-            <Col sm="4" className="sc-search-input">
+            <Col sm="5" className="sc-search-input">
               <Form.Control
                 type="text"
                 onBlur={this._update_search}
@@ -485,80 +494,77 @@ class SRCalDisponibilidad extends Component<props,state> {
                 disabled={this.state.calculating}
               />
             </Col>
+          </Form.Group>
+          <Form.Group className="sc-btn-cal">
+            <Button
+              variant="outline-light"
+              className={
+                this.state.loading || this.state.calculating
+                  ? "btn-cal-disp btn-dis"
+                  : "btn-cal-disp"
+              }
+              onClick={() => this._cal_all("POST")}
+            >
+              <FontAwesomeIcon inverse icon={faPencilAlt} size="lg" /> CALCULAR
+              TODOS
+            </Button>
+            <Button
+              variant="outline-light"
+              className={
+                this.state.loading || this.state.calculating
+                  ? "btn-cal-disp btn-dis"
+                  : "btn-cal-disp"
+              }
+              onClick={() => this._cal_all("PUT")}
+            >
+              <FontAwesomeIcon inverse icon={faPenFancy} size="lg" />{" "}
+              RE-ESCRIBIR CÁLCULO
+            </Button>
 
-            <div className="sc-body-cal">
-              <Button
-                variant="outline-light"
-                className={
-                  this.state.loading || this.state.calculating
-                    ? "btn-cal-disp btn-dis"
-                    : "btn-cal-disp"
-                }
-                onClick={() => this._cal_all("POST")}
-              >
-                <FontAwesomeIcon inverse icon={faPencilAlt} size="lg" />{" "}
-                CALCULAR TODOS
-              </Button>
-              <Button
-                variant="outline-light"
-                className={
-                  this.state.loading || this.state.calculating
-                    ? "btn-cal-disp btn-dis"
-                    : "btn-cal-disp"
-                }
-                onClick={() => this._cal_all("PUT")}
-              >
-                <FontAwesomeIcon inverse icon={faPenFancy} size="lg" />{" "}
-                RE-ESCRIBIR CÁLCULO
-              </Button>
+            <Button
+              variant="outline-light"
+              onClick={this._download_excel_report}
+              className={
+                this.state.loading || this.state.calculating
+                  ? "btn-cal-disp btn-dis"
+                  : "btn-cal-disp"
+              }
+              data-tip={
+                SRM_API_URL +
+                "/sRemoto/disponibilidad/json/" +
+                this._range_time()
+              }
+            >
+              <FontAwesomeIcon inverse icon={faFileExcel} size="lg" /> DESCARGAR
+            </Button>
+            <ReactTooltip />
 
+            <div
+              className={
+                this.state.loading || this.state.calculating
+                  ? "btn-cal-disp btn-dis"
+                  : "btn-cal-disp"
+              }
+            >
               <Button
+                className={
+                  this.state.loading || this.state.calculating
+                    ? "btn-download-report btn-dis"
+                    : "btn-download-report"
+                }
                 variant="outline-light"
-                onClick={this._download_excel_report}
-                className={
-                  this.state.loading || this.state.calculating
-                    ? "btn-cal-disp btn-dis"
-                    : "btn-cal-disp"
-                }
-                data-tip={
-                  SRM_API_URL +
-                  "/sRemoto/disponibilidad/json/" +
-                  this._range_time()
-                }
+                onClick={this._download_tag_report}
               >
-                <FontAwesomeIcon inverse icon={faFileExcel} size="lg" />{" "}
-                DESCARGAR
+                <FontAwesomeIcon inverse icon={faTag} size="lg" /> REPORTE TAGS
               </Button>
-              <ReactTooltip />
-
-              <div
-                className={
-                  this.state.loading || this.state.calculating
-                    ? "btn-cal-disp btn-dis"
-                    : "btn-cal-disp"
-                }
-              >
-                <Button
-                  className={
-                    this.state.loading || this.state.calculating
-                      ? "btn-download-report btn-dis"
-                      : "btn-download-report"
-                  }
-                  variant="outline-light"
-                  onClick={this._download_tag_report}
-                >
-                  <FontAwesomeIcon inverse icon={faTag} size="lg" /> REPORTE
-                  TAGS
-                </Button>
-                <input
-                  type="text"
-                  onChange={this._updateUmbral}
-                  className="input-report"
-                  data-tip="Ingrese el umbral de indisponibilidad mínima a reportar"
-                ></input>
-              </div>
-              <ReactTooltip />
+              <input
+                type="text"
+                onChange={this._updateUmbral}
+                className="input-report"
+                data-tip="Ingrese el umbral de indisponibilidad mínima a reportar"
+              ></input>
             </div>
+            <ReactTooltip />
           </Form.Group>
           <div className="div-cards">
             {this.state.report === undefined ? (

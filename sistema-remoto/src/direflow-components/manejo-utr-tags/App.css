@@ -16,7 +16,6 @@
 .sc-search {
   width: 100%;
   margin: 5px;
-  padding-top: 70px;
 }
 .download_excel{
   height: 35px;
@@ -84,22 +83,8 @@
   background-color: rgb(59, 179, 29);
 }
 
-.btn-download-report{
-  float: left;
-  padding: 1px;
-  min-width: 80%;
-}
-.btn-download-report:hover {
-  background-color: rgb(59, 179, 29);
-}
-.input-report{
-  float: left;
-  margin-top: 1px;
-  margin-left: 3px;
-  max-width: 18%;
-  background-color: transparent;
-  color: white;
-}
+
+
 
 .sc-body-cal{
   width: 100%;

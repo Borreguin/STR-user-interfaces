@@ -14,8 +14,9 @@
  import NodeManagement from './direflow-components/manejo-nodos/App';
  import UTRandTagsManagement from './direflow-components/manejo-utr-tags/App';
  import SRBackupFiles from './direflow-components/versionamiento-nodos/App';
+ import SRCalDisponibilidad  from './direflow-components/disponibilidad-reporte/App';
  
  
  export { 
-   ZDireflowNavigate, ZDireflowTemplate, NodeManagement, UTRandTagsManagement, SRBackupFiles
+   ZDireflowNavigate, ZDireflowTemplate, NodeManagement, UTRandTagsManagement, SRBackupFiles, SRCalDisponibilidad
  };

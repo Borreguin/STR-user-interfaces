@@ -3,7 +3,6 @@ import { Card, Button, Alert } from "react-bootstrap";
 import { Node, Entity } from "./SRCardModel";
 import * as _ from "lodash";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import UploadNode from "./UploadNode";
 
 import {
   faToggleOn,
@@ -17,7 +16,8 @@ import {
 } from "@fortawesome/free-solid-svg-icons";
 import "./SRCard.css";
 import { EntityCards } from "./EntityCards";
-import { SRM_API_URL } from "../../../Pages/sRemoto/Constantes";
+import { SRM_API_URL } from "../../../../Constantes";
+import UploadNode from "./UploadNode";
 
 export interface SRCardProps {
   node: Node;

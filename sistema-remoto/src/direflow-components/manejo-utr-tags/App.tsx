@@ -6,7 +6,7 @@ import { Col, Tab, Tabs } from "react-bootstrap";
 import FilterSTRNodes from "../Common/FilterNodes/FilterSTRNodes";
 import SRModelingTag from "./Components/Modeling_Tags/SRModelingTags";
 import SRModelingRTU from "./Components/Modeling_RTUs/SRModeling_RTUs";
-import react_bootstrap from "../../../public/bootstrap.4.3.1.min.css"
+import react_bootstrap from "../../../public/bootstrap.4.3.1.css"
 
 
 

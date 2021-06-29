@@ -1,5 +1,6 @@
+
 .app {
-  width: 400px;
+  width: 600px;
   height: 575px;
   padding: 30px 60px;
   box-sizing: border-box;
@@ -31,7 +32,7 @@
 .header-image {
   width: 165px;
   height: 165px;
-  background: url('https://silind-s3.s3.eu-west-2.amazonaws.com/direflow/logo.svg');
+  background: url('/logo.svg');
   background-size: contain;
 }
 
@@ -45,11 +46,11 @@
   font-family: 'Noto Sans JP', sans-serif;
   font-size: 16px;
   color: #666;
-  text-align: center;
+  text-align: left;
 }
 
 .button {
-  width: 150px;
+  width: 350px;
   height: 45px;
   font-family: 'Noto Sans JP', sans-serif;
   font-size: 20px;

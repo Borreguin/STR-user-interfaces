@@ -1,3 +1,10 @@
+.page-content {
+  display: inline-block !important;
+  width: 100% !important;
+  /*overflow-x: hidden;*/
+  padding: 2% !important;
+}
+
 
 .srd-diagram {
   height: 500px;
@@ -82,9 +89,6 @@
 .btn-cal-disp:hover {
   background-color: rgb(59, 179, 29);
 }
-
-
-
 
 .sc-body-cal{
   width: 100%;

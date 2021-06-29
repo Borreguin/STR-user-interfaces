@@ -4,7 +4,8 @@ import App from './App';
 export default DireflowComponent.create({
   component: App,
   configuration: {
-    tagname: 'sistema-central',
+    tagname: 'zdireflow-navigate',
+    useShadow: false,
   },
   plugins: [
     {

@@ -6,7 +6,7 @@ import { Col, Tab, Tabs } from "react-bootstrap";
 import FilterSTRNodes from "../Common/FilterNodes/FilterSTRNodes";
 import SRModelingTag from "./Components/Modeling_Tags/SRModelingTags";
 import SRModelingRTU from "./Components/Modeling_RTUs/SRModeling_RTUs";
-import react_bootstrap from "../../../public/bootstrap.4.3.1.css"
+import react_bootstrap from "../../../public/bootstrap.4.3.1.min.css"
 
 
 
@@ -46,7 +46,7 @@ class UTRandTagsManagement extends Component {
     };
 
     return (
-      <Styled styles={ [styles, bootstrap, react_bootstrap]}>
+      <Styled styles={[styles, bootstrap, react_bootstrap]} scoped={ false}>
         <div className="page-content">
           <div className="cons-container">
             <Tabs

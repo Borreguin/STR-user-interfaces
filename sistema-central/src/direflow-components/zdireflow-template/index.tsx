@@ -4,17 +4,17 @@ import App from './App';
 export default DireflowComponent.create({
   component: App,
   configuration: {
-    tagname: 'manejo-utr-tags',
+    tagname: 'zdireflow-template',
     useShadow: false,
   },
   plugins: [
-      {
-      name: 'external-loader',
+    {
+      name: 'font-loader',
       options: {
-        paths: [
-          'https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css'
-        ],
+        google: {
+          families: ['Advent Pro', 'Noto Sans JP'],
+        },
       },
-    }
+    },
   ],
 });

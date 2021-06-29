@@ -1,0 +1,30 @@
+
+.app {
+  width: 440px;
+  height: 800px;
+  padding: 20px 20px;
+  box-sizing: border-box;
+  background-color: rgb(253, 253, 253);
+  box-shadow: 0 4px 14px 4px #375c821c;
+  font-family: 'Noto Sans JP', sans-serif;
+  border-bottom: 5px solid #cad5e6;
+}
+
+.link-menu {
+  list-style-type: none;
+  margin: 0;
+  padding: 0;
+}
+
+.link-block{
+  display: block;
+}
+
+.menu-text {
+  flex-grow: 1;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+  flex-shrink: 1;
+  overflow: hidden;
+  
+}

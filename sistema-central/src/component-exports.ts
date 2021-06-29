@@ -9,8 +9,9 @@
  * this file can be safely deleted.
  */
 
-import App from './direflow-components/sistema-central/App';
+ import ZDireflowNavigate from './direflow-components/zdireflow-navigate/App';
+ import ZDireflowTemplate from './direflow-components/zdireflow-template/App';
 
-export { 
-  App 
+export {
+  ZDireflowNavigate, ZDireflowTemplate 
 };

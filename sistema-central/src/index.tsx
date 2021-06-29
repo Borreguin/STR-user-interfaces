@@ -9,12 +9,40 @@
  * It can be left blank if not needed.
  */
 
-import SistemaCentral from './direflow-components/sistema-central';
+ import { Route, BrowserRouter as Router } from 'react-router-dom'
+ import React from 'react';
+ import ReactDOM from 'react-dom';
 
-SistemaCentral.then((element) => {
+ // importando Componentes:
+ import {
+  ZDireflowNavigate, ZDireflowTemplate
+} from './component-exports';
+import TemplateComp from './direflow-components/zdireflow-navigate';
+ 
 
-  /**
-   * Access DOM node when it's mounted
-   */
-  console.log('sistema-central is mounted on the DOM', element);
+export const routes = [
+  { path: "/", component: ZDireflowTemplate, description: "Inicio" },
+  { path: "/zdireflow-template", component: ZDireflowTemplate, description: "Plantilla" },
+ 
+]
+
+ //<Route exact path="/icons" component={IconLibrary} />
+ const routing = (
+  <Router>
+   {routes.map((route, ix) => (
+     <Route key={ ix} exact path={ route.path} component={route.component} />
+   ))}
+  </Router>
+)
+
+TemplateComp.then((element) => {
+  //Access DOM node when it's mounted
+  // console.log('sistema-remoto is mounted on the DOM', element);
+  // console.log('root', document.getElementById('root'));
+  ReactDOM.render(
+    <React.StrictMode>
+      {routing}
+    </React.StrictMode>,
+    document.getElementById('component')
+  );
 });

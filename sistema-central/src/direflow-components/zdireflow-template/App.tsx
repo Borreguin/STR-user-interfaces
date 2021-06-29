@@ -31,7 +31,7 @@ const App: FC<IProps> = (props) => {
           <div className='header-title'>{props.componentTitle}</div>
           <div>{renderSampleList}</div>
           <button className='button' onClick={handleClick}>
-            Click me!
+            Documentación
           </button>
         </div>
       </div>
@@ -42,9 +42,9 @@ const App: FC<IProps> = (props) => {
 App.defaultProps = {
   componentTitle: 'Sistema Central',
   sampleList: [
-    'Create with React',
-    'Build as Web Component',
-    'Use it anywhere!',
+    'Componente creado en React (yarn start)',
+    'Construido como Componente Web (yarn build)',
+    'Compilado y usado en cualquier lugar (build/ComponentBundle.js)',
   ],
 }
 

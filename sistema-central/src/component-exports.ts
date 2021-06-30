@@ -11,7 +11,8 @@
 
  import ZDireflowNavigate from './direflow-components/zdireflow-navigate/App';
  import ZDireflowTemplate from './direflow-components/zdireflow-template/App';
+ import ComponentModeling from './direflow-components/modelamiento-componentes/App';
 
 export {
-  ZDireflowNavigate, ZDireflowTemplate 
+  ZDireflowNavigate, ZDireflowTemplate, ComponentModeling 
 };

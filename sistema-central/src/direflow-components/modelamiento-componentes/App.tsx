@@ -1,13 +1,19 @@
-import React, { Component, FC, useContext } from "react";
-import { EventContext, Styled, withStyles } from "direflow-component";
+import React, { Component } from "react";
+import { withStyles } from "direflow-component";
 import styles from "./App.css";
 import { Modal_new_root_block } from "./Modals/blocks/modal_new_root_block";
 import { SCT_API_URL } from "../../Constantes";
-import { bloque_root } from "./types";
-import bootstrap from "../../../public/bootstrap.4.3.1.css";
-import { Alert, Button } from "react-bootstrap";
+import { bloque_root, menu, submenu } from "./types";
+import DynamicSidebar from "./DynamicSidebar/DynamicSidebar";
+import { modal_add_submenu_function } from "./Modals/modal_add_submenu";
+import { modal_edit_submenu_function } from "./Modals/modal_edit_submenu";
+import { modal_delete_submenu_function } from "./Modals/modal_delete_submenu";
+import { modal_edit_menu_function } from "./Modals/modal_edit_menu";
 
-type props = {};
+type props = {
+  root_public_id: string;
+};
+
 type state = {
   new_root: boolean;
   modal_show: boolean;
@@ -15,13 +21,14 @@ type state = {
   error: boolean;
   log: Object;
   bloqueroot: bloque_root | undefined;
+  menu: Array<menu>;
 };
 
-// identify the public_id of this modeling process
-const root_public_id = "disponibilidad_ems";
+// const root_public_id = "disponibilidad_ems";
 
 // Tagname de publicación en index.tsx
 class ComponentModeling extends Component<props, state> {
+  root_public_id: string;
   constructor(props) {
     super(props);
     this.state = {
@@ -32,8 +39,20 @@ class ComponentModeling extends Component<props, state> {
       error: false,
       log: { msg: "Empezando... Conectando con API-SCT" },
       bloqueroot: undefined,
+      menu: [],
     };
+    // identify the public_id of this modeling process
+    this.root_public_id =
+      this.props.root_public_id !== undefined
+        ? this.props.root_public_id
+        : "no_definido";
   }
+
+  componentDidMount = async () => {
+    this._search_root_block().then((bloqueroot) =>
+      this._create_initial_menu(bloqueroot)
+    );
+  };
 
   // manejar el cierre de los modales:
   handle_modal_close = (update: boolean) => {
@@ -52,18 +71,15 @@ class ComponentModeling extends Component<props, state> {
 
   // busca la estructura basada en bloques y componentes:
   _search_root_block = async () => {
-    this.setState({
-      loading: true,
-      error: false,
-    });
-
-    let path = SCT_API_URL + "/block-root/" + root_public_id;
+    let bloqueroot = null;
+    this.setState({ loading: true, error: false });
+    let path = SCT_API_URL + "/block-root/" + this.root_public_id;
     await fetch(path)
       .then((res) => res.json())
       .then((json) => {
         if (json.success) {
-          let bloqueroot = json.bloqueroot as bloque_root;
-          this.setState({ bloqueroot: bloqueroot });
+          bloqueroot = json.bloqueroot as bloque_root;
+          this.setState({ bloqueroot: bloqueroot, new_root: false });
         } else {
           this.setState({
             new_root: true,
@@ -80,18 +96,50 @@ class ComponentModeling extends Component<props, state> {
             msg: "Ha fallado la conexión con la API de modelamiento (api-sct)",
           },
         });
-        console.log(error);
+        console.log(error, this.state.log);
       });
     this.setState({ loading: false });
+    return bloqueroot;
+  };
+
+  _create_initial_menu = (bloqueroot: bloque_root) => {
+    if (bloqueroot === null) {
+      this.setState({ menu: [] });
+      return;
+    }
+    // usando las hojas para realizar el submenú:
+    let submenus = [];
+    for (const leaf of bloqueroot.leafs) {
+      let submenu = {
+        parent_id: leaf.parent_id,
+        public_id: leaf.public_id,
+        document: leaf.document,
+        name: leaf.name,
+        object: leaf,
+      } as submenu;
+      submenus.push(submenu);
+    }
+    // creando el menu inicial
+    let menu = {
+      level: 0,
+      parent_id: undefined,
+      public_id: bloqueroot.public_id,
+      name: bloqueroot.name,
+      document: bloqueroot.document,
+      submenu: submenus,
+      object: bloqueroot,
+    } as menu;
+    this.setState({ menu: [menu] });
+    console.log(menu);
   };
 
   // Permite desplegar la modal de inicio de modelación
   // Esto en el caso que aún no exista el root de modelado:
   is_needed_a_new_root = () => {
-    if (!this.state.new_root) {
+    if (this.state.new_root) {
       return (
         <Modal_new_root_block
-          public_id={root_public_id}
+          public_id={this.root_public_id}
           handle_close={this.handle_modal_close}
           handle_new_root_block={this.handle_changes_in_structure}
         />
@@ -110,14 +158,20 @@ class ComponentModeling extends Component<props, state> {
     };
     return (
       <>
-        <link rel="stylesheet" type="text/css" href="/wp-content/uploads/custom-css-js/bootstrap.4.3.1.css"></link>
-        <link rel="stylesheet" type="text/css" href="bootstrap.4.3.1.css"></link>
         {
           // if there is need to create a new root structure:
           this.is_needed_a_new_root()
         }
-        <Alert>hola</Alert>
-         </>
+        <div className="page-wrapper default-theme sidebar-bg bg1 toggled">
+          <DynamicSidebar
+            menu={this.state.menu}
+            edit_menu_modal={ modal_edit_menu_function}
+            add_submenu_modal={modal_add_submenu_function}
+            edit_submenu_modal={modal_edit_submenu_function}
+            delete_submenu_modal={ modal_delete_submenu_function}
+          />
+        </div>
+      </>
     );
   }
 }

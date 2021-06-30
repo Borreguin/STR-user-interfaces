@@ -1,0 +1,100 @@
+.static_menu {
+  padding: 2px !important;
+  
+  color: white;
+}
+
+.static_menu:hover{
+  background-color: rgba(68, 120, 216, 0.699) !important;
+  color: white;
+}
+
+
+.static_pinned_menu {
+  padding: 3px;
+  padding-left: 12px;
+  background-color: rgba(87, 81, 80, 0.692) !important;
+  color: white;
+}
+.static_pinned_menu:hover{
+  background-color: rgba(68, 120, 216, 0.699) !important;
+  color: white;
+}
+
+
+.container_menu {
+  padding: 2px;
+  background-color: rgba(87, 81, 80, 0.692) !important;
+}
+
+.submenu-container{
+  padding: 2px;
+}
+
+.submenu-item{
+  padding: 2px;
+  padding-left: 8px;
+  background-color: rgba(240, 232, 230, 0.164);
+  color: white;
+}
+
+.submenu-item:hover{
+  background-color: rgba(68, 120, 216, 0.699) !important;
+  color: white;
+}
+
+.add_button {
+  position: absolute;
+  right: 7px;
+  cursor: pointer;
+}
+.add_button:hover {
+    color: rgba(36, 209, 252, 0.911);
+}
+
+.edit_block_button {
+  position: absolute;
+  right: 26px;
+  cursor: pointer;
+}
+.edit_block_button:hover {
+    color: rgba(36, 209, 252, 0.911);
+}
+
+.icon_pinned {
+    height: 22px;
+    padding-left: 2%;
+}
+
+.pinned_button{
+  align-content: center;
+}
+
+.right-button-section {
+  position: absolute;
+  right: 4px;
+  padding: 2px;
+}
+
+.delete_button{
+  color: rgb(243, 99, 99);
+  cursor: pointer;
+}
+.delete_button:hover{
+  color: rgb(245, 10, 10);
+}
+
+.edit_button{
+  color: rgba(137, 204, 231, 0.719);
+  margin-right: 7px;
+  cursor: pointer;
+}
+
+.edit_button:hover{
+  color: rgba(16, 13, 231, 0.719);
+}
+
+.active-menu{
+  background-color: rgba(113, 243, 243, 0.26) !important;
+  color: black;
+}

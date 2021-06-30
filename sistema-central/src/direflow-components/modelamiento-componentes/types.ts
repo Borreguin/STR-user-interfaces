@@ -1,6 +1,10 @@
 export type bloque_leaf = {
+  parent_id: string;
   public_id: string;
   name: string;
+  document: string;
+  calculation_type: string;
+  position_x_y: Array<number>;
 };
 
 export type bloque_root = {
@@ -23,3 +27,21 @@ export type leaf_block_form = {
 export type root_component_form = {
   name: string;
 };
+
+export type menu = {
+  level: number,
+  public_id: string,
+  parent_id?: string,
+  name: string,
+  document: string,
+  submenu: Array<submenu>,
+  object: Object
+}
+
+export type submenu = {
+  public_id: string,
+  parent_id?: string,
+  name: string,
+  document: string,
+  object: Object
+}

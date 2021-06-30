@@ -1,18 +1,23 @@
-import { DireflowComponent } from 'direflow-component';
-import App from './App';
+import { DireflowComponent } from "direflow-component";
+import App from "./App";
+
+const direflowProperties = {
+  root_public_id: "no_definida_aún",
+};
 
 export default DireflowComponent.create({
   component: App,
   configuration: {
-    tagname: 'modelamiento-componentes',
+    tagname: "modelamiento-componentes",
     useShadow: false,
   },
+  properties: direflowProperties,
   plugins: [
     {
-      name: 'font-loader',
+      name: "font-loader",
       options: {
         google: {
-          families: ['Advent Pro', 'Noto Sans JP'],
+          families: ["Advent Pro", "Noto Sans JP"],
         },
       },
     },

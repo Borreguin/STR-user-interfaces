@@ -5,10 +5,13 @@ import { Modal_new_root_block } from "./Modals/blocks/modal_new_root_block";
 import { SCT_API_URL } from "../../Constantes";
 import { bloque_root, menu, submenu } from "./types";
 import DynamicSidebar from "./DynamicSidebar/DynamicSidebar";
-import { modal_add_submenu_function } from "./Modals/modal_add_submenu";
-import { modal_edit_submenu_function } from "./Modals/modal_edit_submenu";
-import { modal_delete_submenu_function } from "./Modals/modal_delete_submenu";
-import { modal_edit_menu_function } from "./Modals/modal_edit_menu";
+import { modal_edit_submenu_function } from "./Modals/modal_edit_submenu_function";
+import { modal_delete_submenu_function } from "./Modals/modal_delete_submenu_function";
+import { modal_edit_menu_function } from "./Modals/modal_edit_menu_function";
+import { modal_add_submenu_function } from "./Modals/modal_add_submenu_function";
+import ReactJson from "react-json-view";
+import BlockRootGrid from "./ModelingGrids/ModelingBlocks/BlockRootGrid";
+import BlockLeafGrid from "./ModelingGrids/ModelingComponents/BlockLeafGrid";
 
 type props = {
   root_public_id: string;
@@ -22,6 +25,8 @@ type state = {
   log: Object;
   bloqueroot: bloque_root | undefined;
   menu: Array<menu>;
+  selected_menu_id: string | undefined;
+  selected_menu: menu | undefined;
 };
 
 // const root_public_id = "disponibilidad_ems";
@@ -40,6 +45,8 @@ class ComponentModeling extends Component<props, state> {
       log: { msg: "Empezando... Conectando con API-SCT" },
       bloqueroot: undefined,
       menu: [],
+      selected_menu_id: undefined,
+      selected_menu: undefined,
     };
     // identify the public_id of this modeling process
     this.root_public_id =
@@ -67,6 +74,28 @@ class ComponentModeling extends Component<props, state> {
     value: Object
   ) => {
     console.log(public_id, document, value);
+  };
+
+  handle_messages = (msg) => {
+    if (msg !== undefined) {
+      this.setState({ log: msg });
+    }
+  };
+
+  handle_edited_menu = (menu) => {
+    console.log("handle_edited_menu", menu);
+  };
+
+  handle_reload = (menu: menu) => {
+    let document = menu.document;
+    switch (document) {
+      case "BloqueRoot":
+        this._search_root_block().then((bloqueroot) =>
+          this._create_initial_menu(bloqueroot)
+        );
+        break;
+    }
+    console.log("reload", menu);
   };
 
   // busca la estructura basada en bloques y componentes:
@@ -111,6 +140,7 @@ class ComponentModeling extends Component<props, state> {
     let submenus = [];
     for (const leaf of bloqueroot.leafs) {
       let submenu = {
+        level: 0,
         parent_id: leaf.parent_id,
         public_id: leaf.public_id,
         document: leaf.document,
@@ -129,8 +159,62 @@ class ComponentModeling extends Component<props, state> {
       submenu: submenus,
       object: bloqueroot,
     } as menu;
-    this.setState({ menu: [menu] });
-    console.log(menu);
+    this.setState({
+      menu: [menu],
+      selected_menu_id: bloqueroot.public_id,
+      selected_menu: menu,
+    });
+  };
+
+  // Manejo de selección de menus:
+  _on_click_menu = (new_menu: menu, selected_menu_id: string) => {
+    if (new_menu.level === 0) {
+      this.setState({
+        menu: [new_menu],
+        selected_menu_id: selected_menu_id,
+        selected_menu: new_menu,
+      });
+    } else {
+      let new_array_menu = this.state.menu;
+      // remove all items below new_menu.level
+      new_array_menu.length = new_menu.level;
+      new_array_menu.push(new_menu);
+      this.setState({
+        menu: new_array_menu,
+        selected_menu_id: selected_menu_id,
+        selected_menu: new_menu,
+      });
+    }
+    console.log("new_menu", new_menu, selected_menu_id);
+  };
+
+  // show grid for each selection:
+  show_grid = () => {
+    if (this.state.selected_menu === undefined) {
+      return <></>;
+    }
+    let document = this.state.selected_menu.document;
+    console.log("grid", document);
+    switch (document) {
+      case "BloqueRoot":
+        return (
+          <BlockRootGrid
+            menu={this.state.selected_menu}
+            handle_messages={this.handle_messages}
+            handle_reload={this.handle_reload}
+          />
+        );
+      case "BloqueLeaf":
+        return (
+          <BlockLeafGrid
+            menu={this.state.selected_menu}
+            handle_messages={this.handle_messages}
+            handle_reload={this.handle_reload}
+          />
+        );
+    }
+
+    return <></>;
   };
 
   // Permite desplegar la modal de inicio de modelación
@@ -164,12 +248,34 @@ class ComponentModeling extends Component<props, state> {
         }
         <div className="page-wrapper default-theme sidebar-bg bg1 toggled">
           <DynamicSidebar
+            // to keep track
             menu={this.state.menu}
-            edit_menu_modal={ modal_edit_menu_function}
+            selected_menu_id={this.state.selected_menu_id}
+            // modales de adición, edición, eliminación:
+            edit_menu_modal={modal_edit_menu_function}
             add_submenu_modal={modal_add_submenu_function}
             edit_submenu_modal={modal_edit_submenu_function}
-            delete_submenu_modal={ modal_delete_submenu_function}
+            delete_submenu_modal={modal_delete_submenu_function}
+            // manejo de selección de menus:
+            handle_click_menu_button={this._on_click_menu}
+            handle_edited_menu={this.handle_edited_menu}
           />
+          <div className="page-content content-shift">
+            {/* Grid de modelamiento*/}
+            <div className="grid">{this.show_grid()}</div>
+            <div className="logger">
+              <ReactJson
+                name={false}
+                displayObjectSize={true}
+                indentWidth={2}
+                collapsed={false}
+                iconStyle="circle"
+                displayDataTypes={false}
+                theme="monokai"
+                src={this.state.log}
+              />
+            </div>
+          </div>
         </div>
       </>
     );

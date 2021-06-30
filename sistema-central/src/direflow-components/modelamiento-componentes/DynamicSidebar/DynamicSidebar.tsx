@@ -7,7 +7,7 @@ export interface MenuProps {
     // Hoocks:
     handle_close?: Function;
     handle_edited_menu?: Function;
-    handle_click_menu_button?: Function;
+    handle_click_menu_button: Function;
     // Modals:
     edit_menu_modal?: Function;
     add_submenu_modal?: Function;
@@ -17,7 +17,7 @@ export interface MenuProps {
     modal_show?: boolean;
     // selected_level: number;
     // selected_menu?: string | undefined;
-    // selected_submenu?: string | undefined;
+    selected_menu_id?: string | undefined;
   }
 
 class DynamicSideBar extends Component<MenuProps> {
@@ -53,7 +53,7 @@ class DynamicSideBar extends Component<MenuProps> {
                       delete_submenu_modal={this.props.delete_submenu_modal}
                       // to keep track of changes
                       modal_show={this.props.modal_show}
-                      // selected_static_menu={this.props.selected_static_menu}
+                      selected_menu_id={ this.props.selected_menu_id}
                       // selected_block={ this.props.selected_block}
                     />
                   </div>

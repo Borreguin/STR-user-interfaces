@@ -1,24 +1,23 @@
 import React, { Component } from "react";
 import { Alert, Button, Form, Modal } from "react-bootstrap";
 import { SCT_API_URL } from "../../../../Constantes";
-import { bloque_root, leaf_block_form } from "../../types";
+import { bloque_leaf, root_component_form } from "../../types";
 
 export interface menu_props {
-  object: bloque_root;
+  object: bloque_leaf;
   handle_close?: Function;
-  handle_message?: Function;
   handle_edited_root_block?: Function;
+  handle_message?: Function;
 }
 
 export interface menu_state {
   show: boolean;
-  form: leaf_block_form;
+  form: root_component_form;
   message: string;
 }
 
-let modal_id = "modal_add_block";
-
-export class Modal_add_block extends Component<
+let modal_id = "modal_add_component";
+export class Modal_add_component extends Component<
   menu_props,
   menu_state
 > {
@@ -48,9 +47,7 @@ export class Modal_add_block extends Component<
   handleShow = () => {
     this.setState({ show: true });
   };
-
   handleEditedRootBlock = (bloqueroot) => {
-    console.log("bloqueroot", bloqueroot);
     if (this.props.handle_edited_root_block !== undefined) {
       // permite enviar el bloque root editado:
       this.props.handle_edited_root_block(bloqueroot);
@@ -58,12 +55,12 @@ export class Modal_add_block extends Component<
   };
 
   // INTERNAL FUNCTIONS:
+  // crea un nuevo componente root dentro de un bloque:
   _onclick_create = () => {
-    
     if (this._check_form()) {
-      let path = `${SCT_API_URL}/block-leaf/block-root/${this.props.object.public_id}`;
+      let path = `${SCT_API_URL}/component-root/block-root/${this.props.object.parent_id}/block-leaf/${this.props.object.public_id}`;
       let payload = JSON.stringify(this.state.form);
-      this.setState({ message: "Creando bloque interno" });
+      this.setState({ message: "Creando componente interno" });
       // Creando el nuevo root block mediante la API
       fetch(path, {
         method: "POST",
@@ -75,8 +72,8 @@ export class Modal_add_block extends Component<
         .then((res) => res.json())
         .then((json) => {
           if (json.success) {
-            this.handleEditedRootBlock(json.bloqueroot);
-            this.handleClose();
+           this.handleEditedRootBlock(json.bloqueroot);
+           this.handleClose();
           } else {
             this.setState({ message: json.msg });
             this.handleMessages(json.msg);
@@ -126,18 +123,18 @@ export class Modal_add_block extends Component<
           animation={false}
         >
           <Modal.Header translate={"true"} closeButton>
-            <Modal.Title>Creación de bloque interno</Modal.Title>
+            <Modal.Title>Añadir componente</Modal.Title>
           </Modal.Header>
           <Modal.Body>
             <Form>
-              {/* Forma - diálogo */}
               <Form.Group controlId="BlockName">
-                <Form.Label>Nombre del bloque:</Form.Label>
+                <Form.Label>Nombre del componente:</Form.Label>
                 <Form.Control
                   onChange={(e) => this._handle_form_changes(e, "name")}
                   type="text"
-                  placeholder="Ingrese nombre"
+                  placeholder="Ingrese nuevo nombre"
                 />
+                
               </Form.Group>
               {this.state.message.length === 0 ? (
                 <></>
@@ -154,10 +151,10 @@ export class Modal_add_block extends Component<
             </Button>
             <Button
               variant="primary"
-              disabled={!this._check_form()}
               onClick={this._onclick_create}
+              disabled={!this._check_form()}
             >
-              Crear bloque interno
+              Crear componente
             </Button>
           </Modal.Footer>
         </Modal>
@@ -166,17 +163,15 @@ export class Modal_add_block extends Component<
   }
 }
 
-// permite la creación de un bloque LEAF
-export const modal_add_block_function = (
-  object: bloque_root,
-  handle_modal_close: Function,
+export const modal_add_component_function = (
+  object: bloque_leaf,
+  handle_close: Function,
   handle_changes_in_root: Function
 ) => {
-  
   return (
-    <Modal_add_block
+    <Modal_add_component
       object={object}
-      handle_close={handle_modal_close}
+      handle_close={handle_close}
       handle_edited_root_block={handle_changes_in_root}
     />
   );

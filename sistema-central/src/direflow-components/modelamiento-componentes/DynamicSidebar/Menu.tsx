@@ -7,13 +7,13 @@ import {
   faTrash,
 } from "@fortawesome/free-solid-svg-icons";
 import { Card, ListGroup } from "react-bootstrap";
-import { menu } from "../types";
+import { bloque_leaf, menu, submenu } from "../types";
 
 interface pros {
   menu: menu; // menu structure
   // Hoocks:
   handle_edited_menu?: Function;
-  handle_click_menu_button?: Function;
+  handle_click_menu_button: Function;
   // Modals:
   edit_menu_modal?: Function;
   add_submenu_modal?: Function;
@@ -21,7 +21,7 @@ interface pros {
   delete_submenu_modal?: Function;
   // to keep track of changes
   modal_show?: boolean;
-  // selected_static_menu: static_menu | undefined;
+  selected_menu_id: string | undefined;
   // selected_block: block | undefined;
 }
 
@@ -31,7 +31,6 @@ interface state {
   // selected_static_menu: static_menu | undefined;
   // selected_block: block | undefined;
   selected_object: Object;
-  current_selected_id: string | undefined;
 }
 
 class Menu extends Component<pros, state> {
@@ -39,7 +38,6 @@ class Menu extends Component<pros, state> {
     super(props);
     this.state = {
       show_modal_id: undefined,
-      current_selected_id: undefined,
       selected_object: {},
       // selected_static_menu: this.props.selected_static_menu,
       // selected_block: this.props.selected_static_menu,
@@ -62,30 +60,25 @@ class Menu extends Component<pros, state> {
 
   check_if_is_active = (current_selection_id) => {
     // let to highlight the selected buton in the menu
-    if (this.state.current_selected_id === undefined) {
-      return "";
-    }
-    if (current_selection_id === this.props.menu.public_id) {
+    if (current_selection_id === this.props.selected_menu_id) {
       return "active-menu";
-    }
-    for (const sub of this.props.menu.submenu) {
-      if (current_selection_id === sub.public_id) {
-        return "active-menu";
-      }
     }
     return "";
   };
 
   // static_menu: la estructura estática de menu
   // block: bloque seleccionado
-  on_click_menu_button = (e, selected_id) => {
+  on_click_menu_button = (e, menu : menu | submenu) => {
     if (e.target.tagName !== "DIV" && e.target.tagName !== "SPAN") return;
-    if (this.props.handle_click_menu_button !== undefined) {
-      // console.log("check this out", static_menu, block);
-      // this.props.handle_click_menu_button(static_menu, block);
-    }
-    this.setState({ current_selected_id: selected_id });
+    let classname = "" + e.target.className;
+    if (classname.includes("card-header") && menu.level > 0) { return };
+    let new_menu = this.modify_menu(menu);
+    let selected_menu_id = menu.public_id;
+        this.props.handle_click_menu_button(new_menu, selected_menu_id);
+     
   };
+
+  
 
   shouldBeInMenu = (block_object) => {
     let isBloqueLeaf = block_object.document === "BloqueLeaf";
@@ -102,6 +95,34 @@ class Menu extends Component<pros, state> {
   _handle_close = () => {
     this.setState({ show_modal_id: undefined });
   };
+
+  // TO CHANGE IF NEEDED:
+  modify_menu = (selected_menu: menu | submenu) => {
+    let document = selected_menu.document;
+    console.log(document, selected_menu);
+    switch (document) {
+      case "BloqueRoot":
+        return selected_menu;
+      case "BloqueLeaf":
+        let bloqueleaf = selected_menu["object"] as bloque_leaf;
+        let sub_menu = [] as Array<submenu>;
+        if (bloqueleaf.comp_root !== null) {
+          console.log("continue", bloqueleaf.comp_root)
+        }
+        let new_menu = {
+          level: selected_menu.level + 1,
+          document: document,
+          name: selected_menu.name,
+          public_id: selected_menu.public_id,
+          parent_id: selected_menu.parent_id,
+          object: selected_menu.object,
+          submenu: sub_menu
+        } as menu;
+        return new_menu;
+        
+    }
+
+  }
 
   // show Modal according with the menu
   show_modal = () => {
@@ -157,7 +178,7 @@ class Menu extends Component<pros, state> {
                 className={
                   "static_menu " + this.check_if_is_active(menu.public_id)
                 }
-                onClick={(e) => this.on_click_menu_button(e, menu.public_id)}
+                onClick={(e) => this.on_click_menu_button(e, menu)}
               >
                 <span>
                   <FontAwesomeIcon
@@ -206,7 +227,7 @@ class Menu extends Component<pros, state> {
                               sub_menu.public_id
                             )}`}
                             onClick={(e) =>
-                              this.on_click_menu_button(e, sub_menu.public_id)
+                              this.on_click_menu_button(e, sub_menu)
                             }
                           >
                             <span style={{ marginRight: "15px" }}>
@@ -259,52 +280,6 @@ class Menu extends Component<pros, state> {
           }
         </div>
         {this.show_modal()}
-        {
-          // Llamando modal para editar cabecera del menú
-          /* this.state.show["edit_menu_modal"] !== undefined &&
-          this.state.show["edit_menu_modal"] === true &&
-          this.props.edit_menu_modal !== undefined ? (
-            this.props.edit_menu_modal(
-              menu.public_id,
-              this.props.handle_close,
-              this.props.handle_edited_menu
-            )
-          ) : (
-            <></>
-          )
-        }
-
-        {
-          // Llamando modal para eliminar elementos internos
-          this.state.show["delete_submenu_modal"] !== undefined &&
-          this.state.show["delete_submenu_modal"] === true &&
-          this.props.delete_submenu_modal !== undefined ? (
-            this.props.delete_submenu_modal(
-              this.state.current_selected_id,
-              this.state.current_selected_id,
-              this.props.handle_close,
-              this.props.handle_edited_menu
-            )
-          ) : (
-            <></>
-          )
-        }
-        {
-          // Llamando modal para editar elementos internos
-          this.state.show["edit_submenu_modal"] !== undefined &&
-          this.state.show["edit_submenu_modal"] === true &&
-          this.props.edit_submenu_modal !== undefined ? (
-            this.props.edit_submenu_modal(
-              this.state.current_selected_id,
-              this.state.current_selected_id,
-              this.props.handle_close,
-              this.props.handle_edited_menu
-            )
-          ) : (
-            <></>
-          )
-          */
-        }
       </ul>
     );
   };

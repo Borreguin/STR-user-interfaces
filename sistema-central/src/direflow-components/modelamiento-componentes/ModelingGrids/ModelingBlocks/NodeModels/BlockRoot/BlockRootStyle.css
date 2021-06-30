@@ -1,0 +1,53 @@
+.sr-port {
+  margin-top: 4px;
+  min-width: 12px;
+  height: 16px;
+  z-index: 10;
+  border-top-left-radius: 6px;
+  border-bottom-left-radius: 6px;
+  cursor: pointer;
+  float: right;
+  margin-left: 2px;
+}
+.out-serial-port {
+  height: 24px;
+  float: right;
+  cursor: pointer;
+  width: 92px;
+}
+.out-serial-port:hover{
+  background-color: rgb(37, 112, 182);
+}
+
+.in_error{
+  border-color: red !important;
+}
+
+.sr-root {
+  box-sizing: border-box;
+  white-space: nowrap;
+  pointer-events: all;
+  background-color: hsla(43, 83%, 45%, 0.705);
+  color: white;
+  border-radius: 1px;
+  border: black solid 1px;
+  width: 160px;
+}
+
+.widget-disconnect{
+  background-color: rgba(194, 72, 58, 0.926);
+  border-color: rgba(126, 6, 6, 0.781);
+  border-radius: 50%;
+  color:  rgba(194, 72, 58, 0.926);
+  width: 20px;
+  height: 20px;
+  margin-left: 3px;
+  margin-top: 3px;
+}
+
+.root-port {
+  height: 24px;
+  float: right;
+  cursor: pointer;
+  min-width: 80px;
+}

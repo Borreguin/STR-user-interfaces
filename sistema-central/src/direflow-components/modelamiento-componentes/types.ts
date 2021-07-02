@@ -80,6 +80,7 @@ export type comp_root = {
   name: string,
   position_x_y: Array<Number>,
   public_id: string,
+  parent_id: string,
   topology?: Object
 }
 

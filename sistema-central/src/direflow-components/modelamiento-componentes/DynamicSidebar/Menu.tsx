@@ -68,19 +68,20 @@ class Menu extends Component<pros, state> {
 
   // static_menu: la estructura estática de menu
   // block: bloque seleccionado
-  on_click_menu_button = (e, menu : menu | submenu) => {
+  on_click_menu_button = (e, menu: menu | submenu) => {
+    console.log("on_click_menu_button", menu);
     if (e.target.tagName !== "DIV" && e.target.tagName !== "SPAN") return;
     let classname = "" + e.target.className;
-    if (classname.includes("card-header") && menu.level > 0) { return };
+    if (classname.includes("card-header") && menu.level > 0) {
+      return;
+    }
     let new_menu = this.modify_menu(menu);
     let selected_menu_id = menu.public_id;
-        this.props.handle_click_menu_button(new_menu, selected_menu_id);
-     
+    this.props.handle_click_menu_button(new_menu, selected_menu_id);
   };
 
-  
-
   shouldBeInMenu = (block_object) => {
+    console.log("shouldBeInMenu", block_object);
     let isBloqueLeaf = block_object.document === "BloqueLeaf";
     let isComponenteLeaf = block_object.document === "ComponenteLeaf";
     let notParallelOperation = block_object.calculation_type !== "PARALELO";
@@ -107,7 +108,19 @@ class Menu extends Component<pros, state> {
         let bloqueleaf = selected_menu["object"] as bloque_leaf;
         let sub_menu = [] as Array<submenu>;
         if (bloqueleaf.comp_root !== null) {
-          console.log("continue", bloqueleaf.comp_root)
+          // using a root component:
+          console.log("continue", bloqueleaf.comp_root);
+          for (const leaf of bloqueleaf.comp_root.leafs) {
+            let sub = {
+              document: leaf.document,
+              level: selected_menu.level + 1,
+              name: leaf.name,
+              parent_id: leaf.parent_id,
+              public_id: leaf.public_id,
+              object: leaf,
+            } as submenu;
+            sub_menu.push(sub);
+          }
         }
         let new_menu = {
           level: selected_menu.level + 1,
@@ -116,13 +129,11 @@ class Menu extends Component<pros, state> {
           public_id: selected_menu.public_id,
           parent_id: selected_menu.parent_id,
           object: selected_menu.object,
-          submenu: sub_menu
+          submenu: sub_menu,
         } as menu;
         return new_menu;
-        
     }
-
-  }
+  };
 
   // show Modal according with the menu
   show_modal = () => {
@@ -151,7 +162,7 @@ class Menu extends Component<pros, state> {
           this.state.selected_object,
           this._handle_close,
           this.props.handle_edited_menu
-        )
+        );
     }
 
     return <></>;

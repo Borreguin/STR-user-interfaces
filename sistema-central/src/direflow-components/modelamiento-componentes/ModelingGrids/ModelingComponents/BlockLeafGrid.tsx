@@ -215,16 +215,17 @@ class BlockLeafGrid extends Component<BlockLeafGridProps> {
   // elemento root del grid:
   create_root_component = () => {
     var bloqueleaf = this.props.menu.object as bloque_leaf;
+    var root_component = bloqueleaf.comp_root;
     // var root_data = this.props.menu.object.comp_root;
     // Estructura determinada para node root del grid:
     let Root = {
-      name: bloqueleaf.name,
-      type: bloqueleaf.document,
+      name: root_component.name,
+      type: root_component.document,
       editado: false,
-      public_id: bloqueleaf.public_id,
-      parent_id: bloqueleaf.parent_id,
-      posx: bloqueleaf.position_x_y[0],
-      posy: bloqueleaf.position_x_y[1],
+      public_id: root_component.public_id,
+      parent_id: bloqueleaf.public_id,
+      posx: root_component.position_x_y[0],
+      posy: root_component.position_x_y[1],
     };
     return new CompRootModel({
       root: Root,
@@ -236,10 +237,11 @@ class BlockLeafGrid extends Component<BlockLeafGridProps> {
   create_root_link = () => {
     // Creación de link root, usando información del bloque leaf (como root node)
     var bloqueleaf = this.props.menu.object as bloque_leaf;
+    var root_component = bloqueleaf.comp_root;
     // var root_data = this.props.menu.object.comp_root;
-    if (bloqueleaf.topology && bloqueleaf.topology["ROOT"] !== undefined) {
-      let root_node = this.model.getNode(bloqueleaf.public_id) as CompRootModel;
-      let node_id = bloqueleaf.topology["ROOT"][0];
+    if (root_component.topology && root_component.topology["ROOT"] !== undefined) {
+      let root_node = this.model.getNode(root_component.public_id) as CompRootModel;
+      let node_id = root_component.topology["ROOT"][0];
       let node_to_connect = this.model.getNode(node_id);
       if (node_to_connect === undefined) {
         return;
@@ -258,6 +260,7 @@ class BlockLeafGrid extends Component<BlockLeafGridProps> {
     const { menu } = this.props;
     let nodes = [];
     let bloqueleaf = menu.object as bloque_leaf;
+    // var root_component = bloqueleaf.comp_root;
     if (bloqueleaf.comp_root === null) {
       return nodes;
     }

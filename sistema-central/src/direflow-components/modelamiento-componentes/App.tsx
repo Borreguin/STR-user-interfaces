@@ -87,6 +87,7 @@ class ComponentModeling extends Component<props, state> {
   };
 
   handle_reload = (menu: menu) => {
+    if (menu === undefined) return;
     let document = menu.document;
     switch (document) {
       case "BloqueRoot":
@@ -168,6 +169,8 @@ class ComponentModeling extends Component<props, state> {
 
   // Manejo de selección de menus:
   _on_click_menu = (new_menu: menu, selected_menu_id: string) => {
+    console.log("new_menu", new_menu);
+    if (new_menu === undefined) { return; }
     if (new_menu.level === 0) {
       this.setState({
         menu: [new_menu],

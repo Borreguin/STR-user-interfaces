@@ -436,3 +436,20 @@
     height: 100px;
     background-color:rgb(39, 40, 34);
 }
+
+.cmp-root {
+  box-sizing: border-box;
+  white-space: nowrap;
+  pointer-events: all;
+  background-color: rgba(41,47,230,.583);
+  color: #fff;
+  border-radius: 1px;
+  border: 1px solid #000;
+      border-top-color: rgb(0, 0, 0);
+      border-right-color: rgb(0, 0, 0);
+      border-bottom-color: rgb(0, 0, 0);
+      border-left-color: rgb(0, 0, 0);
+  width: 160px;
+}
+
+

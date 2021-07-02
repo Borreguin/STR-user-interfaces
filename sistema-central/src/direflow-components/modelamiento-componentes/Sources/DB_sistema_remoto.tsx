@@ -5,7 +5,10 @@ import { Button, Form } from "react-bootstrap";
 
 import "./Sources.css";
 import ReactJson from "react-json-view";
-import { get_last_month_dates, to_yyyy_mm_dd_hh_mm_ss } from "../common_functions";
+import {
+  get_last_month_dates,
+  to_yyyy_mm_dd_hh_mm_ss,
+} from "../common_functions";
 
 export interface props {
   handle_msg?: Function;
@@ -43,7 +46,7 @@ export class DB_sistema_remoto extends Component<props, state> {
       end_date: r.last_day_month,
       end_date_str: to_yyyy_mm_dd_hh_mm_ss(r.last_day_month),
       range: [range],
-      log: {msg: "Aún no se ha ejecutado la prueba"}
+      log: { msg: "Aún no se ha ejecutado la prueba" },
     };
   }
 
@@ -98,9 +101,7 @@ export class DB_sistema_remoto extends Component<props, state> {
     return (
       <>
         <Form.Group>
-          <Form.Label>
-            Nombre de la colección:
-          </Form.Label>
+          <Form.Label>Nombre de la colección:</Form.Label>
           <Form.Control as="select">
             <option>Collección 1</option>
             <option>Collección 2</option>
@@ -128,34 +129,31 @@ export class DB_sistema_remoto extends Component<props, state> {
                 value={this.state.end_date_str}
                 onChange={(e) => this.onChangeDate(e, "end_date")}
               />
-              <div
-                className={
-                  this.state.show_date
-                    ? "date-range-show"
-                    : "date-range-no-show"
-                }
-              >
-                <DateRange
-                  locale={es}
-                  ranges={this.state.range}
-                  showMonthAndYearPickers={true}
-                  dateDisplayFormat={"yyyy MMM d"}
-                  onChange={this.handleSelect}
-                  months={1}
-                  direction="horizontal"
-                  fixedHeight={true}
-                  column="true"
-                />
-              </div>
+              <Button variant="outline-info" className="test-manual-btn">
+                Probar
+              </Button>
             </div>
           </Form.Label>
-
-          <Button variant="outline-info" className="test-manual-btn">
-            Probar
-          </Button>
+          <div
+            className={
+              this.state.show_date ? "date-range-show" : "date-range-no-show"
+            }
+          >
+            <DateRange
+              locale={es}
+              ranges={this.state.range}
+              showMonthAndYearPickers={true}
+              dateDisplayFormat={"yyyy MMM d"}
+              onChange={this.handleSelect}
+              months={1}
+              direction="horizontal"
+              fixedHeight={true}
+              column="true"
+            />
+          </div>
         </Form.Group>
         <Form.Group>
-        <ReactJson
+          <ReactJson
             name="log"
             displayObjectSize={true}
             collapsed={true}

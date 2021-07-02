@@ -12,6 +12,7 @@ import { modal_add_submenu_function } from "./Modals/modal_add_submenu_function"
 import ReactJson from "react-json-view";
 import BlockRootGrid from "./ModelingGrids/ModelingBlocks/BlockRootGrid";
 import BlockLeafGrid from "./ModelingGrids/ModelingComponents/BlockLeafGrid";
+import SubComponentGrid from "./ModelingGrids/ModelingSubComponents/SubComponentGrid";
 
 type props = {
   root_public_id: string;
@@ -170,7 +171,9 @@ class ComponentModeling extends Component<props, state> {
   // Manejo de selección de menus:
   _on_click_menu = (new_menu: menu, selected_menu_id: string) => {
     console.log("new_menu", new_menu);
-    if (new_menu === undefined) { return; }
+    if (new_menu === undefined) {
+      return;
+    }
     if (new_menu.level === 0) {
       this.setState({
         menu: [new_menu],
@@ -210,6 +213,14 @@ class ComponentModeling extends Component<props, state> {
       case "BloqueLeaf":
         return (
           <BlockLeafGrid
+            menu={this.state.selected_menu}
+            handle_messages={this.handle_messages}
+            handle_reload={this.handle_reload}
+          />
+        );
+      case "ComponenteLeaf":
+        return (
+          <SubComponentGrid
             menu={this.state.selected_menu}
             handle_messages={this.handle_messages}
             handle_reload={this.handle_reload}

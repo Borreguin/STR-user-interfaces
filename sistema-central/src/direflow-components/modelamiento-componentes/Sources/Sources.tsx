@@ -3,6 +3,7 @@ import { Form } from "react-bootstrap";
 import { SCT_API_URL } from "../../../Constantes";
 import { block } from "../types";
 import { DB_sistema_remoto } from "./DB_sistema_remoto";
+import { DesdeSubComponente } from "./DesdeSubComponente";
 import { Manual } from "./Manual";
 
 export interface props {
@@ -65,11 +66,13 @@ export class Sources extends Component<props, state> {
   show_source_form = () => {
     switch (this.state.select) {
       case "MANUAL":
-        return <Manual component={ this.props.component}/>;
-        case "BD SIST.REMOTO":
-            return <DB_sistema_remoto/>;
-        case "HISTORICO":
-            return <>HISTORICO</>;
+        return <Manual component={this.props.component} />;
+      case "BD SIST.REMOTO":
+        return <DB_sistema_remoto />;
+      case "HISTORICO":
+        return <>HISTORICO</>;
+      case "DESDE SUBCOMPONENTE":
+        return <DesdeSubComponente component={this.props.component}/>
     }
 
     return <>No hay forma asociada a esta fuente</>;
@@ -81,9 +84,7 @@ export class Sources extends Component<props, state> {
         <Form.Control as="select" onChange={this._handle_selection}>
           {this.state.options}
         </Form.Control>
-        <div className="source-container">
-          {this.show_source_form()}
-          </div>
+        <div className="source-container">{this.show_source_form()}</div>
       </>
     );
   }

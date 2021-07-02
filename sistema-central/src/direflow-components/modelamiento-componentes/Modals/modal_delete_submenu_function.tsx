@@ -2,6 +2,7 @@ import React, {  } from "react";
 import { bloque_leaf} from "../types";
 import { Modal_delete_block } from "./blocks/modal_delete_block";
 
+// Permite desplegar los modales de eliminación a nivel de submenu:
 export const modal_delete_submenu_function = (
   object: Object,
   handle_close: Function,

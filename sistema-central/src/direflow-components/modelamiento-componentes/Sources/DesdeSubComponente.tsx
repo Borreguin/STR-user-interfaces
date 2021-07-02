@@ -40,7 +40,7 @@ export interface state {
   log: Object;
 }
 
-export class Manual extends Component<props, state> {
+export class DesdeSubComponente extends Component<props, state> {
   constructor(props) {
     super(props);
     let r = get_last_month_dates();
@@ -75,21 +75,15 @@ export class Manual extends Component<props, state> {
     console.log("component", this.props.component);
   };
 
-  _test_source = async () => {
-    let path = `${SCT_API_URL}/source/manual/test`;
-    let parameters = {
-      root_id: this.props.component.parent_id,
-      leaf_id: this.props.component.public_id,
-      fecha_inicio: to_yyyy_mm_dd_hh_mm_ss(this.state.ini_date),
-      fecha_final: to_yyyy_mm_dd_hh_mm_ss(this.state.end_date),
-    };
+  _create_root_component = async () => {
+    let path = `${SCT_API_URL}/component-leaf/comp-root/${this.props.component.parent_id}/comp-leaf/${this.props.component.public_id}/add-root-component`;
+    
     let isValid = false;
     await fetch(path, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
       },
-      body: JSON.stringify(parameters),
     })
       .then((resp) => resp.json())
       .then((json) => {
@@ -142,53 +136,25 @@ export class Manual extends Component<props, state> {
       <>
         <Form.Group>
           <Form.Label>
-            <div className="date-container">
-              <Button
-                variant="outline-dark"
-                className="btn-date-fixed"
-                onClick={() => {
-                  this.setState({ show_date: !this.state.show_date });
-                }}
-              >
-                {!this.state.show_date ? "Seleccionar" : "Aceptar"}
-              </Button>
-              <input
-                className="date-input"
-                value={this.state.ini_date_str}
-                onChange={(e) => this.onChangeDate(e, "ini_date")}
-              />{" "}
-              <input
-                className="date-input"
-                value={this.state.end_date_str}
-                onChange={(e) => this.onChangeDate(e, "end_date")}
-              />
-              <Button
-                variant="outline-info"
-                className="test-manual-btn"
-                onClick={this._test_source}
-              >
-                Probar
-              </Button>
-            </div>
+            Esta opción permite modelar subcomponentes internos, lo que permite
+            indicar a detalle la topología interna de este componente. Cada
+            subcomponente interno tendrá la posibilidad de elegir un nuevo tipo
+            de fuente asociado.
           </Form.Label>
-
-          <div
-            className={
-              this.state.show_date ? "date-range-show" : "date-range-no-show"
-            }
-          >
-            <DateRange
-              locale={es}
-              ranges={this.state.range}
-              showMonthAndYearPickers={true}
-              dateDisplayFormat={"yyyy MMM d"}
-              onChange={this.handleSelect}
-              months={1}
-              direction="horizontal"
-              fixedHeight={true}
-              column="true"
-            />
-          </div>
+          <Form.Label>
+            <span style={{ color: "red" }}>Nota:</span> La creación de un
+            subcomponente interno eliminará la fuente anteriormente configurada.
+          </Form.Label>
+          
+          <Form.Row style={{ marginTop: "17px", justifyContent: "end", marginRight: "10px"} }>
+            <Button
+              variant="outline-danger"
+              className="test-manual-btn"
+              onClick={this._create_root_component}
+            >
+              Crear subcomponente
+            </Button>
+          </Form.Row>
         </Form.Group>
         <Form.Group>
           <ReactJson

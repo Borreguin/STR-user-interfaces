@@ -7,7 +7,7 @@ import {
   faTrash,
 } from "@fortawesome/free-solid-svg-icons";
 import { Card, ListGroup } from "react-bootstrap";
-import { bloque_leaf, menu, submenu } from "../types";
+import { bloque_leaf, leaf_component, menu, submenu } from "../types";
 
 interface pros {
   menu: menu; // menu structure
@@ -75,13 +75,22 @@ class Menu extends Component<pros, state> {
     if (classname.includes("card-header") && menu.level > 0) {
       return;
     }
-    let new_menu = this.modify_menu(menu);
-    let selected_menu_id = menu.public_id;
-    this.props.handle_click_menu_button(new_menu, selected_menu_id);
+    // Si el botón que ha sido dado click no es root, o no tiene miembros internos
+    // el menu no debe ser modificado:
+    console.log(menu.object["calculation_type"]);
+    let isRoot = menu.object["calculation_type"] === "ROOT";
+    let isSerial = menu.object["calculation_type"] === "SERIE";
+    let isBloqueRoot = menu.object["document"] === "BloqueRoot";
+    if (isRoot || isSerial || isBloqueRoot) {
+      // los elementos que se permiten dar click para ser modificados o ampliados:
+      let new_menu = this.modify_menu(menu);
+      let selected_menu_id = menu.public_id;
+      this.props.handle_click_menu_button(new_menu, selected_menu_id);
+    }
   };
 
   shouldBeInMenu = (block_object) => {
-    console.log("shouldBeInMenu", block_object);
+    // console.log("shouldBeInMenu", block_object);
     let isBloqueLeaf = block_object.document === "BloqueLeaf";
     let isComponenteLeaf = block_object.document === "ComponenteLeaf";
     let notParallelOperation = block_object.calculation_type !== "PARALELO";
@@ -132,6 +141,34 @@ class Menu extends Component<pros, state> {
           submenu: sub_menu,
         } as menu;
         return new_menu;
+      case "ComponenteLeaf":
+        let leaf_component = selected_menu["object"] as leaf_component;
+        let s_menu = [] as Array<submenu>;
+        if (leaf_component.comp_root !== null) {
+          // using a root component:
+          console.log("continue", leaf_component.comp_root);
+          for (const leaf of leaf_component.comp_root.leafs) {
+            let sub = {
+              document: leaf.document,
+              level: selected_menu.level + 1,
+              name: leaf.name,
+              parent_id: leaf.parent_id,
+              public_id: leaf.public_id,
+              object: leaf,
+            } as submenu;
+            s_menu.push(sub);
+          }
+        }
+        let n_menu = {
+          level: selected_menu.level + 1,
+          document: document,
+          name: selected_menu.name,
+          public_id: selected_menu.public_id,
+          parent_id: selected_menu.parent_id,
+          object: selected_menu.object,
+          submenu: s_menu,
+        } as menu;
+        return n_menu;
     }
   };
 

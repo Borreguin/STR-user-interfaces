@@ -69,8 +69,9 @@ export type leaf_component = {
   calculation_type: string,
   document: string,
   name: string,
-  position_x_y: Array<Number>
-  topology: Object
+  position_x_y: Array<Number>,
+  topology: Object,
+  comp_root: comp_root | null
 }
 
 export type comp_root = {

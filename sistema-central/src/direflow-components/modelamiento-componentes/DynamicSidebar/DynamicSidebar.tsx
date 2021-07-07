@@ -29,7 +29,7 @@ class DynamicSideBar extends Component<MenuProps> {
       return (
         <React.Fragment>
           <nav id="sidebar" className="sidebar-wrapper" style={custom_style}>
-            <div className="sidebar-content mCustomScrollbar _mCS_1 mCS-autoHide desktop">
+            <div className="sidebar-content">
               <div style={div_space}></div>
               {this.props.menu === undefined || this.props.menu.length === 0 ? (
                 <></>

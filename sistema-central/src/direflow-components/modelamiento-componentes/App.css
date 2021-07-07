@@ -53,7 +53,6 @@
   height: 24px;
   float: right;
   cursor: pointer;
-  width: 92px;
 }
 .out-serial-port:hover {
   background-color: rgb(37, 112, 182);
@@ -71,7 +70,7 @@
   color: white;
   border-radius: 1px;
   border: black solid 1px;
-  width: 160px;
+  width: 180px;
 }
 
 .widget-disconnect {
@@ -86,15 +85,18 @@
 }
 
 .root-port {
-  height: 24px;
-  float: right;
+  height: 23px;
   cursor: pointer;
-  min-width: 80px;
+  position: absolute;
+  right: 2px;
 }
 
 .Port-Container {
   height: 24px;
   margin: 2px;
+  display: flex;
+  justify-content: space-between;
+  align-content: space-between;
 }
 
 .css-12q0bj3 {
@@ -177,7 +179,13 @@
 .sr-node-title {
   background: rgba(2, 2, 2, 0.671);
   text-align: left;
-  max-width: 250px;
+  min-width: 100px;
+  max-width: 140px;
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+  font-size: 10pt;
+  padding: 3px;
 }
 .sr-node-subtitle {
   background: rgba(0, 0, 0, 0.3);
@@ -293,7 +301,7 @@
   margin-right: 2px;
   position: relative;
   height: 20px;
-  top: -5px;
+  top: -7px;
 }
 
 .widget-add {
@@ -315,7 +323,7 @@
   border-radius: 50%;
   border-color: rgba(126, 6, 6, 0.781);
   font-family: Impact, Haettenschweiler, "Arial Narrow Bold", sans-serif;
-  color: rgba(194, 72, 58, 0.926);
+  color: transparent;
   font-weight: 900;
   z-index: -100;
 }
@@ -374,82 +382,134 @@
 }
 .AveragePort,
 .WeightedPort {
-    width: 20px;
-    background-color: #383630;
-    border-radius: 50%;
-    margin-top: 2px;
+  width: 20px;
+  background-color: #383630;
+  border-radius: 50%;
+  margin-top: 2px;
 }
 
 .sr-weigthed {
-    box-sizing: border-box;
-    white-space: nowrap;
-    pointer-events: all;
-    background-color: rgba(101,96,78,.96);
-    color: #fff;
-    border-radius: 1px;
-    border: 1px solid #000;
-        border-top-color: rgb(0, 0, 0);
-        border-right-color: rgb(0, 0, 0);
-        border-bottom-color: rgb(0, 0, 0);
-        border-left-color: rgb(0, 0, 0);
-    width: 200px;
+  box-sizing: border-box;
+  white-space: nowrap;
+  pointer-events: all;
+  background-color: rgba(101, 96, 78, 0.96);
+  color: #fff;
+  border-radius: 1px;
+  border: 1px solid #000;
+  border-top-color: rgb(0, 0, 0);
+  border-right-color: rgb(0, 0, 0);
+  border-bottom-color: rgb(0, 0, 0);
+  border-left-color: rgb(0, 0, 0);
+  width: 200px;
 }
 
 .sr-average {
-    box-sizing: border-box;
-    white-space: nowrap;
-    pointer-events: all;
-    background-color: hsla(146, 13%, 35%, 0.933);
-    color: white;
-    border-radius: 1px;
-    border: black solid 1px;
-    width: 200px;
-  }
-
-  .AveragePort, .WeightedPort {
-    float: right;
-    height: 20px;
-    cursor: pointer;
+  box-sizing: border-box;
+  white-space: nowrap;
+  pointer-events: all;
+  background-color: hsla(146, 13%, 35%, 0.933);
+  color: white;
+  border-radius: 1px;
+  border: black solid 1px;
+  width: 200px;
 }
 
-.removeIcon{
-    height: 17px;
-    margin-top: 1px;
-    color: rgb(220, 76, 76);
-    padding-top: 0;
-    cursor: pointer;
-    float: right;
-  }
+.AveragePort,
+.WeightedPort {
+  float: right;
+  height: 20px;
+  cursor: pointer;
+}
 
-  .input-style{
-    background-color: rgba(128, 126, 130, 0.248);
-    color: white;
-    border: thin;
-    margin-left: 10px;
-    width: 90%;
-    text-align: center;
-    z-index: 1000;
-  }
+.removeIcon {
+  height: 17px;
+  margin-top: 1px;
+  color: rgb(220, 76, 76);
+  padding-top: 0;
+  cursor: pointer;
+  float: right;
+}
 
-  .logger{
-    margin-top: -60px;
-    height: 100px;
-    background-color:rgb(39, 40, 34);
+.input-style {
+  background-color: rgba(128, 126, 130, 0.248);
+  color: white;
+  border: thin;
+  margin-left: 10px;
+  width: 90%;
+  text-align: center;
+  z-index: 1000;
+}
+
+.logger {
+  margin-top: -60px;
+  height: 100px;
+  background-color: rgb(39, 40, 34);
 }
 
 .cmp-root {
   box-sizing: border-box;
   white-space: nowrap;
   pointer-events: all;
-  background-color: rgba(41,47,230,.583);
+  background-color: rgba(41, 47, 230, 0.583);
   color: #fff;
   border-radius: 1px;
   border: 1px solid #000;
-      border-top-color: rgb(0, 0, 0);
-      border-right-color: rgb(0, 0, 0);
-      border-bottom-color: rgb(0, 0, 0);
-      border-left-color: rgb(0, 0, 0);
+  border-top-color: rgb(0, 0, 0);
+  border-right-color: rgb(0, 0, 0);
+  border-bottom-color: rgb(0, 0, 0);
+  border-left-color: rgb(0, 0, 0);
   width: 160px;
 }
 
+.page-wrapper {
+  height: 99vh;
+  padding: 7px;
+}
 
+.page-content {
+  display: inline-block;
+  width: 100%;
+  transition: padding-left 0.3s ease;
+  overflow-x: hidden;
+  padding-left: 270px !important;
+  background-color: rgb(33, 32, 32);
+}
+
+.content-shift {
+  margin-top: -10px;
+  height: calc(100% - 1px);
+  padding: 0px !important;
+  padding-left: 0px;
+}
+
+.sidebar-wrapper {
+  width: 280px;
+  height: 100%;
+  max-height: 100%;
+  position: fixed;
+  top: 0;
+  left: -280px;
+  z-index: 999;
+  -webkit-transition: left 0.3s ease, width 0.3s ease;
+  transition: left 0.3s ease, width 0.3s ease;
+}
+
+.sidebar-wrapper .sidebar-content {
+  max-height: calc(100% -35px);
+  height: calc(100% - 35px);
+  overflow-y: scroll;
+  position: relative;
+}
+
+.sidebar-wrapper .sidebar-item {
+  -webkit-transition: all 0.3s linear;
+  transition: all 0.3s linear;
+}
+
+.sidebar-wrapper ul {
+  list-style-type: none;
+}
+
+.sidebar-wrapper .sidebar-menu {
+  padding-bottom: 10px;
+}

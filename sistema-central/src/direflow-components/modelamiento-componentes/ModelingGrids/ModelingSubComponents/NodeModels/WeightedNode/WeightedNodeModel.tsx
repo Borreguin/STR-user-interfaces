@@ -103,15 +103,15 @@ export class WeightedNodeModel extends NodeModel<
   create_if_not_exist = async () => {
     let result = null;
     if (this.data.public_id.includes("WeightedNode")) {
-      await this.create_block().then((ans) => (result = ans));
+      await this.create_component().then((ans) => (result = ans));
     }
     return result;
   };
 
-  create_block = async () => {
+  create_component = async () => {
     let result = { success: false, bloqueleaf: null };
     // Este es un nodo nuevo:
-    let path = `${SCT_API_URL}/block-leaf/block-root/${this.data.parent_id}`;
+    let path = `${SCT_API_URL}/component-leaf/comp-root/${this.data.parent_id}`;
     let payload = JSON.stringify({
       name: "PONDERADO",
       document: this.getType(),
@@ -183,7 +183,7 @@ export class WeightedNodeModel extends NodeModel<
 
   // TODO: actualizar mensaje
   delete = () => {
-    let path = `${SCT_API_URL}/block-leaf/block-root/${this.data.parent_id}/block-leaf/${this.data.public_id}`;
+    let path = `${SCT_API_URL}/component-leaf/comp-root/${this.data.parent_id}/comp-leaf/${this.data.public_id}`;
     fetch(path, {
       method: "DELETE",
       headers: { "Content-Type": "application/json" },

@@ -469,6 +469,7 @@ class BlockRootGrid extends Component<BlockRootGridProps> {
       const check = await node.fireEvent(e, "validate");
       msg.validate[check["name"]] = check["valid"];
       all_is_valid = all_is_valid && check["valid"];
+      console.log(node["data"]["name"], check);
       if (!check["valid"]) {
         msg.state = `El elemento ${check["name"]} no es válido`;
       }
@@ -478,7 +479,6 @@ class BlockRootGrid extends Component<BlockRootGridProps> {
       all_is_valid = true;
       for (const node of nodes) {
         const check = await node.fireEvent(e, "save topology");
-        console.log(node["data"]["name"], check);
         all_is_valid = all_is_valid && check["success"];
         if (!check["success"]) {
           msg.state = `El elemento ${node["data"]["name"]} no es válido`;

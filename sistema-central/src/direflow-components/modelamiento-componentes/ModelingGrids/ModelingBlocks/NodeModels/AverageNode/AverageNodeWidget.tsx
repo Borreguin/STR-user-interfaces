@@ -209,7 +209,7 @@ export class AverageNodeWidget extends React.Component<AverageNodeWidgetProps> {
               this._disconnect_port(this.props.node.getPort("SERIE"))
             }
           >
-            .
+            -
           </button>
           <ReactTooltip />
         </div>
@@ -224,24 +224,26 @@ export class AverageNodeWidget extends React.Component<AverageNodeWidgetProps> {
     }
     return this.node.data.connections.map((averagePort) => (
       <div key={_.uniqueId("AveragePort")} className="Port-Container">
-        <button
-          data-tip="Remover este puerto"
-          className="widget-delete"
-          onClick={() => this._deleteAveragePort(averagePort.public_id)}
-        >
-          -
-        </button>
-        <ReactTooltip />
         <div className="ParallelLabel">
           {/*averagePort.name*/}{" "}
           <span className="badge badge-warning right">PromOut</span>
         </div>
 
-        <PortWidget
-          className="AveragePort"
-          port={this.props.node.getPort(averagePort.public_id)}
-          engine={this.props.engine}
-        ></PortWidget>
+        <div className="out-serial-port">
+          <PortWidget
+            className="AveragePort"
+            port={this.props.node.getPort(averagePort.public_id)}
+            engine={this.props.engine}
+          ></PortWidget>
+          <button
+            data-tip="Remover este puerto"
+            className="widget-delete"
+            onClick={() => this._deleteAveragePort(averagePort.public_id)}
+          >
+            -
+          </button>
+          <ReactTooltip />
+        </div>
       </div>
     ));
   };

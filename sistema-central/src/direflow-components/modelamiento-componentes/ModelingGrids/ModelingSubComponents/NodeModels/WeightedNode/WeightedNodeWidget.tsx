@@ -97,7 +97,7 @@ export class WeightedNodeWidget extends React.Component<WeightedNodeWidgetProps>
     this.node.data.editado = !this.node.data.editado;
     // si WeightedNode está en el ID, entonces no existe aún en base de datos:
     if (this.node.data.public_id.includes("WeightedNode")) {
-      this.node.create_block().then((result) => {
+      this.node.create_component().then((result) => {
         if (result.success) {
           let bloqueleaf = _.cloneDeep(result.bloqueleaf) as WeightedNode;
           bloqueleaf.connections = this.node.data.connections;

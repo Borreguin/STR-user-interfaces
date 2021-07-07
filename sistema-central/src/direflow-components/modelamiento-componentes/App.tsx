@@ -110,7 +110,7 @@ class ComponentModeling extends Component<props, state> {
       .then((json) => {
         if (json.success) {
           bloqueroot = json.bloqueroot as bloque_root;
-          this.setState({ bloqueroot: bloqueroot, new_root: false });
+          this.setState({ bloqueroot: bloqueroot, new_root: false, log: {msg: json.msg }});
         } else {
           this.setState({
             new_root: true,
@@ -260,7 +260,7 @@ class ComponentModeling extends Component<props, state> {
           // if there is need to create a new root structure:
           this.is_needed_a_new_root()
         }
-        <div className="page-wrapper default-theme sidebar-bg bg1 toggled">
+        <div className="page-wrapper">
           <DynamicSidebar
             // to keep track
             menu={this.state.menu}

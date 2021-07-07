@@ -117,22 +117,28 @@ ComponentLeafParams & NodeModelGenerics
 
   // Permite validar que el elemento ha sido correctamente conectado
   validate = () => {
-    let valid = true;
+    let valid = false;
     let n_parallel_ports = 0;
+    let is_input_connected = false;
     for (var id_port in this.getPorts()) {
       // todos los nodos deben estar conectados
       // a excepción del puerto SERIE ya que es opcional
       var port = this.getPorts()[id_port];
-      if (id_port !== "SERIE") {
-        valid = valid && Object.keys(port.links).length === 1;
+      if (id_port === "InPut") {
+        // valid = valid && Object.keys(port.links).length === 1;
+        is_input_connected = Object.keys(port.links).length === 1;
       }
       // contando conexiones paralelas
-      if (port.getType() === "PARALELO") {
+      if (port.getType() === "PARALELO" && Object.keys(port.links).length === 1) {
         n_parallel_ports += 1;
       }
     }
-    // Para el caso de conexiones paralelas, no hay ninguno o hay más de dos conexiones
-    valid = valid && (n_parallel_ports === 0 || n_parallel_ports >= 2);
+    // Para el caso de conexiones paralelas:
+    // en caso de no estar conectado totalmente
+    // en caso que puertos paralelos esten conectados y el puerto serie también este conectado
+    let all_disconnected = n_parallel_ports === 0 && !is_input_connected;
+    valid = all_disconnected || (is_input_connected && (n_parallel_ports >= 2 || n_parallel_ports === 0));
+
     this.valid = valid;
     return valid;
   };

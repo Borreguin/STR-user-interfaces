@@ -47,7 +47,7 @@ export class Modal_add_component extends Component<
   handleShow = () => {
     this.setState({ show: true });
   };
-  handleEditedRootBlock = (bloqueroot) => {
+  handleEditedLeafBlock = (bloqueroot) => {
     if (this.props.handle_edited_root_block !== undefined) {
       // permite enviar el bloque root editado:
       this.props.handle_edited_root_block(bloqueroot);
@@ -72,8 +72,9 @@ export class Modal_add_component extends Component<
         .then((res) => res.json())
         .then((json) => {
           if (json.success) {
-           this.handleEditedRootBlock(json.bloqueroot);
-           this.handleClose();
+            console.log("creado modal_add_component", json, this.props.object);
+           this.handleEditedLeafBlock(json);
+           // this.handleClose();
           } else {
             this.setState({ message: json.msg });
             this.handleMessages(json.msg);

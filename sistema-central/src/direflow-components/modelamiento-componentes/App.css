@@ -437,7 +437,7 @@
   margin-left: 10px;
   width: 90%;
   text-align: center;
-  z-index: 1000;
+  max-height: 21px;
 }
 
 .logger {
@@ -458,7 +458,7 @@
   border-right-color: rgb(0, 0, 0);
   border-bottom-color: rgb(0, 0, 0);
   border-left-color: rgb(0, 0, 0);
-  width: 160px;
+  width: 180px;
 }
 
 .page-wrapper {
@@ -483,21 +483,15 @@
 }
 
 .sidebar-wrapper {
-  width: 280px;
+  width: 270px;
   height: 100%;
-  max-height: 100%;
-  position: fixed;
-  top: 0;
-  left: -280px;
+  position: absolute;
   z-index: 999;
-  -webkit-transition: left 0.3s ease, width 0.3s ease;
-  transition: left 0.3s ease, width 0.3s ease;
 }
 
 .sidebar-wrapper .sidebar-content {
-  max-height: calc(100% -35px);
   height: calc(100% - 35px);
-  overflow-y: scroll;
+  /*overflow-y: scroll;*/
   position: relative;
 }
 
@@ -508,8 +502,147 @@
 
 .sidebar-wrapper ul {
   list-style-type: none;
+  padding: 0px;
 }
 
 .sidebar-wrapper .sidebar-menu {
   padding-bottom: 10px;
+}
+
+.container_menu {
+  padding: 2px;
+  background-color: rgba(87, 81, 80, 0.692) !important;
+}
+
+.card {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+  word-wrap: break-word;
+  background-color: #fff;
+  background-clip: border-box;
+  border: 1px solid rgba(0, 0, 0, 0.125);
+  border-radius: 0.25rem;
+}
+
+.submenu-item:hover {
+  background-color: rgba(68, 120, 216, 0.699) !important;
+  color: white;
+}
+
+.submenu-item {
+  padding: 2px;
+  padding-left: 2px;
+  padding-left: 8px;
+  background-color: rgba(240, 232, 230, 0.164);
+  color: white;
+}
+
+.active-menu {
+  background-color: rgba(113, 243, 243, 0.26) !important;
+  color: black !important;
+}
+
+.static_menu {
+  padding: 2px !important;
+  color: white;
+}
+
+.static_menu:hover {
+  background-color: rgba(68, 120, 216, 0.699) !important;
+  color: white;
+}
+
+.right-button-section {
+  position: absolute;
+  right: 4px;
+  padding: 2px;
+}
+
+.add_button {
+  position: absolute;
+  right: 7px;
+  cursor: pointer;
+}
+.add_button:hover {
+  color: rgba(36, 209, 252, 0.911);
+}
+.edit_block_button {
+  position: absolute;
+  right: 26px;
+  cursor: pointer;
+}
+.edit_block_button:hover {
+  color: rgba(36, 209, 252, 0.911);
+}
+
+.submenu-container {
+  padding: 2px;
+}
+
+.edit_button {
+  color: rgba(137, 204, 231, 0.719);
+  margin-right: 7px;
+  cursor: pointer;
+}
+
+.delete_button {
+  color: rgb(243, 99, 99);
+  cursor: pointer;
+}
+
+.sidebar-menu-container{
+  padding: 2px !important;
+}
+
+.menu-text{
+  max-width: 180px;
+  display: inline-flex;
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow:ellipsis;
+}
+
+.source-container{
+  margin-top: 25px;
+}
+
+.test-manual-btn{
+  margin-top: -5px;
+  margin-left: 10px;
+}
+
+.btn-date-fixed{
+  max-height: 38px;
+  margin-right: 10px;
+  margin-left: 10px;
+  margin-top: -5px;
+}
+
+.date-range-no-show{
+  display: none;
+}
+
+.date-range-show{
+  margin-top: 4px;
+  width: min-content;
+  height: min-content;
+  background-color: rgb(252, 253, 253);
+  overflow: hidden;
+  padding: 1px !important;
+  margin: 1px;
+}
+
+.date-container{
+  display: flex;
+  flex-direction: row;
+  flex-wrap:wrap;
+  justify-content: space-between;
+}
+
+.date-input{
+  width: 120px;
+  height: 37px;
+  margin-top: -4px;
 }

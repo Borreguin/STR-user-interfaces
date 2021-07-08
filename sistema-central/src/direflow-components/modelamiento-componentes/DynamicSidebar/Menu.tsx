@@ -79,7 +79,7 @@ class Menu extends Component<pros, state> {
     // el menu no debe ser modificado:
     console.log(menu.object["calculation_type"]);
     let isRoot = menu.object["calculation_type"] === "ROOT";
-    let isSerial = menu.object["calculation_type"] === "SERIE";
+    let isSerial = menu.object["calculation_type"] === "SERIE" && (menu.object["comp_root"] !== null);
     let isBloqueRoot = menu.object["document"] === "BloqueRoot";
     if (isRoot || isSerial || isBloqueRoot) {
       // los elementos que se permiten dar click para ser modificados o ampliados:
@@ -213,7 +213,7 @@ class Menu extends Component<pros, state> {
     }
     // caso contrario se presenta el menú
     return (
-      <ul>
+      <div className="sidebar-menu-container">
         {/*<div className="header-menu">
           <span>{menu.name}</span>
         </div> */}
@@ -281,7 +281,7 @@ class Menu extends Component<pros, state> {
                             <span style={{ marginRight: "15px" }}>
                               &middot;
                             </span>
-                            <span>
+                            <span className="menu-text">
                               {sub_menu.name.length > 30
                                 ? sub_menu.name.substring(0, 20) +
                                   "..." +
@@ -328,7 +328,7 @@ class Menu extends Component<pros, state> {
           }
         </div>
         {this.show_modal()}
-      </ul>
+      </div>
     );
   };
 

@@ -57,7 +57,7 @@ export class Modal_add_subcomponent extends Component<
   // INTERNAL FUNCTIONS:
   // crea un nuevo componente leaf dentro de un componente root
   _onclick_create = () => {
-    console.log("usando este objeto", this.props.object);
+    console.log("creando subcomponente", this.props.object);
     if (this._check_form()) {
       let path = `${SCT_API_URL}/component-leaf/comp-root/${this.props.object.public_id}`;
       let payload = JSON.stringify(this.state.form);
@@ -73,8 +73,8 @@ export class Modal_add_subcomponent extends Component<
         .then((res) => res.json())
         .then((json) => {
           if (json.success) {
-           this.handleEditedRootBlock(json.bloqueroot);
-           this.handleClose();
+           this.handleEditedRootBlock(json);
+           // this.handleClose();
           } else {
             this.setState({ message: json.msg });
             this.handleMessages(json.msg);

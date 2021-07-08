@@ -94,13 +94,16 @@ class BlockLeafGrid extends Component<BlockLeafGridProps> {
     const resp = this._init_graph();
     this.setState({ engine: resp.engine, model: resp.model });
   };
- 
 
   // Permite actualizar el grid cada vez que recibe un cambio desde las propiedades
   // Esto ocurre cuando se añade un bloque en el menú lateral
   componentWillReceiveProps = (newProps: BlockLeafGridProps) => {
-    if (this.props.menu.name !== newProps.menu.name) {
-      // limpiar el modelo antes de iniciar nuevamente 
+    let submenu_change =
+      this.props.menu.submenu.length !== this.last_props.menu.submenu.length;
+    let name_submenu_change = this.props.menu.name !== newProps.menu.name;
+    // si hay cambio de nombre o cambio en el submenu
+    if (name_submenu_change || submenu_change) {
+      // limpiar el modelo antes de iniciar nuevamente
       let model = this.state.model;
       let engine = this.state.engine;
       for (const node of model.getNodes()) {
@@ -112,24 +115,29 @@ class BlockLeafGrid extends Component<BlockLeafGridProps> {
       this.engine = engine;
       this.model = model;
       engine.setModel(model);
-      
-      this.setState({ engine: engine, model:model });
+      this.setState({ engine: engine, model: model });
     }
   };
 
   componentDidUpdate = (prevProps) => {
     let bloqueleaf = this.props.menu.object as bloque_leaf;
+    let submenu_change =
+      this.props.menu.submenu.length !== this.last_props.menu.submenu.length;
+    let name_submenu_change =
+      prevProps !== undefined &&
+      this.props.menu.name !== prevProps.menu.name &&
+      bloqueleaf.comp_root !== undefined;
 
-    if (prevProps !== undefined && this.props.menu.name !== prevProps.menu.name &&
-      bloqueleaf.comp_root !== undefined) {
+    if (name_submenu_change || submenu_change) {
       const resp = this._init_graph();
       let engine = this.state.engine;
       engine.setModel(resp.model);
       this.engine = resp.engine;
       this.model = resp.model;
+      this.last_props = _.cloneDeep(this.props);
       this.setState({ engine: engine, model: resp.model });
     }
-  }
+  };
 
   update_nodes_from_changes = (new_blocks: Array<leaf_component>) => {
     // actualizando en el grid solamente aquellos elementos
@@ -138,7 +146,6 @@ class BlockLeafGrid extends Component<BlockLeafGridProps> {
     let nodes = engine.getModel().getNodes();
 
     if (nodes.length <= new_blocks.length) {
-      console.log("need to update");
       for (const block of new_blocks) {
         let found = false;
         for (const node of nodes) {
@@ -239,8 +246,13 @@ class BlockLeafGrid extends Component<BlockLeafGridProps> {
     var bloqueleaf = this.props.menu.object as bloque_leaf;
     var root_component = bloqueleaf.comp_root;
     // var root_data = this.props.menu.object.comp_root;
-    if (root_component.topology && root_component.topology["ROOT"] !== undefined) {
-      let root_node = this.model.getNode(root_component.public_id) as CompRootModel;
+    if (
+      root_component.topology &&
+      root_component.topology["ROOT"] !== undefined
+    ) {
+      let root_node = this.model.getNode(
+        root_component.public_id
+      ) as CompRootModel;
       let node_id = root_component.topology["ROOT"][0];
       let node_to_connect = this.model.getNode(node_id);
       if (node_to_connect === undefined) {
@@ -525,12 +537,13 @@ class BlockLeafGrid extends Component<BlockLeafGridProps> {
     }
     this._handle_messages(msg);
     //this.reload_graph();
-  
   };
 
   reload_graph = () => {
+    console.log("reload_block_leaf_grid");
     if (this.props.handle_reload !== undefined) {
-      this.props.handle_reload();
+      console.log("reload_block_leaf_grid", this.props.menu);
+      this.props.handle_reload(this.props.menu);
     }
   };
 
@@ -557,7 +570,6 @@ class BlockLeafGrid extends Component<BlockLeafGridProps> {
     // Variables generales:
     this.parent_id = bloqueleaf.comp_root.public_id;
     // console.log("voy a trabajar con esto:", this.props.menu)
-    
 
     // Añadir el bloque root (inicio de operaciones):
     model.addNode(this.create_root_component());

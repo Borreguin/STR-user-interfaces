@@ -3,7 +3,7 @@ import { withStyles } from "direflow-component";
 import styles from "./App.css";
 import { Modal_new_root_block } from "./Modals/blocks/modal_new_root_block";
 import { SCT_API_URL } from "../../Constantes";
-import { bloque_root, menu, submenu } from "./types";
+import { block_leaf, bloque_leaf, bloque_root, comp_root, leaf_component, menu, submenu } from "./types";
 import DynamicSidebar from "./DynamicSidebar/DynamicSidebar";
 import { modal_edit_submenu_function } from "./Modals/modal_edit_submenu_function";
 import { modal_delete_submenu_function } from "./Modals/modal_delete_submenu_function";
@@ -43,7 +43,7 @@ class ComponentModeling extends Component<props, state> {
       modal_show: false,
       loading: false,
       error: false,
-      log: { msg: "Empezando... Conectando con API-SCT" },
+      log: { msg: "Conectado con API-SCT" },
       bloqueroot: undefined,
       menu: [],
       selected_menu_id: undefined,
@@ -83,21 +83,94 @@ class ComponentModeling extends Component<props, state> {
     }
   };
 
-  handle_edited_menu = (menu) => {
-    console.log("handle_edited_menu", menu);
+  handle_edited_menu = (object) => {
+    if (object === undefined) return;
+    console.log("handle_edited_menu", object);
+    if (object["document"] === "BloqueRoot") {
+      this._create_initial_menu(object as bloque_root);
+    } else {
+      this._update_menu(object);
+    }
   };
 
   handle_reload = (menu: menu) => {
+    console.log("reload", menu);
     if (menu === undefined) return;
     let document = menu.document;
+    let level = menu.level;
+    let new_menu = this.state.menu;
     switch (document) {
       case "BloqueRoot":
         this._search_root_block().then((bloqueroot) =>
           this._create_initial_menu(bloqueroot)
         );
         break;
+      case "BloqueLeaf":
+        console.log("este caso?", this.state.menu, this.state.selected_menu);
+        new_menu[level] = menu;
+        this.setState({menu: new_menu, selected_menu:menu});
+        break;
     }
-    console.log("reload", menu);
+  };
+  // actualiza el menú de acuerdo al objeto enviado:
+  _update_menu = (json) => {
+    let bloqueroot = json.bloqueroot as bloque_root;
+    let bloqueleaf = json.bloqueleaf as bloque_leaf;
+
+    let componente_root = json.component_root as comp_root;
+    let componente_leaf = json.component_leaf as leaf_component;
+    // construyendo nuevo menu:
+    let new_menus = this.state.menu;
+    // let's change the menu:
+    let new_object = null;
+    if (bloqueleaf !== undefined) new_object = bloqueleaf as bloque_leaf;
+    if (componente_root !== undefined) new_object = componente_root as comp_root;
+    console.log("update menu", json, new_menus, new_object);
+    
+    // Se compara de esta manera ya que bloqueleaf es padre de ComponenteRoot
+    for (const menu of new_menus) {
+      // actualizar menu principal:
+      if (bloqueroot !== undefined &&  menu.public_id === bloqueroot.public_id) {
+        menu.object = bloqueroot;
+      }
+
+      // Actualizar objetos del submenu si se necesita
+      for (const submenu of menu.submenu) {
+        // si es un bloque de tipo leaf
+        if ( bloqueleaf && submenu.public_id === new_object.public_id) {
+          submenu.object = new_object;
+          console.log("done", submenu, bloqueleaf);
+        }
+        // si es un componente leaf
+        if (componente_leaf && submenu.public_id === new_object.public_id) {
+          console.log("update?", submenu);
+        }
+      }
+      // Si el objeto se encuentra dentro del menu:
+      if (menu.public_id === new_object.public_id) {
+        console.log("need to check", menu, new_object)
+        let submenus = [];
+        let leafs = [];
+        if (new_object.document === "BloqueLeaf") leafs = new_object.comp_root.leafs;
+        if (new_object.document === "ComponenteRoot") leafs = new_object.leafs;
+        for (const leaf of leafs) {
+          let submenu = {
+            level: menu.level,
+            parent_id: leaf.parent_id,
+            public_id: leaf.public_id,
+            document: leaf.document,
+            name: leaf.name,
+            object: leaf,
+          } as submenu;
+          submenus.push(submenu);
+        }
+        menu.name = new_object.name;
+        menu.submenu = submenus;
+        menu.object = new_object;
+        this.setState({ menu: new_menus });
+        console.log("new_menus", new_menus);
+      }
+    }
   };
 
   // busca la estructura basada en bloques y componentes:
@@ -110,7 +183,7 @@ class ComponentModeling extends Component<props, state> {
       .then((json) => {
         if (json.success) {
           bloqueroot = json.bloqueroot as bloque_root;
-          this.setState({ bloqueroot: bloqueroot, new_root: false, log: {msg: json.msg }});
+          this.setState({ bloqueroot: bloqueroot, new_root: false });
         } else {
           this.setState({
             new_root: true,
@@ -200,7 +273,7 @@ class ComponentModeling extends Component<props, state> {
       return <></>;
     }
     let document = this.state.selected_menu.document;
-    console.log("grid", document);
+    console.log("render grid", document);
     switch (document) {
       case "BloqueRoot":
         return (
@@ -211,6 +284,7 @@ class ComponentModeling extends Component<props, state> {
           />
         );
       case "BloqueLeaf":
+        console.log("aqui", this.state.selected_menu);
         return (
           <BlockLeafGrid
             menu={this.state.selected_menu}

@@ -1,10 +1,10 @@
 import React, { Component } from "react";
 import { Alert, Button, Form, Modal } from "react-bootstrap";
 import { SCT_API_URL } from "../../../../Constantes";
-import { bloque_leaf } from "../../types";
+import { leaf_component } from "../../types";
 
 export interface modal_props {
-  object: bloque_leaf;
+  object: leaf_component;
   handle_close?: Function;
   handle_edited_root_block?: Function;
   handle_message?: Function;
@@ -15,9 +15,9 @@ export interface modal_state {
   message: string;
 }
 
-let modal_id = "Modal_delete_block";
+let modal_id = "Modal_delete_componente";
 
-export class Modal_delete_block extends Component<
+export class Modal_delete_component extends Component<
   modal_props,
   modal_state
 > {
@@ -46,7 +46,7 @@ export class Modal_delete_block extends Component<
   handleShow = () => {
     this.setState({ show: true });
   };
-  handleEditedRootBlock = (bloqueroot) => {
+  handleEditedRootComponent = (bloqueroot) => {
     if (this.props.handle_edited_root_block !== undefined) {
       // permite enviar el bloque root editado:
       this.props.handle_edited_root_block(bloqueroot);
@@ -56,7 +56,8 @@ export class Modal_delete_block extends Component<
   // INTERNAL FUNCTIONS:
   // Elimina un bloque interno de un bloque root
   _onclick_delete = () => {
-    let path = `${SCT_API_URL}/block-leaf/block-root/${this.props.object.parent_id}/block-leaf/${this.props.object.public_id}`;
+    console.log(this.props.object);
+    let path = `${SCT_API_URL}/component-leaf/comp-root/${this.props.object.parent_id}/comp-leaf/${this.props.object.public_id}`;
     this.setState({ message: "Eliminando bloque interno" });
     // Creando el nuevo root block mediante la API
     fetch(path, {
@@ -67,9 +68,10 @@ export class Modal_delete_block extends Component<
     })
       .then((res) => res.json())
       .then((json) => {
+        console.log("modal_delete_componente", json);
         if (json.success) {
-          this.handleEditedRootBlock(json.bloqueroot);
-          // this.handleClose();
+          this.handleEditedRootComponent(json);
+          this.handleClose();
         } else {
           this.setState({ message: json.msg });
           this.handleMessages(json.msg);
@@ -98,13 +100,13 @@ export class Modal_delete_block extends Component<
           animation={false}
         >
           <Modal.Header translate={"true"} closeButton>
-            <Modal.Title>Eliminación de bloque interno</Modal.Title>
+            <Modal.Title>Eliminación de componente</Modal.Title>
           </Modal.Header>
           <Modal.Body>
             <Form>
               <Form.Group controlId="BlockName">
                 <Form.Label>
-                  Desea eliminar el bloque interno: {this.props.object.name}?{" "}
+                  Desea eliminar el componente: {this.props.object.name}?{" "}
                 </Form.Label>
                 <Form.Text>
                   Esta acción es permanente y se eliminará todo el contenido
@@ -136,12 +138,12 @@ export class Modal_delete_block extends Component<
 }
 
 export const modal_delete_block_function = (
-  object: bloque_leaf,
+  object: leaf_component,
   handle_close: Function,
   handle_changes_in_root: Function
 ) => {
   return (
-    <Modal_delete_block
+    <Modal_delete_component
       object={object}
       handle_close={handle_close}
       handle_edited_root_block={handle_changes_in_root}

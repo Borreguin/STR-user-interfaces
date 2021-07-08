@@ -40,12 +40,11 @@ export class WeightedNodeWidget extends React.Component<WeightedNodeWidgetProps>
         weight[weighted.public_id] = weighted.weight;
         this.state = {
           edited: false,
-          weight:weight
-        }
+          weight: weight,
+        };
       });
     }
   }
-
 
   _handle_message(msg: Object) {
     if (this.props.handle_messages !== undefined) {
@@ -259,17 +258,8 @@ export class WeightedNodeWidget extends React.Component<WeightedNodeWidgetProps>
 
   /* Generando puertos con ponderación */
   generateWeightedPort = () => {
-    
     return this.node.data.connections.map((port) => (
       <div id={port.public_id} key={port.public_id} className="Port-Container">
-        <button
-          data-tip="Remover este puerto"
-          className="widget-delete"
-          onClick={() => this._deleteWeightedPort(port.public_id)}
-        >
-          -
-        </button>
-        <ReactTooltip />
         <div id={port.public_id} key={port.public_id} className="ParallelLabel">
           <input
             type="number"
@@ -283,14 +273,22 @@ export class WeightedNodeWidget extends React.Component<WeightedNodeWidgetProps>
             }}
             onBlur={this._validate_weighted_change}
           ></input>
-          <span className="badge badge-warning right">WeigtOut</span>
         </div>
-
-        <PortWidget
-          className="WeightedPort"
-          port={this.props.node.getPort(port.public_id)}
-          engine={this.props.engine}
-        ></PortWidget>
+        <div className="out-serial-port">
+          <PortWidget
+            className="WeightedPort"
+            port={this.props.node.getPort(port.public_id)}
+            engine={this.props.engine}
+          ></PortWidget>
+          <button
+            data-tip="Remover este puerto"
+            className="widget-delete"
+            onClick={() => this._deleteWeightedPort(port.public_id)}
+          >
+            -
+          </button>
+          <ReactTooltip />
+        </div>
       </div>
     ));
   };
@@ -305,7 +303,7 @@ export class WeightedNodeWidget extends React.Component<WeightedNodeWidgetProps>
         }
     };
     const { node } = this.props;
- 
+
     return (
       <div
         className="node css-nlpftr"

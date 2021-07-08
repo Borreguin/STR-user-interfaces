@@ -74,7 +74,7 @@ export class Modal_edit_block extends Component<menu_props, menu_state> {
           this.setState({ message: json.msg });
           if (json.success) {
             this.handleEditedRootBlock(json.bloqueroot);
-            this.handleClose();
+            // this.handleClose();
           } else {
             this.handleMessages(json.msg);
           }

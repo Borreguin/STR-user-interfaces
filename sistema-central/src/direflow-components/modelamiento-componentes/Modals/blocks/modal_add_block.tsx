@@ -76,7 +76,7 @@ export class Modal_add_block extends Component<
         .then((json) => {
           if (json.success) {
             this.handleEditedRootBlock(json.bloqueroot);
-            this.handleClose();
+            // this.handleClose();
           } else {
             this.setState({ message: json.msg });
             this.handleMessages(json.msg);

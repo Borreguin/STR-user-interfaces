@@ -27,7 +27,6 @@
 
 .sc-pick-menu {
   min-width: 340px;
-  height: 40px;
   z-index: 1000;
 }
 
@@ -75,6 +74,7 @@
   border-radius: 4px !important;
   background-color: rgba(7, 65, 145, 0.685) !important;
   margin: 2px !important;
+  color: white !important;
 }
 
 .btn-dis {
@@ -357,7 +357,7 @@ h5 {
   display: inline-block !important;
   width: 100% !important;
   /*overflow-x: hidden;*/
-  padding: 2% !important;
+  padding: 0.5% !important;
 }
 
 .modal-header .close {

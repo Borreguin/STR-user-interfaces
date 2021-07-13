@@ -1,10 +1,10 @@
 import React, { Component } from "react";
 import { Alert, Button, Form, Modal } from "react-bootstrap";
 import { SCT_API_URL } from "../../../../Constantes";
-import { bloque_leaf, root_component_form } from "../../types";
+import { bloque_leaf, comp_root, root_component_form } from "../../types";
 
 export interface menu_props {
-  object: bloque_leaf;
+  object: comp_root;
   handle_close?: Function;
   handle_edited_root_block?: Function;
   handle_message?: Function;
@@ -58,7 +58,7 @@ export class Modal_add_component extends Component<
   // crea un nuevo componente root dentro de un bloque:
   _onclick_create = () => {
     if (this._check_form()) {
-      let path = `${SCT_API_URL}/component-root/block-root/${this.props.object.parent_id}/block-leaf/${this.props.object.public_id}`;
+      let path = `${SCT_API_URL}/component-leaf/comp-root/${this.props.object.public_id}`;
       let payload = JSON.stringify(this.state.form);
       this.setState({ message: "Creando componente interno" });
       // Creando el nuevo root block mediante la API
@@ -165,7 +165,7 @@ export class Modal_add_component extends Component<
 }
 
 export const modal_add_component_function = (
-  object: bloque_leaf,
+  object: comp_root,
   handle_close: Function,
   handle_changes_in_root: Function
 ) => {

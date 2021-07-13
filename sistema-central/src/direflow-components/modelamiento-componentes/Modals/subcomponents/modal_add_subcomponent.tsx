@@ -1,10 +1,10 @@
 import React, { Component } from "react";
 import { Alert, Button, Form, Modal } from "react-bootstrap";
 import { SCT_API_URL } from "../../../../Constantes";
-import { bloque_leaf, root_component_form } from "../../types";
+import { bloque_leaf, leaf_component, root_component_form } from "../../types";
 
 export interface menu_props {
-  object: bloque_leaf;
+  object: leaf_component;
   handle_close?: Function;
   handle_edited_root_block?: Function;
   handle_message?: Function;
@@ -165,7 +165,7 @@ export class Modal_add_subcomponent extends Component<
 }
 
 export const modal_add_component_function = (
-  object: bloque_leaf,
+  object: leaf_component,
   handle_close: Function,
   handle_changes_in_root: Function
 ) => {

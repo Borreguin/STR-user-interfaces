@@ -9,15 +9,28 @@ import {
   get_last_month_dates,
   to_yyyy_mm_dd_hh_mm_ss,
 } from "../common_functions";
+import { SCT_API_URL } from "../../../Constantes";
+import { leaf_component } from "../types";
 
 export interface props {
   handle_msg?: Function;
+  handle_isValid?: Function;
+  handle_sources_changes: Function;
+  component: leaf_component;
 }
 
 export type Range = {
   startDate: Date;
   endDate: Date;
   key: string;
+};
+
+
+type parameters = {
+  collection_name: string;
+  field: string;
+  fecha_inicio: string;
+  fecha_final: string;
 };
 
 export interface state {
@@ -28,6 +41,9 @@ export interface state {
   end_date_str: string;
   range: Array<Range>;
   log: Object;
+  options: Array<JSX.Element>;
+  select: string;
+  field: string;
 }
 
 export class DB_sistema_remoto extends Component<props, state> {
@@ -46,7 +62,10 @@ export class DB_sistema_remoto extends Component<props, state> {
       end_date: r.last_day_month,
       end_date_str: to_yyyy_mm_dd_hh_mm_ss(r.last_day_month),
       range: [range],
-      log: { msg: "Aún no se ha ejecutado la prueba" },
+      log: { fuentes: this.props.component.sources },
+      options: [],
+      select: "",
+      field: "disponibilidad_promedio_porcentage"
     };
   }
 
@@ -56,11 +75,39 @@ export class DB_sistema_remoto extends Component<props, state> {
     }
   };
 
-  componentDidMount = () => {};
+  componentDidMount = () => {
+    let path = `${SCT_API_URL}/options/collections`;
+    fetch(path)
+      .then((res) => res.json())
+      .then((json) => {
+        if (json.success) {
+          // creando lista de opciones
+          let options = this.state.options;
+          let ix = 0;
+          for (const collection of json.collections) {
+            if (collection !== null) {
+              if (ix === 0) {
+                this.setState({ select: collection });
+              }
+              options.push(<option key={ix}>{collection}</option>);
+              ix += 1;
+            }
+          }
+          this.setState({ options: options });
+        } else {
+          this._handle_message({ succes: false, msg: json.msg });
+        }
+      })
+      .catch((error) =>
+        this._handle_message({ success: false, error: "" + error })
+      );
+  };
 
-  /*_handle_selection = (e) => {
-    this.setState({ select: e.target.value });
-  };*/
+  _handle_isValid = (isvalid: boolean) => {
+    if (this.props.handle_isValid !== undefined) {
+      this.props.handle_isValid(isvalid);
+    }
+  };
 
   handleSelect = (range) => {
     this.setState({
@@ -92,21 +139,98 @@ export class DB_sistema_remoto extends Component<props, state> {
     }
   };
 
-  handle_picker_change = (ini_date, end_date) => {
-    console.log(ini_date, end_date);
-    // this.setState({ ini_date: ini_date, end_date: end_date });
+
+  handle_change = (e) => {
+    let value = e.target.value;
+    this.setState({ field: value });
+  }
+  _handle_selection = (e) => {
+    this.setState({ select: e.target.value });
   };
+
+
+
+  _test_source = async () => {
+    let path = `${SCT_API_URL}/source/db-sistema-remoto/test`;
+    let parameters = {
+      collection_name: this.state.select,
+      field: this.state.field,
+      fecha_inicio: to_yyyy_mm_dd_hh_mm_ss(this.state.ini_date),
+      fecha_final: to_yyyy_mm_dd_hh_mm_ss(this.state.end_date),
+    } as parameters;
+    let isValid = false;
+    await fetch(path, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(parameters),
+    })
+      .then((resp) => resp.json())
+      .then((json) => {
+        this.setState({ log: json });
+        isValid = true;
+      })
+      .catch((error) => {
+        console.log(error);
+        let log = {
+          msg: "Error al conectarse con la API (api-sct)",
+        };
+        isValid = false;
+        this.setState({ log: log });
+      });
+    this._handle_isValid(isValid);
+  };
+  
+  _config_source = async () => {
+    let path = `${SCT_API_URL}/component-leaf/comp-root/${this.props.component.parent_id}/comp-leaf/${this.props.component.public_id}/configure-source`;
+    let parameters = {
+      collection_name: this.state.select,
+      field: this.state.field,
+      fecha_inicio: to_yyyy_mm_dd_hh_mm_ss(this.state.ini_date),
+      fecha_final: to_yyyy_mm_dd_hh_mm_ss(this.state.end_date),
+    } as parameters;
+    let isValid = false;
+    await fetch(path, {
+      method: "PUT",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({type: "BD SIST.REMOTO", parameters: parameters }),
+    })
+      .then((resp) => resp.json())
+      .then((json) => {
+        this.setState({ log: json });
+        this.props.handle_sources_changes(json);
+        isValid = true;
+      })
+      .catch((error) => {
+        console.log(error);
+        let log = {
+          msg: "Error al conectarse con la API (api-sct)",
+        };
+        isValid = false;
+        this.setState({ log: log });
+      });
+    this._handle_isValid(isValid);
+  };
+
+
 
   render() {
     return (
       <>
         <Form.Group>
           <Form.Label>Nombre de la colección:</Form.Label>
-          <Form.Control as="select">
-            <option>Collección 1</option>
-            <option>Collección 2</option>
+          <Form.Control as="select" onChange={this._handle_selection }>
+            { this.state.options}
           </Form.Control>
-          <br></br>
+          <br/>
+          <Form.Label>Nombre del campo:</Form.Label>
+          <Form.Control type="text" placeholder="Campo a utilizar" 
+            onChange={this.handle_change} value={ this.state.field}
+          />
+          <br/>
 
           <Form.Label>
             <div className="date-container">
@@ -129,8 +253,11 @@ export class DB_sistema_remoto extends Component<props, state> {
                 value={this.state.end_date_str}
                 onChange={(e) => this.onChangeDate(e, "end_date")}
               />
-              <Button variant="outline-info" className="test-manual-btn">
+              <Button variant="outline-info" className="test-manual-btn" onClick={ this._test_source}>
                 Probar
+              </Button>
+              <Button variant="warning" className="test-manual-btn" onClick={ this._config_source}>
+                Guardar configuración
               </Button>
             </div>
           </Form.Label>

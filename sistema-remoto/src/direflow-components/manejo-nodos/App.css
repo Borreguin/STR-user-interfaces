@@ -2,7 +2,7 @@
   display: inline-block;
   width: 100%;
   /*overflow-x: hidden;*/
-  padding: 1%;
+  padding: 0.5%;
 }
 
 .sc-search {
@@ -19,12 +19,7 @@
   padding-left: 0px;
 }
 
-.sc-pick-menu {
-  padding: 4px;
-  min-width: 340px;
-  max-width: 360px;
-  height: 40px;
-}
+
 
 .bt-download {
   height: 35px;
@@ -51,6 +46,7 @@
   padding: 1px;
   border-radius: 4px;
   background-color: rgba(20, 57, 110, 0.685);
+  color: white !important;
 }
 
 .btn-dis {
@@ -59,9 +55,7 @@
   cursor: progress;
 }
 
-.btn-cal-disp:hover {
-  background-color: rgb(59, 179, 29);
-}
+
 
 
 .sc-body-cal {
@@ -220,7 +214,6 @@
   padding: 4px;
   min-width: 340px;
   max-width: 360px;
-  height: 40px;
 }
 
 .bt-download {
@@ -238,14 +231,6 @@
   margin-left: 5px;
 }
 
-.btn-cal-disp {
-  float: left;
-  height: 30px;
-  width: 25%;
-  padding: 1px;
-  border-radius: 4px;
-  background-color: rgba(20, 57, 110, 0.685);
-}
 
 .btn-dis {
   background-color: rgba(88, 89, 92, 0.836);

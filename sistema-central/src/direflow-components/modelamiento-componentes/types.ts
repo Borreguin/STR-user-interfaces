@@ -63,6 +63,11 @@ export type properties = {
   topology: Object,
 }
 
+export type source = {
+  type: string,
+  parameters: Object
+}
+
 export type leaf_component = {
   parent_id: string,
   public_id: string,
@@ -71,7 +76,8 @@ export type leaf_component = {
   name: string,
   position_x_y: Array<Number>,
   topology: Object,
-  comp_root: comp_root | null
+  comp_root: comp_root | null,
+  sources: Array<source>
 }
 
 export type comp_root = {

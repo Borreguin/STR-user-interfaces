@@ -27,6 +27,9 @@ export type Range = {
 type parameters = {
   fecha_inicio: string;
   fecha_final: string;
+  piserver_name: string;
+  tag_name: string;
+  condicion_filtrado: string;
 };
 
 export interface state {
@@ -37,9 +40,13 @@ export interface state {
   end_date_str: string;
   range: Array<Range>;
   log: Object;
+  pi_server: string;
+  options: Array<JSX.Element>;
+  tag_name: string;
+  condition: string;
 }
 
-export class Manual extends Component<props, state> {
+export class Historico extends Component<props, state> {
   constructor(props) {
     super(props);
     let r = get_last_month_dates();
@@ -56,6 +63,10 @@ export class Manual extends Component<props, state> {
       end_date_str: to_yyyy_mm_dd_hh_mm_ss(r.last_day_month),
       range: [range],
       log: { fuentes: this.props.component.sources },
+      pi_server: "",
+      options: [],
+      tag_name: "UTR_C_GENERO_DNP.SV",
+      condition: "INDISPONIBLE"
     };
   }
 
@@ -71,17 +82,42 @@ export class Manual extends Component<props, state> {
   };
 
   componentDidMount = () => {
-    console.log("component", this.props.component);
+    let path = `${SCT_API_URL}/options/pi-servers`;
+    fetch(path)
+      .then((res) => res.json())
+      .then((json) => {
+        if (json.success) {
+          // creando lista de opciones
+          let options = this.state.options;
+          let ix = 0;
+          for (const pi_server of json.pi_servers) {
+            if (pi_server !== null) {
+              if (ix === 0) {
+                this.setState({ pi_server: pi_server });
+              }
+              options.push(<option key={ix}>{pi_server}</option>);
+              ix += 1;
+            }
+          }
+          this.setState({ options: options });
+        } else {
+          this._handle_message({ succes: false, msg: json.msg });
+        }
+      })
+      .catch((error) =>
+        this._handle_message({ success: false, error: "" + error })
+      );
   };
 
   _test_source = async () => {
-    let path = `${SCT_API_URL}/source/manual/test`;
+    let path = `${SCT_API_URL}/source/historico/test`;
     let parameters = {
-      root_id: this.props.component.parent_id,
-      leaf_id: this.props.component.public_id,
       fecha_inicio: to_yyyy_mm_dd_hh_mm_ss(this.state.ini_date),
       fecha_final: to_yyyy_mm_dd_hh_mm_ss(this.state.end_date),
-    };
+      piserver_name: this.state.pi_server,
+      tag_name: this.state.tag_name,
+      condicion_filtrado: this.state.condition
+    } as parameters;
     let isValid = false;
     await fetch(path, {
       method: "POST",
@@ -111,6 +147,9 @@ export class Manual extends Component<props, state> {
     let parameters = {
       fecha_inicio: to_yyyy_mm_dd_hh_mm_ss(this.state.ini_date),
       fecha_final: to_yyyy_mm_dd_hh_mm_ss(this.state.end_date),
+      piserver_name: this.state.pi_server,
+      tag_name: this.state.tag_name,
+      condicion_filtrado: this.state.condition
     } as parameters;
     let isValid = false;
     await fetch(path, {
@@ -118,7 +157,7 @@ export class Manual extends Component<props, state> {
       headers: {
         "Content-Type": "application/json",
       },
-      body: JSON.stringify({type: "MANUAL", parameters: parameters }),
+      body: JSON.stringify({ type: "HISTORICO", parameters: parameters }),
     })
       .then((resp) => resp.json())
       .then((json) => {
@@ -167,10 +206,36 @@ export class Manual extends Component<props, state> {
     }
   };
 
+  _handle_selection = (e) => {
+    this.setState({ pi_server: e.target.value });
+  };
+
+
   render() {
     return (
       <>
         <Form.Group>
+          <Form.Label>Nombre del servidor a conectar:</Form.Label>
+          <Form.Control as="select" onChange={this._handle_selection}>
+            {this.state.options}
+          </Form.Control>
+          <br />
+          <Form.Label>Nombre de la tag:</Form.Label>
+          <Form.Control
+            type="text"
+            placeholder="Campo a utilizar"
+            onChange={(e) => { this.setState({tag_name: e.target.value})}}
+            value={this.state.tag_name}
+          />
+          <br />
+          <Form.Label>Condición de indisponibilidad a utilizar:</Form.Label>
+          <Form.Control
+            type="text"
+            placeholder="Campo a utilizar"
+            onChange={(e) => { this.setState({condition: e.target.value})}}
+            value={this.state.condition}
+          />
+          <br />
           <Form.Label>
             <div className="date-container">
               <Button
@@ -199,7 +264,11 @@ export class Manual extends Component<props, state> {
               >
                 Probar
               </Button>
-              <Button variant="warning" className="test-manual-btn" onClick={ this._config_source}>
+              <Button
+                variant="warning"
+                className="test-manual-btn"
+                onClick={this._config_source}
+              >
                 Guardar configuración
               </Button>
             </div>

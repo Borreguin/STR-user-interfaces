@@ -71,7 +71,7 @@ export class Modal_delete_component extends Component<
         console.log("modal_delete_componente", json);
         if (json.success) {
           this.handleEditedRootComponent(json);
-          this.handleClose();
+          // this.handleClose();
         } else {
           this.setState({ message: json.msg });
           this.handleMessages(json.msg);

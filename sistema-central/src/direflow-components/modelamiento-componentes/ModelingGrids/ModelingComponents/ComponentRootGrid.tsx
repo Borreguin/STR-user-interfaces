@@ -6,8 +6,8 @@ import createEngine, {
   DiagramEngine,
 } from "@projectstorm/react-diagrams";
 import { CanvasWidget } from "@projectstorm/react-canvas-core";
-import { TrayWidget } from "../ModelingComponents/NodeModels/DragAndDropWidget/TrayWidget";
-import { TrayItemWidget } from "../ModelingComponents/NodeModels/DragAndDropWidget/TrayItemWidget";
+import { TrayWidget } from "./NodeModels/DragAndDropWidget/TrayWidget";
+import { TrayItemWidget } from "./NodeModels/DragAndDropWidget/TrayItemWidget";
 import "../ModelingComponents/NodeModels/DragAndDropWidget/styles.css";
 import * as _ from "lodash";
 import { Button } from "react-bootstrap";
@@ -19,9 +19,10 @@ import { WeightedNodeModel } from "./NodeModels/WeightedNode/WeightedNodeModel";
 import { ComponentLeafFactory } from "./NodeModels/ComponentLeaf/ComponentLeafFactory";
 import { AverageNodeFactory } from "./NodeModels/AverageNode/AverageNodeFactory";
 import { WeightedNodeFactory } from "./NodeModels/WeightedNode/WeightedNodeFactory";
-import { bloque_leaf, leaf_component, menu } from "../../types";
+import { comp_root, leaf_component, menu, submenu } from "../../types";
 import { DefaultState } from "../DefaultState";
 import { StyledCanvasWidget } from "../helpers/StyledCanvasWidget";
+import { SCT_API_URL } from "../../../../Constantes";
 
 type BlockLeafGridProps = {
   menu: menu;
@@ -66,7 +67,7 @@ type WeightedConnection = {
     };
 */
 
-class BlockLeafGrid extends Component<BlockLeafGridProps> {
+class ComponentRootGrid extends Component<BlockLeafGridProps> {
   state: {
     engine: DiagramEngine;
     model: DiagramModel;
@@ -101,6 +102,7 @@ class BlockLeafGrid extends Component<BlockLeafGridProps> {
     let submenu_change =
       this.props.menu.submenu.length !== this.last_props.menu.submenu.length;
     let name_submenu_change = this.props.menu.name !== newProps.menu.name;
+    console.log("ComponentRootGrid componentWillReceiveProps", submenu_change, name_submenu_change);
     // si hay cambio de nombre o cambio en el submenu
     if (name_submenu_change || submenu_change) {
       // limpiar el modelo antes de iniciar nuevamente
@@ -120,14 +122,13 @@ class BlockLeafGrid extends Component<BlockLeafGridProps> {
   };
 
   componentDidUpdate = (prevProps) => {
-    let bloqueleaf = this.props.menu.object as bloque_leaf;
     let submenu_change =
       this.props.menu.submenu.length !== this.last_props.menu.submenu.length;
     let name_submenu_change =
       prevProps !== undefined &&
-      this.props.menu.name !== prevProps.menu.name &&
-      bloqueleaf.comp_root !== undefined;
-
+      this.props.menu.name !== prevProps.menu.name;
+      console.log("ComponentRootGrid componentDidUpdate", submenu_change, name_submenu_change);
+   
     if (name_submenu_change || submenu_change) {
       const resp = this._init_graph();
       let engine = this.state.engine;
@@ -221,18 +222,16 @@ class BlockLeafGrid extends Component<BlockLeafGridProps> {
 
   // elemento root del grid:
   create_root_component = () => {
-    var bloqueleaf = this.props.menu.object as bloque_leaf;
-    var root_component = bloqueleaf.comp_root;
-    // var root_data = this.props.menu.object.comp_root;
+    var componentRoot = this.props.menu.object as comp_root;
     // Estructura determinada para node root del grid:
     let Root = {
-      name: root_component.name,
-      type: root_component.document,
+      name: componentRoot.name,
+      type: componentRoot.document,
       editado: false,
-      public_id: root_component.public_id,
-      parent_id: bloqueleaf.public_id,
-      posx: root_component.position_x_y[0],
-      posy: root_component.position_x_y[1],
+      public_id: componentRoot.public_id,
+      parent_id: componentRoot.public_id,
+      posx: componentRoot.position_x_y[0],
+      posy: componentRoot.position_x_y[1],
     };
     return new CompRootModel({
       root: Root,
@@ -243,17 +242,17 @@ class BlockLeafGrid extends Component<BlockLeafGridProps> {
 
   create_root_link = () => {
     // Creación de link root, usando información del bloque leaf (como root node)
-    var bloqueleaf = this.props.menu.object as bloque_leaf;
-    var root_component = bloqueleaf.comp_root;
+    var componentRoot = this.props.menu.object as comp_root;
+    //vvar root_component = bloqueleaf.comp_root;
     // var root_data = this.props.menu.object.comp_root;
     if (
-      root_component.topology &&
-      root_component.topology["ROOT"] !== undefined
+      componentRoot.topology &&
+      componentRoot.topology["ROOT"] !== undefined
     ) {
       let root_node = this.model.getNode(
-        root_component.public_id
+        componentRoot.public_id
       ) as CompRootModel;
-      let node_id = root_component.topology["ROOT"][0];
+      let node_id = componentRoot.topology["ROOT"][0];
       let node_to_connect = this.model.getNode(node_id);
       if (node_to_connect === undefined) {
         return;
@@ -271,12 +270,12 @@ class BlockLeafGrid extends Component<BlockLeafGridProps> {
   create_nodes = () => {
     const { menu } = this.props;
     let nodes = [];
-    let bloqueleaf = menu.object as bloque_leaf;
+    let componentRoot = menu.object as comp_root;
     // var root_component = bloqueleaf.comp_root;
-    if (bloqueleaf.comp_root === null) {
+    if (componentRoot === null) {
       return nodes;
     }
-    bloqueleaf.comp_root.leafs.forEach((leaf) => {
+    componentRoot.leafs.forEach((leaf) => {
       let data = {
         name: leaf.name,
         editado: false,
@@ -351,9 +350,9 @@ class BlockLeafGrid extends Component<BlockLeafGridProps> {
   create_node_links = () => {
     const { menu } = this.props;
     let next_topology = null;
-    let bloqueleaf = menu.object as bloque_leaf;
-    bloqueleaf.comp_root.leafs.forEach((leaf) => {
-      console.log("leaf", leaf);
+    let componentRoot = menu.object as comp_root;
+    componentRoot.leafs.forEach((leaf) => {
+      // console.log("leaf", leaf);
       let raw_node = this.model.getNode(leaf.public_id);
       // console.log(raw_node.getType());
       switch (raw_node.getType()) {
@@ -540,12 +539,61 @@ class BlockLeafGrid extends Component<BlockLeafGridProps> {
   };
 
   reload_graph = () => {
-    console.log("reload_block_leaf_grid");
     if (this.props.handle_reload !== undefined) {
-      console.log("reload_block_leaf_grid", this.props.menu);
-      this.props.handle_reload(this.props.menu);
+      this.get_object_from_db().then((json) => {
+        let new_menu = this.create_menu_from_json(json);
+        console.log("reload_block_leaf_grid", new_menu);
+        this.props.handle_reload(new_menu);
+      });
     }
   };
+
+  get_object_from_db = async() => {
+    // permite actualizar desde la base de datos:
+    console.log(this.props.menu);
+    let answer = null;
+    let path = `${SCT_API_URL}/component-root/${this.props.menu.public_id}`;
+    await fetch(path)
+      .then((res) => res.json())
+      .then((json) => {
+        if (json.success) {
+          answer = json;
+        }
+        else {
+          this._handle_messages({ succes: false, msg: json.msg });
+        }
+      })
+      .catch((error) =>
+        this._handle_messages({ success: false, error: "" + error })
+    );
+    return answer;
+  }
+
+  create_menu_from_json = (json) => {
+    let rootComponent = json.componente as comp_root;
+    let submenus = [];
+    for (const leaf of rootComponent.leafs) {
+      let submenu = {
+        level: this.props.menu.level,
+        document: leaf.document,
+        public_id: leaf.public_id,
+        parent_id: leaf.parent_id,
+        name: leaf.name,
+        object: leaf
+      } as submenu;
+      submenus.push(submenu);
+    }
+    let new_menu = {
+      level: this.props.menu.level,
+      document: rootComponent.document,
+      public_id: rootComponent.public_id,
+      parent_id: rootComponent.parent_id,
+      name: rootComponent.name,
+      object: rootComponent,
+      submenu: submenus
+    } as menu;
+    return new_menu;
+  }
 
   _init_graph = () => {
     //1) setup the diagram engine
@@ -560,15 +608,15 @@ class BlockLeafGrid extends Component<BlockLeafGridProps> {
     engine.getNodeFactories().registerFactory(new WeightedNodeFactory());
 
     // Empezando la población de grid:
-    let bloqueleaf = this.props.menu.object as bloque_leaf;
-    if (bloqueleaf.comp_root === null) {
+    let componentRoot = this.props.menu.object as comp_root;
+    if (componentRoot === null) {
       this.model = model;
       this.engine = engine;
       engine.setModel(this.model);
       return { model: model, engine: engine };
     }
     // Variables generales:
-    this.parent_id = bloqueleaf.comp_root.public_id;
+    this.parent_id = componentRoot.public_id;
     // console.log("voy a trabajar con esto:", this.props.menu)
 
     // Añadir el bloque root (inicio de operaciones):
@@ -664,4 +712,4 @@ class BlockLeafGrid extends Component<BlockLeafGridProps> {
   }
 }
 
-export default BlockLeafGrid;
+export default ComponentRootGrid;

@@ -1,5 +1,5 @@
-:root{
-  --sbmenuwidth: 420px
+:root {
+  --sbmenuwidth: 420px;
 }
 
 body {
@@ -10,10 +10,10 @@ body {
   display: flex;
   justify-content: center;
   align-items: center;
-  background-color: #F6FAFA;
+  background-color: #f6fafa;
 }
 
-zDireflow-navigate{
+zDireflow-navigate {
   position: absolute;
   right: 10px;
   top: 10px;
@@ -21,7 +21,7 @@ zDireflow-navigate{
   background-color: blueviolet;
 }
 
-.component-container{
+.component-container {
   width: calc(100% - var(--sbmenuwidth) - 30px);
   position: absolute;
   left: 5px;
@@ -31,27 +31,27 @@ zDireflow-navigate{
   min-height: 900px;
 }
 
-.source-container{
+.source-container {
   margin-top: 25px;
 }
 
-.test-manual-btn{
+.test-manual-btn {
   margin-top: -5px;
   margin-left: 10px;
 }
 
-.btn-date-fixed{
+.btn-date-fixed {
   max-height: 38px;
   margin-right: 10px;
   margin-left: 10px;
   margin-top: -5px;
 }
 
-.date-range-no-show{
+.date-range-no-show {
   display: none;
 }
 
-.date-range-show{
+.date-range-show {
   margin-top: 4px;
   width: min-content;
   height: min-content;
@@ -61,15 +61,48 @@ zDireflow-navigate{
   margin: 1px;
 }
 
-.date-container{
+.date-container {
   display: flex;
   flex-direction: row;
-  flex-wrap:wrap;
+  flex-wrap: wrap;
   justify-content: space-between;
 }
 
-.date-input{
+.date-input {
   width: 120px;
   height: 37px;
   margin-top: -4px;
+}
+
+.source-item {
+  margin: 4px;
+  width: 180px;
+  background-color: #ffc108;
+  padding: 5px;
+  display: flex;
+  justify-content: space-between
+}
+
+.source-label{
+  align-self: flex-start;
+}
+
+.source-delete{
+  align-self: flex-end;
+  color: rgba(184, 17, 17, 0.871);
+  cursor: pointer;
+}
+
+.source-delete:hover{
+  color: red;
+}
+
+.source-list {
+  margin: 4px;
+  background-color: #c0c8c870;
+  border-radius: 7px;
+  height: auto;
+  display: flex;
+  flex-wrap: wrap;
+  flex-direction: row;
 }

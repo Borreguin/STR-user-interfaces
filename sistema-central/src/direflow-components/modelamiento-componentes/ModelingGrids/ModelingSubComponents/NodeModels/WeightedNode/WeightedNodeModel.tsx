@@ -109,6 +109,7 @@ export class WeightedNodeModel extends NodeModel<
   };
 
   create_component = async () => {
+    console.log("lets create", this.data);
     let result = { success: false, bloqueleaf: null };
     // Este es un nodo nuevo:
     let path = `${SCT_API_URL}/component-leaf/comp-root/${this.data.parent_id}`;
@@ -126,11 +127,11 @@ export class WeightedNodeModel extends NodeModel<
       .then((res) => res.json())
       .then((json) => {
         if (json.success) {
-          let bloqueleaf = json.bloqueleaf as WeightedNode;
-          bloqueleaf.parent_id = _.cloneDeep(this.data.parent_id);
-          this.setNodeInfo(json.bloqueleaf);
+          let componente_leaf = json.component_leaf as WeightedNode;
+          componente_leaf.parent_id = _.cloneDeep(this.data.parent_id);
+          this.setNodeInfo(json.component_leaf);
           this._handle_changes(this);
-          result = { success: json.success, bloqueleaf: json.bloqueleaf };
+          result = { success: json.success, bloqueleaf: json.component_leaf };
         }
       })
       .catch(console.log);

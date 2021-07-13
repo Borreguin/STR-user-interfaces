@@ -11,8 +11,9 @@ import { modal_edit_menu_function } from "./Modals/modal_edit_menu_function";
 import { modal_add_submenu_function } from "./Modals/modal_add_submenu_function";
 import ReactJson from "react-json-view";
 import BlockRootGrid from "./ModelingGrids/ModelingBlocks/BlockRootGrid";
-import BlockLeafGrid from "./ModelingGrids/ModelingComponents/BlockLeafGrid";
+import ComponentRootGrid from "./ModelingGrids/ModelingComponents/ComponentRootGrid";
 import SubComponentGrid from "./ModelingGrids/ModelingSubComponents/SubComponentGrid";
+import * as _ from "lodash";
 
 type props = {
   root_public_id: string;
@@ -65,6 +66,7 @@ class ComponentModeling extends Component<props, state> {
   // manejar el cierre de los modales:
   handle_modal_close = (update: boolean) => {
     // let update_modal_show_state = this.state.modal_show;
+    console.log("handle_modal_close", update);
     this.setState({ modal_show: update });
   };
 
@@ -74,18 +76,19 @@ class ComponentModeling extends Component<props, state> {
     document: string,
     value: Object
   ) => {
-    console.log(public_id, document, value);
+    console.log("handle_changes_in_structure", public_id, document, value);
   };
 
   handle_messages = (msg) => {
+    console.log("handle_messages", msg);
     if (msg !== undefined) {
       this.setState({ log: msg });
     }
   };
 
   handle_edited_menu = (object) => {
-    if (object === undefined) return;
     console.log("handle_edited_menu", object);
+    if (object === undefined) return;
     if (object["document"] === "BloqueRoot") {
       this._create_initial_menu(object as bloque_root);
     } else {
@@ -94,11 +97,12 @@ class ComponentModeling extends Component<props, state> {
   };
 
   handle_reload = (menu: menu) => {
-    console.log("reload", menu);
+    console.log("handle_reload", menu);
     if (menu === undefined) return;
     let document = menu.document;
     let level = menu.level;
     let new_menu = this.state.menu;
+    console.log("handle_reload document",document);
     switch (document) {
       case "BloqueRoot":
         this._search_root_block().then((bloqueroot) =>
@@ -106,7 +110,10 @@ class ComponentModeling extends Component<props, state> {
         );
         break;
       case "BloqueLeaf":
-        console.log("este caso?", this.state.menu, this.state.selected_menu);
+        new_menu[level] = menu;
+        this.setState({menu: new_menu, selected_menu:menu});
+        break;
+      case "ComponenteRoot":
         new_menu[level] = menu;
         this.setState({menu: new_menu, selected_menu:menu});
         break;
@@ -130,7 +137,7 @@ class ComponentModeling extends Component<props, state> {
     // Se compara de esta manera ya que bloqueleaf es padre de ComponenteRoot
     for (const menu of new_menus) {
       // actualizar menu principal:
-      if (bloqueroot !== undefined &&  menu.public_id === bloqueroot.public_id) {
+      if (bloqueroot &&  menu.public_id === bloqueroot.public_id) {
         menu.object = bloqueroot;
       }
 
@@ -165,10 +172,14 @@ class ComponentModeling extends Component<props, state> {
           submenus.push(submenu);
         }
         menu.name = new_object.name;
+        menu.document = new_object.document;
         menu.submenu = submenus;
         menu.object = new_object;
+        let old_menu = _.cloneDeep(this.state.menu);
+        console.log("menu anterior", old_menu);
+        console.log("menu nuevo", new_menus);
         this.setState({ menu: new_menus });
-        console.log("new_menus", new_menus);
+        
       }
     }
   };
@@ -283,10 +294,10 @@ class ComponentModeling extends Component<props, state> {
             handle_reload={this.handle_reload}
           />
         );
-      case "BloqueLeaf":
+      case "ComponenteRoot":
         console.log("aqui", this.state.selected_menu);
         return (
-          <BlockLeafGrid
+          <ComponentRootGrid
             menu={this.state.selected_menu}
             handle_messages={this.handle_messages}
             handle_reload={this.handle_reload}

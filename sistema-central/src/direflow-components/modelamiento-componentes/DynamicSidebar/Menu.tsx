@@ -72,15 +72,19 @@ class Menu extends Component<pros, state> {
     console.log("on_click_menu_button", menu);
     if (e.target.tagName !== "DIV" && e.target.tagName !== "SPAN") return;
     let classname = "" + e.target.className;
-    if (classname.includes("card-header") && menu.level > 0) {
+    if ((classname.includes("card-header") || classname === "menu-text") && menu.level > 0) {
       return;
     }
     // Si el botón que ha sido dado click no es root, o no tiene miembros internos
     // el menu no debe ser modificado:
-    console.log(menu.object["calculation_type"]);
+    console.log("on_click_menu_button calculation_type", menu.object["calculation_type"]);
+    console.log("on_click_menu_button classname", classname);
     let isRoot = menu.object["calculation_type"] === "ROOT";
     let isSerial = menu.object["calculation_type"] === "SERIE" && (menu.object["comp_root"] !== null);
     let isBloqueRoot = menu.object["document"] === "BloqueRoot";
+    let isComponenteLeaf = menu.object["document"] === "ComponenteLeaf";
+    console.log("on_click_menu_button condiciones", isRoot, isSerial, isBloqueRoot, isComponenteLeaf);
+  
     if (isRoot || isSerial || isBloqueRoot) {
       // los elementos que se permiten dar click para ser modificados o ampliados:
       let new_menu = this.modify_menu(menu);
@@ -118,7 +122,7 @@ class Menu extends Component<pros, state> {
         let sub_menu = [] as Array<submenu>;
         if (bloqueleaf.comp_root !== null) {
           // using a root component:
-          console.log("continue", bloqueleaf.comp_root);
+          console.log("contiene componente root", bloqueleaf.comp_root);
           for (const leaf of bloqueleaf.comp_root.leafs) {
             let sub = {
               document: leaf.document,
@@ -131,13 +135,15 @@ class Menu extends Component<pros, state> {
             sub_menu.push(sub);
           }
         }
+        // este Bloque leaf queda representado por un componente root
+        let rootComponent = bloqueleaf.comp_root;
         let new_menu = {
           level: selected_menu.level + 1,
-          document: document,
-          name: selected_menu.name,
-          public_id: selected_menu.public_id,
-          parent_id: selected_menu.parent_id,
-          object: selected_menu.object,
+          document: rootComponent.document,
+          name: rootComponent.name,
+          public_id: rootComponent.public_id,
+          parent_id: rootComponent.parent_id,
+          object: rootComponent,
           submenu: sub_menu,
         } as menu;
         return new_menu;
@@ -281,7 +287,7 @@ class Menu extends Component<pros, state> {
                             <span style={{ marginRight: "15px" }}>
                               &middot;
                             </span>
-                            <span className="menu-text">
+                            <span className="submenu-text">
                               {sub_menu.name.length > 30
                                 ? sub_menu.name.substring(0, 20) +
                                   "..." +

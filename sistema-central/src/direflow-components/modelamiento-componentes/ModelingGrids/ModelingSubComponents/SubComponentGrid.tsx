@@ -19,9 +19,10 @@ import { WeightedNodeModel } from "./NodeModels/WeightedNode/WeightedNodeModel";
 import { ComponentLeafFactory } from "./NodeModels/ComponentLeaf/ComponentLeafFactory";
 import { AverageNodeFactory } from "./NodeModels/AverageNode/AverageNodeFactory";
 import { WeightedNodeFactory } from "./NodeModels/WeightedNode/WeightedNodeFactory";
-import { bloque_leaf, leaf_component, menu } from "../../types";
+import { bloque_leaf, comp_root, leaf_component, menu, submenu } from "../../types";
 import { DefaultState } from "../DefaultState";
 import { StyledCanvasWidget } from "../helpers/StyledCanvasWidget";
+import { SCT_API_URL } from "../../../../Constantes";
 
 type GridProps = {
   menu: menu;
@@ -94,13 +95,17 @@ class SubComponentGrid extends Component<GridProps> {
     const resp = this._init_graph();
     this.setState({ engine: resp.engine, model: resp.model });
   };
- 
 
   // Permite actualizar el grid cada vez que recibe un cambio desde las propiedades
   // Esto ocurre cuando se añade un bloque en el menú lateral
   componentWillReceiveProps = (newProps: GridProps) => {
-    if (this.props.menu.name !== newProps.menu.name) {
-      // limpiar el modelo antes de iniciar nuevamente 
+    let submenu_change =
+      this.props.menu.submenu.length !== this.last_props.menu.submenu.length;
+    let name_submenu_change = this.props.menu.name !== newProps.menu.name;
+    console.log("SubComponentGrid componentWillReceiveProps", submenu_change, name_submenu_change);
+    // si hay cambio de nombre o cambio en el submenu
+    if (submenu_change || name_submenu_change) {
+      // limpiar el modelo antes de iniciar nuevamente
       let model = this.state.model;
       let engine = this.state.engine;
       for (const node of model.getNodes()) {
@@ -112,24 +117,31 @@ class SubComponentGrid extends Component<GridProps> {
       this.engine = engine;
       this.model = model;
       engine.setModel(model);
-      
-      this.setState({ engine: engine, model:model });
+
+      this.setState({ engine: engine, model: model });
     }
   };
 
   componentDidUpdate = (prevProps) => {
     let bloqueleaf = this.props.menu.object as bloque_leaf;
-
-    if (prevProps !== undefined && this.props.menu.name !== prevProps.menu.name &&
-      bloqueleaf.comp_root !== undefined) {
+    let submenu_change =
+      this.props.menu.submenu.length !== this.last_props.menu.submenu.length;
+    let name_submenu_change =
+      prevProps !== undefined &&
+      this.props.menu.name !== prevProps.menu.name &&
+      bloqueleaf.comp_root !== undefined;
+    console.log("SubComponentGrid componentDidUpdate", submenu_change, name_submenu_change);
+   
+    if (name_submenu_change || submenu_change) {
       const resp = this._init_graph();
       let engine = this.state.engine;
       engine.setModel(resp.model);
       this.engine = resp.engine;
       this.model = resp.model;
+      this.last_props = _.cloneDeep(this.props);
       this.setState({ engine: engine, model: resp.model });
     }
-  }
+  };
 
   update_nodes_from_changes = (new_blocks: Array<leaf_component>) => {
     // actualizando en el grid solamente aquellos elementos
@@ -239,8 +251,13 @@ class SubComponentGrid extends Component<GridProps> {
     var bloqueleaf = this.props.menu.object as bloque_leaf;
     var root_component = bloqueleaf.comp_root;
     // var root_data = this.props.menu.object.comp_root;
-    if (root_component.topology && root_component.topology["ROOT"] !== undefined) {
-      let root_node = this.model.getNode(root_component.public_id) as CompRootModel;
+    if (
+      root_component.topology &&
+      root_component.topology["ROOT"] !== undefined
+    ) {
+      let root_node = this.model.getNode(
+        root_component.public_id
+      ) as CompRootModel;
       let node_id = root_component.topology["ROOT"][0];
       let node_to_connect = this.model.getNode(node_id);
       if (node_to_connect === undefined) {
@@ -314,11 +331,11 @@ class SubComponentGrid extends Component<GridProps> {
     if (topology.hasOwnProperty(operation)) {
       // Caso serie simple, se conecta con el primer miembro de la lista
       let node = null;
-      if (topology[operation].length == 1) {
+      if (topology[operation].length === 1) {
         node = this.model.getNode(topology[operation][0]);
       }
       // Caso serie avanzado, se conecta con el segundo miembro de la lista
-      else if (topology[operation].length == 2) {
+      else if (topology[operation].length === 2) {
         next_topology = topology[operation][0];
         node = this.model.getNode(topology[operation][1]);
       }
@@ -525,14 +542,64 @@ class SubComponentGrid extends Component<GridProps> {
     }
     this._handle_messages(msg);
     //this.reload_graph();
-  
   };
 
   reload_graph = () => {
     if (this.props.handle_reload !== undefined) {
-      this.props.handle_reload();
+      this.get_object_from_db().then((json) => {
+        let new_menu = this.create_menu_from_json(json);
+        console.log("reload_block_leaf_grid", new_menu);
+        this.props.handle_reload(new_menu);
+      });
     }
   };
+
+  get_object_from_db = async() => {
+    // permite actualizar desde la base de datos:
+    console.log(this.props.menu);
+    let answer = null;
+    let path = `${SCT_API_URL}/component-root/${this.props.menu.public_id}`;
+    await fetch(path)
+      .then((res) => res.json())
+      .then((json) => {
+        if (json.success) {
+          answer = json;
+        }
+        else {
+          this._handle_messages({ succes: false, msg: json.msg });
+        }
+      })
+      .catch((error) =>
+        this._handle_messages({ success: false, error: "" + error })
+    );
+    return answer;
+  }
+
+  create_menu_from_json = (json) => {
+    let rootComponent = json.componente as comp_root;
+    let submenus = [];
+    for (const leaf of rootComponent.leafs) {
+      let submenu = {
+        level: this.props.menu.level,
+        document: leaf.document,
+        public_id: leaf.public_id,
+        parent_id: leaf.parent_id,
+        name: leaf.name,
+        object: leaf
+      } as submenu;
+      submenus.push(submenu);
+    }
+    let new_menu = {
+      level: this.props.menu.level,
+      document: rootComponent.document,
+      public_id: rootComponent.public_id,
+      parent_id: rootComponent.parent_id,
+      name: rootComponent.name,
+      object: rootComponent,
+      submenu: submenus
+    } as menu;
+    return new_menu;
+  }
 
   _init_graph = () => {
     //1) setup the diagram engine
@@ -557,7 +624,6 @@ class SubComponentGrid extends Component<GridProps> {
     // Variables generales:
     this.parent_id = bloqueleaf.comp_root.public_id;
     // console.log("voy a trabajar con esto:", this.props.menu)
-    
 
     // Añadir el bloque root (inicio de operaciones):
     model.addNode(this.create_root_component());

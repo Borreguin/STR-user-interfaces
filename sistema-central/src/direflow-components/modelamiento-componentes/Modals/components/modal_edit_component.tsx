@@ -1,14 +1,8 @@
-import React, { Component, useState } from "react";
+import React, { Component } from "react";
 import { Alert, Button, Col, Form, Modal } from "react-bootstrap";
 import { SCT_API_URL } from "../../../../Constantes";
 import { Sources } from "../../Sources/Sources";
-import {
-  block_leaf,
-  bloque_root,
-  leaf_component,
-  root_block_form,
-  root_component_form,
-} from "../../types";
+import { leaf_component, root_component_form } from "../../types";
 export interface add_menu_props {
   object: leaf_component;
   handle_close?: Function;
@@ -125,6 +119,8 @@ export class Modal_edit_component extends Component<
     return valid;
   };
 
+
+
   render() {
     return (
       <>
@@ -163,10 +159,11 @@ export class Modal_edit_component extends Component<
               </Form.Group>
 
               <Form.Group>
-                <Form.Label>
-                  Configure la fuente de datos por defecto:
-                </Form.Label>
-                {<Sources component={ this.props.object as leaf_component}></Sources> }
+                
+                  <Sources
+                    component={this.props.object as leaf_component}
+                  ></Sources>
+                
               </Form.Group>
             </Form>
             {this.state.message.length === 0 ? (
@@ -178,15 +175,8 @@ export class Modal_edit_component extends Component<
             )}
           </Modal.Body>
           <Modal.Footer>
-            <Button variant="secondary" onClick={this.handleClose}>
-              Cancelar
-            </Button>
-            <Button
-              variant="warning"
-              disabled={!this._check_form()}
-              onClick={this._onclick_edit}
-            >
-              Editar fuente de {this.props.object.name}
+            <Button variant="success" onClick={this.handleClose}>
+              Aceptar
             </Button>
           </Modal.Footer>
         </Modal>

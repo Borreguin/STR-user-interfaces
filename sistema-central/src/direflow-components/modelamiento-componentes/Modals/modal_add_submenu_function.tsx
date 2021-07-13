@@ -1,5 +1,5 @@
 import React from "react";
-import { bloque_leaf, bloque_root } from "../types";
+import { bloque_leaf, bloque_root, comp_root, leaf_component } from "../types";
 import { Modal_add_block } from "./blocks/modal_add_block";
 import { Modal_add_component } from "./components/modal_add_component";
 import { Modal_add_subcomponent } from "./subcomponents/modal_add_subcomponent";
@@ -13,7 +13,7 @@ export const modal_add_submenu_function = (
   console.log("modal_add_submenu_function!", object["document"]);
 
   let document = object["document"];
-
+  console.log(object);
   switch (document) {
     case "BloqueRoot":
       // pemmite añadir bloques leaf dentro de BloqueRoot
@@ -24,24 +24,25 @@ export const modal_add_submenu_function = (
           handle_edited_root_block={handle_changes_in_root}
         />
       );
-    case "BloqueLeaf":
-      // pemmite añadir componentes root dentro de BloqueLeaf
-      return (
-        <Modal_add_component
-          object={object as bloque_leaf}
-          handle_close={handle_close}
-          handle_edited_root_block={handle_changes_in_root}
-        />
-      );
-      case "ComponenteLeaf":
+      case "ComponenteRoot":
         // pemmite añadir componentes root dentro de BloqueLeaf
         return (
-          <Modal_add_subcomponent
-            object={object as bloque_leaf}
+          <Modal_add_component
+            object={object as comp_root}
             handle_close={handle_close}
             handle_edited_root_block={handle_changes_in_root}
           />
         );
+    case "ComponenteLeaf":
+      // pemmite añadir componentes root dentro de BloqueLeaf
+      return (
+        <Modal_add_subcomponent
+          object={object as leaf_component}
+          handle_close={handle_close}
+          handle_edited_root_block={handle_changes_in_root}
+        />
+      );
+    
   }
 
   return <></>;

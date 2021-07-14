@@ -121,15 +121,6 @@ export class BlockRootWidget extends React.Component<BlockWidgetProps> {
           {node.data.name}
         </div>
         <ReactTooltip />
-        <div className="BtnContainer">
-          {/* Permite guardar en base de datos la posición del elemento */}
-          <FontAwesomeIcon
-            icon={this.node.data.editado? faBullseye: faCheck}
-            size="2x"
-            className={"icon-off"}
-            onClick={this._update_position}
-          />
-        </div>
       </div>
     );
   }
@@ -141,14 +132,6 @@ export class BlockRootWidget extends React.Component<BlockWidgetProps> {
         
         <div className="root-port" key={_.uniqueId("ROOT")}>
           <span className="badge badge-warning badge-space">Root</span>
-          <button
-            data-tip="Desconectar este puerto"
-            className="widget-disconnect"
-            onClick={() => this._disconnect_port(this.props.node.getPort("ROOT"))}
-          >
-            -
-          </button>
-          <ReactTooltip />
           <PortWidget
             className="SerialOutPort"
             port={this.props.node.getPort("ROOT")}

@@ -12,7 +12,7 @@ export interface MenuProps {
     edit_menu_modal?: Function;
     add_submenu_modal?: Function;
     edit_submenu_modal?: Function;
-    delete_submenu_modal?: Function;
+    indisponibilidad_submenu_modal?: Function;
     // To keep the current state
     modal_show?: boolean;
     // selected_level: number;
@@ -50,7 +50,7 @@ class DynamicSideBar extends Component<MenuProps> {
                       edit_menu_modal={this.props.edit_menu_modal}
                       add_submenu_modal={this.props.add_submenu_modal}
                       edit_submenu_modal={this.props.edit_submenu_modal}
-                      delete_submenu_modal={this.props.delete_submenu_modal}
+                      indisponibilidad_submenu_modal={this.props.indisponibilidad_submenu_modal}
                       // to keep track of changes
                       modal_show={this.props.modal_show}
                       selected_menu_id={ this.props.selected_menu_id}

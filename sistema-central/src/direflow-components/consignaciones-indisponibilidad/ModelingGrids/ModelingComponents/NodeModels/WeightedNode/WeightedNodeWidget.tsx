@@ -158,22 +158,6 @@ export class WeightedNodeWidget extends React.Component<WeightedNodeWidgetProps>
           {node.data.name}
         </div>
         <ReactTooltip />
-        <div className="BtnContainer">
-          {/* Permite eliminar el elemento*/}
-          <FontAwesomeIcon
-            icon={faTrash}
-            size="2x"
-            className="removeIcon"
-            onClick={this._delete_node}
-          />
-          {/* Permite guardar en base de datos la posición del elemento */}
-          <FontAwesomeIcon
-            icon={this.node.data.editado ? faCheck : faSave}
-            size="2x"
-            className={this.node.data.editado ? "icon-on" : "icon-off"}
-            onClick={this._update_node}
-          />
-        </div>
       </div>
     );
   }
@@ -188,15 +172,6 @@ export class WeightedNodeWidget extends React.Component<WeightedNodeWidgetProps>
             port={this.props.node.getPort("InPut")}
             engine={this.props.engine}
           ></PortWidget>
-          <button
-            data-tip="Desconectar este puerto"
-            className="widget-delete"
-            onClick={() =>
-              this._disconnect_port(this.props.node.getPort("InPut"))
-            }
-          >
-            -
-          </button>
           <ReactTooltip />
           <span className="badge badge-warning badge-space">InPut</span>
         </div>
@@ -207,16 +182,6 @@ export class WeightedNodeWidget extends React.Component<WeightedNodeWidgetProps>
             port={this.props.node.getPort("SERIE")}
             engine={this.props.engine}
           ></PortWidget>
-          <button
-            data-tip="Desconectar este puerto"
-            className="widget-delete"
-            onClick={() =>
-              this._disconnect_port(this.props.node.getPort("SERIE"))
-            }
-          >
-            .
-          </button>
-          <ReactTooltip />
         </div>
       </div>
     );
@@ -280,14 +245,7 @@ export class WeightedNodeWidget extends React.Component<WeightedNodeWidgetProps>
             port={this.props.node.getPort(port.public_id)}
             engine={this.props.engine}
           ></PortWidget>
-          <button
-            data-tip="Remover este puerto"
-            className="widget-delete"
-            onClick={() => this._deleteWeightedPort(port.public_id)}
-          >
-            -
-          </button>
-          <ReactTooltip />
+
         </div>
       </div>
     ));
@@ -319,11 +277,6 @@ export class WeightedNodeWidget extends React.Component<WeightedNodeWidgetProps>
         >
           {this.generateTitle(node)}
           {this.generateInAndOutSerialPort()}
-
-          <button className="widget-add" onClick={this._addWeightedPort}>
-            +
-          </button>
-
           {this.generateWeightedPort()}
         </div>
       </div>

@@ -15,9 +15,9 @@ export interface modal_state {
   message: string;
 }
 
-let modal_id = "Modal_delete_componente";
+let modal_id = "Modal_indisponibilidad_componente";
 
-export class Modal_delete_component extends Component<
+export class Modal_indisponibilidad_component extends Component<
   modal_props,
   modal_state
 > {
@@ -55,7 +55,7 @@ export class Modal_delete_component extends Component<
 
   // INTERNAL FUNCTIONS:
   // Elimina un bloque interno de un bloque root
-  _onclick_delete = () => {
+  _onclick_indisponibilidad = () => {
     console.log(this.props.object);
     let path = `${SCT_API_URL}/component-leaf/comp-root/${this.props.object.parent_id}/comp-leaf/${this.props.object.public_id}`;
     this.setState({ message: "Eliminando bloque interno" });
@@ -68,7 +68,7 @@ export class Modal_delete_component extends Component<
     })
       .then((res) => res.json())
       .then((json) => {
-        console.log("modal_delete_componente", json);
+        console.log("modal_indisponibilidad_componente", json);
         if (json.success) {
           this.handleEditedRootComponent(json);
           // this.handleClose();
@@ -98,20 +98,16 @@ export class Modal_delete_component extends Component<
           show={this.state.show}
           onHide={this.handleClose}
           animation={false}
+          size="lg"
         >
           <Modal.Header translate={"true"} closeButton>
-            <Modal.Title>Eliminación de componente</Modal.Title>
+            <Modal.Title>Ingreso de indisponibilidad en {this.props.object.name}</Modal.Title>
           </Modal.Header>
           <Modal.Body>
             <Form>
               <Form.Group controlId="BlockName">
-                <Form.Label>
-                  Desea eliminar el componente: {this.props.object.name}?{" "}
-                </Form.Label>
                 <Form.Text>
-                  Esta acción es permanente y se eliminará todo el contenido
-                  interno de este bloque, esto incluye todos los componentes
-                  internos modelados.{" "}
+                  Esta forma permite ingresar datos de indisponibilidad de manera manual
                 </Form.Text>
               </Form.Group>
               {this.state.message.length === 0 ? (
@@ -127,8 +123,8 @@ export class Modal_delete_component extends Component<
             <Button variant="secondary" onClick={this.handleClose}>
               Cancelar
             </Button>
-            <Button variant="outline-danger" onClick={this._onclick_delete}>
-              Eliminar {this.props.object.name}
+            <Button variant="outline-danger" onClick={this._onclick_indisponibilidad}>
+              Ingresar indisponibilidad en {this.props.object.name}
             </Button>
           </Modal.Footer>
         </Modal>
@@ -137,13 +133,13 @@ export class Modal_delete_component extends Component<
   }
 }
 
-export const modal_delete_block_function = (
+export const modal_indisponibilidad_block_function = (
   object: leaf_component,
   handle_close: Function,
   handle_changes_in_root: Function
 ) => {
   return (
-    <Modal_delete_component
+    <Modal_indisponibilidad_component
       object={object}
       handle_close={handle_close}
       handle_edited_root_block={handle_changes_in_root}

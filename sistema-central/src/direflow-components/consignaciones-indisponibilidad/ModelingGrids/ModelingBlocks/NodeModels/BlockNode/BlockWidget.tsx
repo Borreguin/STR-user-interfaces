@@ -169,15 +169,6 @@ export class BlockWidget extends React.Component<BlockWidgetProps> {
           {node.data.name}
         </div>
         <ReactTooltip />
-        <div className="BtnContainer">
-          {/* Permite guardar en base de datos la posición del elemento */}
-          <FontAwesomeIcon
-            icon={this.node.data.editado ? faBullseye : faCheck}
-            size="2x"
-            className={"icon-off"}
-            onClick={this._update_position}
-          />
-        </div>
       </div>
     );
   }
@@ -192,16 +183,6 @@ export class BlockWidget extends React.Component<BlockWidgetProps> {
             port={this.props.node.getPort("InPut")}
             engine={this.props.engine}
           ></PortWidget>
-          <button
-            data-tip="Desconectar este puerto"
-            className="widget-delete"
-            onClick={() =>
-              this._disconnect_port(this.props.node.getPort("InPut"))
-            }
-          >
-            -
-          </button>
-          <ReactTooltip />
           <span className="badge badge-warning badge-space">InPut</span>
         </div>
         <div className="out-serial-port" key={_.uniqueId("SERIEPort")}>
@@ -211,16 +192,6 @@ export class BlockWidget extends React.Component<BlockWidgetProps> {
             port={this.props.node.getPort("SERIE")}
             engine={this.props.engine}
           ></PortWidget>
-          <button
-            data-tip="Desconectar este puerto"
-            className="widget-delete"
-            onClick={() =>
-              this._disconnect_port(this.props.node.getPort("SERIE"))
-            }
-          >
-            .
-          </button>
-          <ReactTooltip />
         </div>
       </div>
     );
@@ -243,13 +214,7 @@ export class BlockWidget extends React.Component<BlockWidgetProps> {
             port={this.props.node.getPort(parallelPort.public_id)}
             engine={this.props.engine}
           ></PortWidget>
-          <button
-            data-tip="Remover este puerto"
-            className="widget-delete"
-            onClick={() => this._deleteParallelPort(parallelPort.public_id)}
-          >
-            -
-          </button>
+ 
         </div>
       </div>
     ));
@@ -270,10 +235,6 @@ export class BlockWidget extends React.Component<BlockWidgetProps> {
         <div className={this.props.node.valid ? "sr-node" : "sr-node in_error"}>
           {this.generateTitle(node)}
           {this.generateInAndOutSerialPort()}
-          <button className="widget-add" onClick={this._addParallelPort}>
-            +
-          </button>
-
           {this.generateParallelPort()}
         </div>
       </div>

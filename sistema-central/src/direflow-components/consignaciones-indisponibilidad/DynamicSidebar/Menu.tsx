@@ -1,13 +1,19 @@
 import React, { Component } from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
+  faAmbulance,
   faCog,
+  faHandHolding,
+  faHandHoldingHeart,
+  faHeartBroken,
   faPen,
   faPlusCircle,
+  faScrewdriver,
   faTrash,
 } from "@fortawesome/free-solid-svg-icons";
 import { Card, ListGroup } from "react-bootstrap";
 import { bloque_leaf, leaf_component, menu, submenu } from "../types";
+import ReactTooltip from "react-tooltip";
 
 interface pros {
   menu: menu; // menu structure
@@ -18,7 +24,7 @@ interface pros {
   edit_menu_modal?: Function;
   add_submenu_modal?: Function;
   edit_submenu_modal?: Function;
-  delete_submenu_modal?: Function;
+  indisponibilidad_submenu_modal?: Function;
   // to keep track of changes
   modal_show?: boolean;
   selected_menu_id: string | undefined;
@@ -72,19 +78,33 @@ class Menu extends Component<pros, state> {
     console.log("on_click_menu_button", menu);
     if (e.target.tagName !== "DIV" && e.target.tagName !== "SPAN") return;
     let classname = "" + e.target.className;
-    if ((classname.includes("card-header") || classname === "menu-text") && menu.level > 0) {
+    if (
+      (classname.includes("card-header") || classname === "menu-text") &&
+      menu.level > 0
+    ) {
       return;
     }
     // Si el botón que ha sido dado click no es root, o no tiene miembros internos
     // el menu no debe ser modificado:
-    console.log("on_click_menu_button calculation_type", menu.object["calculation_type"]);
+    console.log(
+      "on_click_menu_button calculation_type",
+      menu.object["calculation_type"]
+    );
     console.log("on_click_menu_button classname", classname);
     let isRoot = menu.object["calculation_type"] === "ROOT";
-    let isSerial = menu.object["calculation_type"] === "SERIE" && (menu.object["comp_root"] !== null);
+    let isSerial =
+      menu.object["calculation_type"] === "SERIE" &&
+      menu.object["comp_root"] !== null;
     let isBloqueRoot = menu.object["document"] === "BloqueRoot";
     let isComponenteLeaf = menu.object["document"] === "ComponenteLeaf";
-    console.log("on_click_menu_button condiciones", isRoot, isSerial, isBloqueRoot, isComponenteLeaf);
-  
+    console.log(
+      "on_click_menu_button condiciones",
+      isRoot,
+      isSerial,
+      isBloqueRoot,
+      isComponenteLeaf
+    );
+
     if (isRoot || isSerial || isBloqueRoot) {
       // los elementos que se permiten dar click para ser modificados o ampliados:
       let new_menu = this.modify_menu(menu);
@@ -194,8 +214,8 @@ class Menu extends Component<pros, state> {
           this._handle_close,
           this.props.handle_edited_menu
         );
-      case "delete_submenu_modal":
-        return this.props.delete_submenu_modal(
+      case "indisponibilidad_submenu_modal":
+        return this.props.indisponibilidad_submenu_modal(
           this.state.selected_object,
           this._handle_close,
           this.props.handle_edited_menu
@@ -241,27 +261,6 @@ class Menu extends Component<pros, state> {
                   />
                 </span>
                 <span className="menu-text">{menu.name}</span>
-
-                <span className="right-button-section">
-                  {/* Botón para añadir*/}
-                  <FontAwesomeIcon
-                    icon={faPlusCircle}
-                    size="1x"
-                    className="add_button"
-                    onClick={() =>
-                      this.on_click_show("add_submenu_modal", menu.object)
-                    }
-                  />
-                  {/* Botón de edición*/}
-                  <FontAwesomeIcon
-                    icon={faPen}
-                    size="1x"
-                    className="edit_block_button"
-                    onClick={() =>
-                      this.on_click_show("edit_menu_modal", menu.object)
-                    }
-                  />
-                </span>
               </Card.Header>
 
               {/* MENU SECUNDARIO */}
@@ -273,6 +272,10 @@ class Menu extends Component<pros, state> {
                   <ListGroup variant="flush">
                     {/* Creando los sub-menus */}
                     {this.props.menu.submenu.map((sub_menu) => {
+                      
+                      let calculation_type = sub_menu.object["calculation_type"];
+                      let isLeaf = calculation_type === "LEAF";
+                      console.log("sub_menu", sub_menu, calculation_type, isLeaf);
                       if (this.shouldBeInMenu(sub_menu.object)) {
                         return (
                           <ListGroup.Item
@@ -284,10 +287,15 @@ class Menu extends Component<pros, state> {
                               this.on_click_menu_button(e, sub_menu)
                             }
                           >
-                            <span style={{ marginRight: "15px" }}>
+                            <span style={{ marginRight: "7px" }}>
                               &middot;
                             </span>
-                            <span className="submenu-text">
+                            <span
+                              className="submenu-text"
+                              data-tip={
+                                sub_menu.name.length > 25 ? sub_menu.name : ""
+                              }
+                            >
                               {sub_menu.name.length > 30
                                 ? sub_menu.name.substring(0, 20) +
                                   "..." +
@@ -297,12 +305,14 @@ class Menu extends Component<pros, state> {
                                   )
                                 : sub_menu.name}
                             </span>
-                            <span className="right-button-section">
+                            <ReactTooltip />
+                            <span className={isLeaf? "right-button-section": "hide"} >
                               {/* Open edit modal */}
                               <FontAwesomeIcon
-                                icon={faPen}
+                                icon={faHandHoldingHeart}
+                                data-tip="Ingreso de consignaciones"
                                 size="1x"
-                                className="edit_button"
+                                className="consignacion_button"
                                 onClick={() =>
                                   this.on_click_show(
                                     "edit_submenu_modal",
@@ -310,18 +320,21 @@ class Menu extends Component<pros, state> {
                                   )
                                 }
                               />
-                              {/* Open delete modal */}
+                              <ReactTooltip />
+                              {/* Open indisponibilidad modal */}
                               <FontAwesomeIcon
-                                icon={faTrash}
+                                icon={faHeartBroken}
+                                data-tip="Ingreso de indisponibilidad"
                                 size="1x"
-                                className="delete_button"
+                                className="indisponibilidad_button"
                                 onClick={() =>
                                   this.on_click_show(
-                                    "delete_submenu_modal",
+                                    "indisponibilidad_submenu_modal",
                                     sub_menu.object
                                   )
                                 }
                               />
+                              <ReactTooltip />
                             </span>
                           </ListGroup.Item>
                         );

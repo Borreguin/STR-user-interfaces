@@ -301,7 +301,7 @@
   margin-right: 2px;
   position: relative;
   height: 20px;
-  top: -7px;
+  top: -2px;
 }
 
 .widget-add {
@@ -582,15 +582,17 @@
   padding: 2px;
 }
 
-.edit_button {
-  color: rgba(137, 204, 231, 0.719);
-  margin-right: 7px;
+.consignacion_button {
+  color: rgba(106, 236, 62, 0.933);
+  margin-right: 8px;
   cursor: pointer;
+  font-size: 15pt;
 }
 
-.delete_button {
-  color: rgb(243, 99, 99);
+.indisponibilidad_button {
+  color: rgb(243, 22, 22);
   cursor: pointer;
+  font-size: 16pt;
 }
 
 .sidebar-menu-container{
@@ -606,13 +608,16 @@
 }
 
 .submenu-text{
-  max-width: 180px;
+  max-width: 160px;
   display: inline-flex;
   overflow: hidden;
   white-space: nowrap;
   text-overflow:ellipsis;
 }
 
+.hide{
+  display: none;
+}
 .source-container{
   margin-top: 25px;
 }

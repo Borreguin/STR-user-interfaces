@@ -6,7 +6,7 @@ import { SCT_API_URL } from "../../Constantes";
 import { bloque_leaf, bloque_root, comp_root, leaf_component, menu, submenu } from "./types";
 import DynamicSidebar from "./DynamicSidebar/DynamicSidebar";
 import { modal_edit_submenu_function } from "./Modals/modal_edit_submenu_function";
-import { modal_delete_submenu_function } from "./Modals/modal_delete_submenu_function";
+import { modal_indisponibilidad_submenu_function } from "./Modals/modal_indisponibilidad_submenu_function";
 import { modal_edit_menu_function } from "./Modals/modal_edit_menu_function";
 import { modal_add_submenu_function } from "./Modals/modal_add_submenu_function";
 import ReactJson from "react-json-view";
@@ -354,7 +354,7 @@ class IngresarInfo extends Component<props, state> {
             edit_menu_modal={modal_edit_menu_function}
             add_submenu_modal={modal_add_submenu_function}
             edit_submenu_modal={modal_edit_submenu_function}
-            delete_submenu_modal={modal_delete_submenu_function}
+            indisponibilidad_submenu_modal={modal_indisponibilidad_submenu_function}
             // manejo de selección de menus:
             handle_click_menu_button={this._on_click_menu}
             handle_edited_menu={this.handle_edited_menu}

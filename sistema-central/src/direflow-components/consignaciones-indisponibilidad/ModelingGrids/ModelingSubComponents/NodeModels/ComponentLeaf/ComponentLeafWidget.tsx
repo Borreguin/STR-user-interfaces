@@ -1,22 +1,19 @@
 import * as React from "react";
-import { BlockNodeModel } from "./BlockNodeModel";
+import { ComponentLeafModel } from "./ComponentLeafModel";
 import {
   DefaultPortLabel,
   DiagramEngine,
   PortWidget,
 } from "@projectstorm/react-diagrams";
-import "./BlockNodeStyle.css";
-import {
-  faCheck,
-  faBullseye,
-} from "@fortawesome/free-solid-svg-icons";
+import "./ComponentLeafStyle.css";
+import { faCheck, faBullseye } from "@fortawesome/free-solid-svg-icons";
 import * as _ from "lodash";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import ReactTooltip from "react-tooltip";
 import { ParallelOutPortModel } from "./ParallelOutputPort";
 
-export interface BlockWidgetProps {
-  node: BlockNodeModel;
+export interface ComponentLeafProps {
+  node: ComponentLeafModel;
   engine: DiagramEngine;
   size?: number;
   handle_messages?: Function;
@@ -29,9 +26,9 @@ export interface BlockWidgetProps {
  * 	node; 	    los tributos cambiados del nodo si se requiere
  */
 
-export class BlockWidget extends React.Component<BlockWidgetProps> {
-  bck_node: BlockNodeModel; // original node
-  node: BlockNodeModel; // edited node
+export class ComponentLeafWidget extends React.Component<ComponentLeafProps> {
+  bck_node: ComponentLeafModel; // original node
+  node: ComponentLeafModel; // edited node
   state = {
     edited: false,
   };
@@ -230,7 +227,6 @@ export class BlockWidget extends React.Component<BlockWidgetProps> {
   generateParallelPort = () => {
     return this.node.data.parallel_connections.map((parallelPort) => (
       <div key={_.uniqueId("ParallelPort")} className="Port-Container">
-        <ReactTooltip />
         <div className="ParallelLabel">
           {parallelPort.name !== undefined
             ? parallelPort.name.substring(0, 15)
@@ -250,6 +246,7 @@ export class BlockWidget extends React.Component<BlockWidgetProps> {
           >
             -
           </button>
+          <ReactTooltip />
         </div>
       </div>
     ));

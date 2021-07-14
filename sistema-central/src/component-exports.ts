@@ -1,7 +1,7 @@
 /**
  * In this file you can export components that will
  * be built as a pure React component library.
- * 
+ *
  * Using the command `npm run build:lib` will
  * produce a folder `lib` with your React components.
  *
@@ -9,10 +9,14 @@
  * this file can be safely deleted.
  */
 
- import ZDireflowNavigate from './direflow-components/zdireflow-navigate/App';
- import ZDireflowTemplate from './direflow-components/zdireflow-template/App';
- import ComponentModeling from './direflow-components/modelamiento-componentes/App';
+import ZDireflowNavigate from "./direflow-components/zdireflow-navigate/App";
+import ZDireflowTemplate from "./direflow-components/zdireflow-template/App";
+import ComponentModeling from "./direflow-components/modelamiento-componentes/App";
+import IngresarInfo from "./direflow-components/consignaciones-indisponibilidad/App";
 
 export {
-  ZDireflowNavigate, ZDireflowTemplate, ComponentModeling 
+  ZDireflowNavigate,
+  ZDireflowTemplate,
+  ComponentModeling,
+  IngresarInfo,
 };

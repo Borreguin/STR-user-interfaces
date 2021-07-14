@@ -1,22 +1,14 @@
 import * as React from "react";
-import { BlockNodeModel } from "./BlockNodeModel";
-import {
-  DefaultPortLabel,
-  DiagramEngine,
-  PortWidget,
-} from "@projectstorm/react-diagrams";
-import "./BlockNodeStyle.css";
-import {
-  faCheck,
-  faBullseye,
-} from "@fortawesome/free-solid-svg-icons";
+import { AverageNode, AverageNodeModel } from "./AverageNodeModel";
+import { DiagramEngine, PortWidget } from "@projectstorm/react-diagrams";
+import "./AverageNodeStyle.css";
+import { faTrash, faSave, faCheck } from "@fortawesome/free-solid-svg-icons";
 import * as _ from "lodash";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import ReactTooltip from "react-tooltip";
-import { ParallelOutPortModel } from "./ParallelOutputPort";
 
-export interface BlockWidgetProps {
-  node: BlockNodeModel;
+export interface AverageNodeWidgetProps {
+  node: AverageNodeModel;
   engine: DiagramEngine;
   size?: number;
   handle_messages?: Function;
@@ -29,9 +21,9 @@ export interface BlockWidgetProps {
  * 	node; 	    los tributos cambiados del nodo si se requiere
  */
 
-export class BlockWidget extends React.Component<BlockWidgetProps> {
-  bck_node: BlockNodeModel; // original node
-  node: BlockNodeModel; // edited node
+export class AverageNodeWidget extends React.Component<AverageNodeWidgetProps> {
+  bck_node: AverageNodeModel; // original node
+  node: AverageNodeModel; // edited node
   state = {
     edited: false,
   };
@@ -45,60 +37,38 @@ export class BlockWidget extends React.Component<BlockWidgetProps> {
     this.bck_node = _.cloneDeep(props.node);
   }
 
-  componentDidUpdate = () => {
-    if (this.node !== this.bck_node && !this.state.edited) {
-      this.bck_node = _.cloneDeep(this.node);
-      this.setState({ edited: true });
-      this.node.data.editado = true;
-    }
-  };
-
   _handle_message(msg: Object) {
     if (this.props.handle_messages !== undefined) {
       this.props.handle_messages(msg);
     }
   }
 
-  _addParallelPort = () => {
-    let newH = Object.assign([], this.node.data.parallel_connections);
-    let next_id = newH.length > 0 ? (newH.length as number) + 1 : 1;
-    let p_port = {
-      nombre: "Sin conexión",
-      public_id: "PPort_" + this.node.data.public_id + "_" + next_id,
-    };
-    newH.push(p_port);
+  _addAveragePort = () => {
     // making a backup of the last node:
     this.bck_node = _.cloneDeep(this.node);
-    // edititing the node:
-    this.node.data.parallel_connections = newH;
-    this.props.node.addPort(new ParallelOutPortModel(p_port.public_id));
+    // añadiendo puerto:
+    var resp = this.node.addAveragePort();
+    this.node.data = resp.data;
+    // actualizando estado de editado
     this.is_edited();
+    this.props.engine.repaintCanvas();
   };
 
-  _deleteParallelPort = (id_port) => {
-    // lista nueva de puertos
-    let newH = [];
-    // identificando el puerto a eliminar
-    var port = this.props.node.getPort(id_port);
-    // eliminando los links conectados a este puerto
-    var links = this.props.node.getPort(id_port).getLinks();
-    for (var link in links) {
-      this.props.node.getLink(link).remove();
+  _deleteAveragePort = (id_port) => {
+    // identificando si es posible eliminar el puerto:
+    if (Object.keys(this.props.node.getPorts()).length <= 4) {
+      let msg = {
+        msg: "No se puede eliminar este puerto, se desconecta solamente.",
+      };
+      this._handle_message(msg);
+      let port = this.props.node.getPort(id_port);
+      this._disconnect_port(port);
+      return;
     }
-    // removiendo el puerto
-    this.props.node.removePort(port);
-    // actualizando la metadata del nodo:
-    this.node.data.parallel_connections.forEach((port) => {
-      if (port.public_id !== id_port) {
-        newH.push(port);
-      }
-    });
-    this.node.data.parallel_connections = newH;
-    // cambiando el estado de editado:
+    // eliminando el puerto y links
+    var resp = this.node.deleteAveragePort(id_port);
+    this.node.data = resp.data;
     this.is_edited();
-    let msg = { msg: "Se ha eliminado el puerto" };
-    this._handle_message(msg);
-    // actualizando el Canvas
     this.props.engine.repaintCanvas();
   };
 
@@ -115,28 +85,46 @@ export class BlockWidget extends React.Component<BlockWidgetProps> {
   };
 
   _update_node = () => {
-    this.node.data.editado = !this.node.data.editado;
-    //this.is_edited();
-    // actualizar posición del nodo
-    this.node.updatePosition();
     // Guarda la configuración actual del nodo:
-    // Generar topología de operaciones
-    this.node.updateTopology();
+    // this.node.data.editado = !this.node.data.editado;
+    // si AverageNode está en el ID, entonces no existe aún en base de datos:
+    if (this.node.data.public_id.includes("AverageNode")) {
+      this.node.create_block().then((result) => {
+        if (result.success) {
+          let bloqueleaf = _.cloneDeep(result.bloqueleaf) as AverageNode;
+          bloqueleaf.connections = this.node.data.connections;
+          this.node.setNodeInfo(bloqueleaf);
+          // Generar topología de operaciones
+          // this.node.updateTopology();
+        }
+      });
+    } else {
+      // actualizar posición del nodo
+      this.node.updatePosition();
+      // Generar topología de operaciones
+      // this.node.updateTopology();
+    }
+
     // Actualizar el lienzo
     this.props.engine.repaintCanvas();
   };
 
-  _update_position = () => {
-    // actualizar posición del nodo
-    this.node.updatePosition().then((result) => {
-      if (result.success) {
-        // se encuentra sincronizado con la base de datos
-        this.node.data.editado = false;
-      } else {
-        // los cambios no fueron guardados en base de datos
-        this.node.data.editado = true;
+  _delete_node = () => {
+    this.node.data.editado = !this.node.data.editado;
+    let node = this.props.engine.getModel().getNode(this.node.getID());
+    let ports = node.getPorts();
+    for (var p in ports) {
+      let port = ports[p];
+      let links = port.getLinks();
+      for (var id_l in links) {
+        let link = links[id_l];
+        this.props.node.getLink(id_l).remove();
+        this.props.engine.getModel().removeLink(link);
       }
-    });
+    }
+    this.node.delete();
+    this.props.engine.getModel().removeNode(node);
+    this.props.engine.repaintCanvas();
   };
 
   is_edited = () => {
@@ -157,10 +145,6 @@ export class BlockWidget extends React.Component<BlockWidgetProps> {
     }
   };
 
-  generatePort(port) {
-    return <DefaultPortLabel port={port} engine={this.props.engine} />;
-  }
-
   /* Generación del título del nodo */
   generateTitle(node) {
     return (
@@ -170,12 +154,19 @@ export class BlockWidget extends React.Component<BlockWidgetProps> {
         </div>
         <ReactTooltip />
         <div className="BtnContainer">
+          {/* Permite eliminar el elemento*/}
+          <FontAwesomeIcon
+            icon={faTrash}
+            size="2x"
+            className="removeIcon"
+            onClick={this._delete_node}
+          />
           {/* Permite guardar en base de datos la posición del elemento */}
           <FontAwesomeIcon
-            icon={this.node.data.editado ? faBullseye : faCheck}
+            icon={this.node.data.editado ? faCheck : faSave}
             size="2x"
-            className={"icon-off"}
-            onClick={this._update_position}
+            className={this.node.data.editado ? "icon-on" : "icon-off"}
+            onClick={this._update_node}
           />
         </div>
       </div>
@@ -218,7 +209,7 @@ export class BlockWidget extends React.Component<BlockWidgetProps> {
               this._disconnect_port(this.props.node.getPort("SERIE"))
             }
           >
-            .
+            -
           </button>
           <ReactTooltip />
         </div>
@@ -227,29 +218,31 @@ export class BlockWidget extends React.Component<BlockWidgetProps> {
   };
 
   /* Generando puerto en paralelo */
-  generateParallelPort = () => {
-    return this.node.data.parallel_connections.map((parallelPort) => (
-      <div key={_.uniqueId("ParallelPort")} className="Port-Container">
-        <ReactTooltip />
+  generateAveragePort = () => {
+    if (this.node.data.connections === undefined) {
+      return <></>;
+    }
+    return this.node.data.connections.map((averagePort) => (
+      <div key={_.uniqueId("AveragePort")} className="Port-Container">
         <div className="ParallelLabel">
-          {parallelPort.name !== undefined
-            ? parallelPort.name.substring(0, 15)
-            : ""}{" "}
-          <span className="badge badge-warning right">ParalOut</span>
+          {/*averagePort.name*/}{" "}
+          <span className="badge badge-warning right">PromOut</span>
         </div>
+
         <div className="out-serial-port">
           <PortWidget
-            className="ParallelPort"
-            port={this.props.node.getPort(parallelPort.public_id)}
+            className="AveragePort"
+            port={this.props.node.getPort(averagePort.public_id)}
             engine={this.props.engine}
           ></PortWidget>
           <button
             data-tip="Remover este puerto"
             className="widget-delete"
-            onClick={() => this._deleteParallelPort(parallelPort.public_id)}
+            onClick={() => this._deleteAveragePort(averagePort.public_id)}
           >
             -
           </button>
+          <ReactTooltip />
         </div>
       </div>
     ));
@@ -267,14 +260,19 @@ export class BlockWidget extends React.Component<BlockWidgetProps> {
         }}
         key={this.props.node.getID()}
       >
-        <div className={this.props.node.valid ? "sr-node" : "sr-node in_error"}>
+        <div
+          className={
+            this.props.node.valid ? "sr-average" : "sr-average in_error"
+          }
+        >
           {this.generateTitle(node)}
           {this.generateInAndOutSerialPort()}
-          <button className="widget-add" onClick={this._addParallelPort}>
+
+          <button className="widget-add" onClick={this._addAveragePort}>
             +
           </button>
 
-          {this.generateParallelPort()}
+          {this.generateAveragePort()}
         </div>
       </div>
     );

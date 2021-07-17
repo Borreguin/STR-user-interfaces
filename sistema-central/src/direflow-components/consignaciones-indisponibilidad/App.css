@@ -634,30 +634,3 @@
   margin-top: -5px;
 }
 
-.date-range-no-show{
-  display: none;
-}
-
-.date-range-show{
-  margin-top: 4px;
-  width: min-content;
-  height: min-content;
-  background-color: rgb(252, 253, 253);
-  overflow: hidden;
-  padding: 1px !important;
-  margin: 1px;
-}
-
-.date-container{
-  display: flex;
-  flex-direction: row;
-  flex-wrap:wrap;
-  justify-content: space-between;
-}
-
-.date-input{
-  width: 120px;
-  height: 37px;
-  margin-top: -4px;
-}
-

@@ -65,11 +65,10 @@ zDireflow-navigate {
   display: flex;
   flex-direction: row;
   flex-wrap: wrap;
-  justify-content: space-between;
 }
 
 .date-input {
-  width: 120px;
+  width: 160px;
   height: 37px;
   margin-top: -4px;
 }
@@ -80,20 +79,20 @@ zDireflow-navigate {
   background-color: #ffc108;
   padding: 5px;
   display: flex;
-  justify-content: space-between
+  justify-content: space-between;
 }
 
-.source-label{
+.source-label {
   align-self: flex-start;
 }
 
-.source-delete{
+.source-delete {
   align-self: flex-end;
   color: rgba(184, 17, 17, 0.871);
   cursor: pointer;
 }
 
-.source-delete:hover{
+.source-delete:hover {
   color: red;
 }
 
@@ -105,4 +104,75 @@ zDireflow-navigate {
   display: flex;
   flex-wrap: wrap;
   flex-direction: row;
+  min-height: 30px;
+}
+
+.period-item {
+  margin: 4px;
+  width: 210px;
+  background-color: #fcc92f80;
+  padding: 5px;
+  display: flex;
+  justify-content: space-between;
+  border-radius: 7px;
+}
+
+
+.period-edited {
+  margin: 4px;
+  width: 210px;
+  background-color: #4c9bc0aa;
+  padding: 5px;
+  display: flex;
+  justify-content: space-between;
+  border-radius: 7px;
+}
+
+.period-label {
+  align-self: flex-start;
+}
+
+.period-edit {
+  align-self: flex-end;
+  color: rgba(5, 29, 89, 0.987);
+  cursor: pointer;
+}
+.period-edit:hover {
+  color: rgba(19, 216, 19, 0.919);
+}
+
+.period-delete {
+  align-self: flex-end;
+  color: rgba(184, 17, 17, 0.871);
+  cursor: pointer;
+}
+
+.period-delete:hover {
+  color: red;
+}
+
+.period-list {
+  margin: 4px;
+  background-color: #c0c8c870;
+  border-radius: 7px;
+  height: auto;
+  display: flex;
+  flex-wrap: wrap;
+  flex-direction: row;
+  min-height: 30px;
+}
+
+.container-tab-menu {
+  padding: 5px;
+  border-top: transparent;
+  border-radius: 0px;
+  min-height: 240px;
+}
+
+.add-period{
+  width: 100%;
+}
+
+.rdrDateDisplayWrapper{
+  display: none;
 }

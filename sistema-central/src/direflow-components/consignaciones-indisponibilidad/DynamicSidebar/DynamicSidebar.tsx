@@ -11,7 +11,7 @@ export interface MenuProps {
     // Modals:
     edit_menu_modal?: Function;
     add_submenu_modal?: Function;
-    edit_submenu_modal?: Function;
+    add_consignment_modal?: Function;
     indisponibilidad_submenu_modal?: Function;
     // To keep the current state
     modal_show?: boolean;
@@ -49,7 +49,7 @@ class DynamicSideBar extends Component<MenuProps> {
                       //Modals:
                       edit_menu_modal={this.props.edit_menu_modal}
                       add_submenu_modal={this.props.add_submenu_modal}
-                      edit_submenu_modal={this.props.edit_submenu_modal}
+                      edit_submenu_modal={this.props.add_consignment_modal}
                       indisponibilidad_submenu_modal={this.props.indisponibilidad_submenu_modal}
                       // to keep track of changes
                       modal_show={this.props.modal_show}

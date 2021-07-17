@@ -1,11 +1,10 @@
 import React, { Component } from "react";
 import { withStyles } from "direflow-component";
 import styles from "./App.css";
-import { Modal_new_root_block } from "./Modals/blocks/modal_new_root_block";
 import { SCT_API_URL } from "../../Constantes";
 import { bloque_leaf, bloque_root, comp_root, leaf_component, menu, submenu } from "./types";
 import DynamicSidebar from "./DynamicSidebar/DynamicSidebar";
-import { modal_edit_submenu_function } from "./Modals/modal_edit_submenu_function";
+import { modal_add_consignment_submenu_function } from "./Modals/modal_edit_submenu_function";
 import { modal_indisponibilidad_submenu_function } from "./Modals/modal_indisponibilidad_submenu_function";
 import { modal_edit_menu_function } from "./Modals/modal_edit_menu_function";
 import { modal_add_submenu_function } from "./Modals/modal_add_submenu_function";
@@ -14,6 +13,7 @@ import BlockRootGrid from "./ModelingGrids/ModelingBlocks/BlockRootGrid";
 import ComponentRootGrid from "./ModelingGrids/ModelingComponents/ComponentRootGrid";
 import SubComponentGrid from "./ModelingGrids/ModelingSubComponents/SubComponentGrid";
 import * as _ from "lodash";
+import { Modal_root_not_found } from "./Modals/blocks/modal_root_not_found";
 
 type props = {
   root_public_id: string;
@@ -321,7 +321,7 @@ class IngresarInfo extends Component<props, state> {
   is_needed_a_new_root = () => {
     if (this.state.new_root) {
       return (
-        <Modal_new_root_block
+        <Modal_root_not_found
           public_id={this.root_public_id}
           handle_close={this.handle_modal_close}
           handle_new_root_block={this.handle_changes_in_structure}
@@ -353,7 +353,7 @@ class IngresarInfo extends Component<props, state> {
             // modales de adición, edición, eliminación:
             edit_menu_modal={modal_edit_menu_function}
             add_submenu_modal={modal_add_submenu_function}
-            edit_submenu_modal={modal_edit_submenu_function}
+            add_consignment_modal={modal_add_consignment_submenu_function}
             indisponibilidad_submenu_modal={modal_indisponibilidad_submenu_function}
             // manejo de selección de menus:
             handle_click_menu_button={this._on_click_menu}

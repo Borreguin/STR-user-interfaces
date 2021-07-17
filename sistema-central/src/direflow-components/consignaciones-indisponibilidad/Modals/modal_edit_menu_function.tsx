@@ -1,6 +1,5 @@
 import React, {  } from "react";
-import { bloque_leaf, bloque_root} from "../types";
-import { Modal_edit_root_block } from "./blocks/modal_edit_root_block";
+import { bloque_root} from "../types";
 
 export const modal_edit_menu_function = (
   object: Object,
@@ -12,14 +11,7 @@ export const modal_edit_menu_function = (
   let document = object["document"];
 
   switch (document) {
-    case "BloqueRoot":
-      return (
-        <Modal_edit_root_block
-          object={object as bloque_root}
-          handle_close={handle_close}
-          handle_edited_root_block={handle_changes_in_root}
-        />
-      );
+
   }
 
   return <></>;

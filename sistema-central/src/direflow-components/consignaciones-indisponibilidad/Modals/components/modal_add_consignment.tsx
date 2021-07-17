@@ -16,10 +16,10 @@ export interface add_menu_state {
   message: string;
 }
 
-let modal_id = "Modal_edit_component";
+let modal_id = "Modal_add_consigment";
 
 // Edición de un componente LEAF:
-export class Modal_edit_component extends Component<
+export class Modal_add_consignment extends Component<
   add_menu_props,
   add_menu_state
 > {
@@ -131,7 +131,7 @@ export class Modal_edit_component extends Component<
           size="lg"
         >
           <Modal.Header translate={"true"} closeButton>
-            <Modal.Title>Editar configuraciones</Modal.Title>
+            <Modal.Title>Ingreso de consignaciones de {this.props.object.name} </Modal.Title>
           </Modal.Header>
           <Modal.Body>
             <Form>
@@ -185,13 +185,13 @@ export class Modal_edit_component extends Component<
   }
 }
 
-export const modal_edit_component_function = (
+export const modal_add_consignment_function = (
   object: leaf_component,
   handle_close: Function,
   handle_changes_in_root: Function
 ) => {
   return (
-    <Modal_edit_component
+    <Modal_add_consignment
       object={object}
       handle_close={handle_close}
       handle_edited_root_block={handle_changes_in_root}

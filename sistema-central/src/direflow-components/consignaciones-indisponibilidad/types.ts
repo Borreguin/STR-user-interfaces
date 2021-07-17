@@ -125,3 +125,16 @@ export type selectedBlock = {
   object?: block_leaf
 }
 
+
+export type unavailability = {
+  public_id: string | undefined,
+  fecha_inicio: Date,
+  fecha_final: Date,
+  detalle: detalle_indisponibilidad,
+  responsable: string
+}
+
+export type detalle_indisponibilidad = {
+  descripcion_corta: string,
+  detalle: string
+}

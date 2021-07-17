@@ -1,6 +1,5 @@
 import React, {  } from "react";
 import { bloque_leaf, leaf_component} from "../types";
-import { Modal_delete_block } from "./blocks/modal_delete_block";
 import { Modal_indisponibilidad_component } from "./components/modal_indisponibilidad_componente";
 
 // Permite desplegar los modales de eliminación a nivel de submenu:
@@ -14,14 +13,7 @@ export const modal_indisponibilidad_submenu_function = (
   let document = object["document"];
 
   switch (document) {
-    case "BloqueLeaf":
-      return (
-        <Modal_delete_block
-          object={object as bloque_leaf}
-          handle_close={handle_close}
-          handle_edited_root_block={handle_changes_in_root}
-        />
-      );
+
     case "ComponenteLeaf":
       return (
         <Modal_indisponibilidad_component

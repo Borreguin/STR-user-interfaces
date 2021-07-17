@@ -1,15 +1,9 @@
 import React, { Component } from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
-  faAmbulance,
   faCog,
-  faHandHolding,
   faHandHoldingHeart,
   faHeartBroken,
-  faPen,
-  faPlusCircle,
-  faScrewdriver,
-  faTrash,
 } from "@fortawesome/free-solid-svg-icons";
 import { Card, ListGroup } from "react-bootstrap";
 import { bloque_leaf, leaf_component, menu, submenu } from "../types";

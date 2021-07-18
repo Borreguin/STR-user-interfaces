@@ -634,3 +634,27 @@
   margin-top: -5px;
 }
 
+
+.BarWidget{
+  min-width: 150px;
+  min-height: 50px;
+  background: rgb(20, 20, 20);
+  flex-grow: 0;
+  flex-shrink: 0;
+      padding: 2px;
+}
+
+
+.date-range-show-fixed {
+  margin-top: 4px;
+  width: min-content;
+  height: min-content;
+  background-color: rgb(252, 253, 253);
+  overflow: hidden;
+  padding: 1px !important;
+  margin: 1px;
+  display: block;
+  position: fixed;
+  top: 50px;
+  z-index: 1000;
+}

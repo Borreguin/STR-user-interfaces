@@ -51,6 +51,7 @@ export interface modal_state {
   detalle: detalle_indisponibilidad;
   check_form: boolean;
   public_id: string | undefined;
+  editing: boolean;
 }
 
 let modal_id = "Modal_indisponibilidad_componente";
@@ -59,6 +60,7 @@ export class Modal_indisponibilidad_component extends Component<
   modal_props,
   modal_state
 > {
+  responsable: string;
   constructor(props) {
     super(props);
     let range = {
@@ -82,7 +84,12 @@ export class Modal_indisponibilidad_component extends Component<
         detalle: "",
       },
       check_form: false,
+      editing: false,
     };
+    this.responsable =
+      localStorage.getItem("userRole") +
+      " | " +
+      localStorage.getItem("userDisplayName");
   }
   // HOOKS SECTION:
   handleClose = () => {
@@ -142,7 +149,6 @@ export class Modal_indisponibilidad_component extends Component<
   // INTERNAL FUNCTIONS:
   // Elimina un bloque interno de un bloque root
   _onclick_indisponibilidad = () => {
-    console.log(this.props.object);
     let path = `${SCT_API_URL}/todo/${this.props.object.parent_id}/comp-leaf/${this.props.object.public_id}`;
     this.setState({ message: "Eliminando bloque interno" });
     // Creando el nuevo root block mediante la API
@@ -181,21 +187,23 @@ export class Modal_indisponibilidad_component extends Component<
       fecha_inicio: _.cloneDeep(this.state.ini_date),
       fecha_final: _.cloneDeep(this.state.end_date),
       detalle: _.cloneDeep(this.state.detalle),
-      responsable: "test",
+      responsable: this.responsable,
     } as unavailability;
 
-     // añadir periodo: // no existe id público todavía
-    if (!this.state.public_id) {
+    // añadir periodo: // no existe id público todavía por lo que tiene un nuevo id
+    if (!this.state.editing) {
       periods.push(period);
     }
-     // editar periodo:
+    // editar periodo: // utiliza el mismo Id a editar
     else {
       let idx = this._search_this_period_by_id(this.state.public_id);
-      if (idx < 0) { return }
+      if (idx < 0) {
+        return;
+      }
       periods[idx] = period;
       this.setState({ public_id: undefined });
     }
-    this.setState({ periods: periods });
+    this.setState({ periods: periods, editing: false });
   };
 
   _search_this_period_by_id = (public_id) => {
@@ -207,7 +215,7 @@ export class Modal_indisponibilidad_component extends Component<
       }
     }
     return idx;
-  }
+  };
 
   _remove_period = (period: unavailability) => {
     let new_periods = [];
@@ -220,6 +228,10 @@ export class Modal_indisponibilidad_component extends Component<
   };
 
   _edit_period = (period: unavailability) => {
+    this._set_period(period, true);
+  };
+
+  _set_period = (period: unavailability, editing: boolean) => {
     let detalle = this.state.detalle;
     let range = this.state.range[0];
     detalle.descripcion_corta = period.detalle.descripcion_corta;
@@ -228,13 +240,14 @@ export class Modal_indisponibilidad_component extends Component<
     range.endDate = period.fecha_final;
 
     this.setState({
+      editing: editing,
       detalle: detalle,
       ini_date_str: to_yyyy_mm_dd_hh_mm_ss(period.fecha_inicio),
-      ini_date:period.fecha_inicio,
+      ini_date: period.fecha_inicio,
       end_date_str: to_yyyy_mm_dd_hh_mm_ss(period.fecha_final),
-      end_date:period.fecha_final,
+      end_date: period.fecha_final,
       public_id: period.public_id,
-      range: [range]
+      range: [range],
     });
   };
 
@@ -243,8 +256,18 @@ export class Modal_indisponibilidad_component extends Component<
     let id = 0;
     for (const period of this.state.periods) {
       let period_container = (
-        <div key={"per_" + id} className={period.public_id === this.state.public_id? "period-edited": "period-item"} >
-          <div className="period-label">
+        <div
+          key={"per_" + id}
+          className={
+            period.public_id === this.state.public_id
+              ? "period-edited"
+              : "period-item"
+          }
+        >
+          <div
+            className="period-label"
+            onClick={(e) => this._set_period(period, false)}
+          >
             <div>{to_dd_month_yyyy_hh_mm(period.fecha_inicio)}</div>
             <div>{to_dd_month_yyyy_hh_mm(period.fecha_final)}</div>
           </div>
@@ -339,35 +362,57 @@ export class Modal_indisponibilidad_component extends Component<
       valid = false;
     }
     for (const period of this.state.periods) {
-      // si se está editando un periodo, entonces se debe esquivar 
+      // si se está editando un periodo, entonces se debe esquivar
       // la revisión de fechas contra este periodo:
-      if (this.state.public_id === period.public_id) { continue; }
+      if (this.state.public_id === period.public_id) {
+        continue;
+      }
       // Caso contrario, se debe revisar que no exista superposición de fechas
-      if (period.fecha_inicio <= this.state.ini_date && this.state.ini_date <= period.fecha_final) {
-        message = `La fecha de inicio (${to_dd_month_yyyy_hh_mm(this.state.ini_date)}) 
+      if (
+        period.fecha_inicio <= this.state.ini_date &&
+        this.state.ini_date <= period.fecha_final
+      ) {
+        message = `La fecha de inicio (${to_dd_month_yyyy_hh_mm(
+          this.state.ini_date
+        )}) 
         está contenida dentro del periodo:
-        [${to_dd_month_yyyy_hh_mm(period.fecha_inicio)},${to_dd_month_yyyy_hh_mm(period.fecha_final)}]`;
+        [${to_dd_month_yyyy_hh_mm(
+          period.fecha_inicio
+        )},${to_dd_month_yyyy_hh_mm(period.fecha_final)}]`;
         valid = false;
         break;
       }
-      if (period.fecha_inicio <= this.state.end_date && this.state.end_date <= period.fecha_final) {
-        message = `La fecha de fin (${to_dd_month_yyyy_hh_mm(this.state.end_date)}) 
+      if (
+        period.fecha_inicio <= this.state.end_date &&
+        this.state.end_date <= period.fecha_final
+      ) {
+        message = `La fecha de fin (${to_dd_month_yyyy_hh_mm(
+          this.state.end_date
+        )}) 
         está contenida dentro del periodo:
-        [${to_dd_month_yyyy_hh_mm(period.fecha_inicio)},${to_dd_month_yyyy_hh_mm(period.fecha_final)}]`;
+        [${to_dd_month_yyyy_hh_mm(
+          period.fecha_inicio
+        )},${to_dd_month_yyyy_hh_mm(period.fecha_final)}]`;
         valid = false;
         break;
       }
-      if (this.state.ini_date <= period.fecha_inicio && period.fecha_final <= this.state.end_date) {
-        message = `La fecha de inicio y fin (${to_dd_month_yyyy_hh_mm(this.state.ini_date)}, ${to_dd_month_yyyy_hh_mm(this.state.end_date)}) 
+      if (
+        this.state.ini_date <= period.fecha_inicio &&
+        period.fecha_final <= this.state.end_date
+      ) {
+        message = `La fecha de inicio y fin (${to_dd_month_yyyy_hh_mm(
+          this.state.ini_date
+        )}, ${to_dd_month_yyyy_hh_mm(this.state.end_date)}) 
         contenienen al periodo:
-        [${to_dd_month_yyyy_hh_mm(period.fecha_inicio)},${to_dd_month_yyyy_hh_mm(period.fecha_final)}]`;
+        [${to_dd_month_yyyy_hh_mm(
+          period.fecha_inicio
+        )},${to_dd_month_yyyy_hh_mm(period.fecha_final)}]`;
         valid = false;
         break;
       }
     }
     // TODO: Restablecer
-    this.setState({ check_form: valid, message: message });
-    console.log("check_form", valid, message);
+    this.setState({ check_form: true, message: message });
     return valid;
   };
 
@@ -379,7 +424,6 @@ export class Modal_indisponibilidad_component extends Component<
   };
 
   _forma_detalle = () => {
-    console.log("forma_detalle", this.state.detalle);
     return (
       <Card className="container-tab-menu">
         <Form.Group>
@@ -460,7 +504,7 @@ export class Modal_indisponibilidad_component extends Component<
                     <Form.Control
                       plaintext
                       readOnly
-                      defaultValue={"valor a actualizar"}
+                      defaultValue={this.responsable}
                     />
                   </Col>
                 </Form.Group>
@@ -470,7 +514,7 @@ export class Modal_indisponibilidad_component extends Component<
                   onClick={this._add_or_edit_period}
                   className="add-period"
                 >
-                  {!this.state.public_id? "Agregar " : "Editar "}
+                  {this.state.editing ? "Editar " : "Agregar "}
                   periodo
                 </Button>
 

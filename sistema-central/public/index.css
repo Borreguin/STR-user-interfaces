@@ -109,18 +109,19 @@ zDireflow-navigate {
 
 .period-item {
   margin: 4px;
-  width: 210px;
+  width: 180px;
   background-color: #fcc92f80;
   padding: 5px;
   display: flex;
   justify-content: space-between;
   border-radius: 7px;
+  cursor: pointer;
 }
 
 
 .period-edited {
   margin: 4px;
-  width: 210px;
+  width: 180px;
   background-color: #4c9bc0aa;
   padding: 5px;
   display: flex;
@@ -175,4 +176,8 @@ zDireflow-navigate {
 
 .rdrDateDisplayWrapper{
   display: none;
+}
+
+.period-button{
+  z-index: 1000;
 }

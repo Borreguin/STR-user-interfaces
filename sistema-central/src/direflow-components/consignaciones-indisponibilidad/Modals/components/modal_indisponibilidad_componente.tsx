@@ -15,6 +15,7 @@ import {
 import { SCT_API_URL } from "../../../../Constantes";
 import {
   to_dd_month_yyyy_hh_mm,
+  to_range,
   to_yyyy_mm_dd_hh_mm_ss,
 } from "../../common_functions";
 import {
@@ -50,7 +51,7 @@ export interface modal_state {
   range: Array<Range>;
   detalle: detalle_indisponibilidad;
   check_form: boolean;
-  public_id: string | undefined;
+  id_manual: string | undefined;
   editing: boolean;
 }
 
@@ -78,7 +79,7 @@ export class Modal_indisponibilidad_component extends Component<
       end_date: range.endDate,
       end_date_str: to_yyyy_mm_dd_hh_mm_ss(range.endDate),
       range: [range],
-      public_id: undefined,
+      id_manual: undefined,
       detalle: {
         descripcion_corta: "",
         detalle: "",
@@ -91,6 +92,12 @@ export class Modal_indisponibilidad_component extends Component<
       " | " +
       localStorage.getItem("userDisplayName");
   }
+
+  // Component functions:
+  componentDidMount = () => {
+    this._get_periods();
+  };
+
   // HOOKS SECTION:
   handleClose = () => {
     // actualizo el estado local
@@ -146,28 +153,93 @@ export class Modal_indisponibilidad_component extends Component<
     }
   };
 
-  // INTERNAL FUNCTIONS:
-  // Elimina un bloque interno de un bloque root
-  _onclick_indisponibilidad = () => {
-    let path = `${SCT_API_URL}/todo/${this.props.object.parent_id}/comp-leaf/${this.props.object.public_id}`;
-    this.setState({ message: "Eliminando bloque interno" });
-    // Creando el nuevo root block mediante la API
+  _get_range = () => {
+    let ini_period_str = localStorage.getItem("$ini_period");
+    let end_period_str = localStorage.getItem("$end_period");
+    let ini_period = new Date();
+    if (ini_period_str !== null) {
+      ini_period = new Date(ini_period_str);
+    }
+    let end_period = new Date();
+    if (end_period_str !== null) {
+      end_period = new Date(end_period_str);
+    }
+    return { ini_period: ini_period, end_period: end_period };
+  };
+
+  _get_periods = (keep_msg = true) => {
+    let range = this._get_range();
+    let path = `${SCT_API_URL}/component-leaf/comp-root/${
+      this.props.object.parent_id
+    }/comp-leaf/${this.props.object.public_id}/indisponibilidad/${to_range(
+      range.ini_period,
+      range.end_period
+    )}`;
     fetch(path, {
-      method: "DELETE",
+      method: "GET",
       headers: {
         "Content-Type": "application/json",
       },
     })
       .then((res) => res.json())
       .then((json) => {
-        console.log("modal_indisponibilidad_componente", json);
-        if (json.success) {
-          this.handleEditedRootComponent(json);
-          // this.handleClose();
-        } else {
+        if (keep_msg) {
           this.setState({ message: json.msg });
-          this.handleMessages(json.msg);
         }
+        if (json.success) {
+          // crear lista de indisponibilidades.
+          let indisponibilidades = json.indisponibilidades;
+          let periods = [] as Array<unavailability>;
+          for (const indisponibilidad of indisponibilidades) {
+            let period = {
+              fecha_inicio: new Date(indisponibilidad.fecha_inicio),
+              fecha_final: new Date(indisponibilidad.fecha_final),
+              id_manual: indisponibilidad.id_manual,
+              detalle: indisponibilidad.detalle,
+              responsable: indisponibilidad.responsable,
+              editado: false,
+            } as unavailability;
+            periods.push(period);
+          }
+          periods.sort((a, b) =>
+            a.fecha_inicio > b.fecha_inicio
+              ? 1
+              : b.fecha_inicio > a.fecha_inicio
+              ? -1
+              : 0
+          );
+          this.setState({ periods: periods });
+        }
+      })
+      .catch((error) => {
+        console.log(error);
+        let msg = `Ha fallado la conexión con la API de modelamiento (api-sct). \n ${error}`;
+        this.setState({ message: msg });
+        this.handleMessages(msg);
+      });
+  };
+
+  _post_period = async (period: unavailability) => {
+    let path = `${SCT_API_URL}/component-leaf/comp-root/${
+      this.props.object.parent_id
+    }/comp-leaf/${this.props.object.public_id}/indisponibilidad/${to_range(
+      period.fecha_inicio,
+      period.fecha_final
+    )}`;
+    let resp = "";
+
+    await fetch(path, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        detalle: period.detalle,
+        responsable: period.responsable,
+      }),
+    })
+      .then((res) => res.json())
+      .then((json) => {
+        this.setState({ message: json.msg });
+        resp = json.msg;
       })
       .catch((error) => {
         console.log(error);
@@ -175,6 +247,76 @@ export class Modal_indisponibilidad_component extends Component<
         this.setState({ message: msg });
         this.handleMessages(msg);
       });
+    return resp;
+  };
+
+  _put_period = async (period: unavailability) => {
+    let path = `${SCT_API_URL}/component-leaf/comp-root/${
+      this.props.object.parent_id
+    }/comp-leaf/${this.props.object.public_id}/indisponibilidad/${to_range(
+      period.fecha_inicio,
+      period.fecha_final
+    )}`;
+    let resp = "";
+
+    await fetch(path, {
+      method: "PUT",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        detalle: period.detalle,
+        responsable: period.responsable,
+        id_manual: period.id_manual,
+      }),
+    })
+      .then((res) => res.json())
+      .then((json) => {
+        this.setState({ message: json.msg });
+        resp = json.msg;
+      })
+      .catch((error) => {
+        console.log(error);
+        let msg = "Ha fallado la conexión con la API de modelamiento (api-sct)";
+        this.setState({ message: msg });
+        this.handleMessages(msg);
+      });
+    return resp;
+  };
+
+  _delete_period = async (period: unavailability) => {
+    let path = `${SCT_API_URL}/component-leaf/comp-root/${this.props.object.parent_id}/comp-leaf/${this.props.object.public_id}/indisponibilidad/${period.id_manual}`;
+    let resp = "";
+
+    await fetch(path, {
+      method: "DELETE",
+      headers: { "Content-Type": "application/json" },
+    })
+      .then((res) => res.json())
+      .then((json) => {
+        this.setState({ message: json.msg });
+        resp = json.msg;
+      })
+      .catch((error) => {
+        console.log(error);
+        let msg = "Ha fallado la conexión con la API de modelamiento (api-sct)";
+        this.setState({ message: msg });
+        this.handleMessages(msg);
+      });
+    return resp;
+  };
+
+  // Permite ingresar periodos de indisponibilidades si fuera necesario
+  _onclick_indisponibilidad = async () => {
+    let result = "";
+    for (const period of this.state.periods) {
+      let new_period = period.id_manual.includes("period_");
+      if (new_period) {
+        result += "\n" + (await this._post_period(period));
+      } else if (period.editado) {
+        result += "\n" + (await this._put_period(period));
+      }
+    }
+    this.setState({ message: result });
+    this._get_periods(false);
   };
 
   _add_or_edit_period = () => {
@@ -183,11 +325,12 @@ export class Modal_indisponibilidad_component extends Component<
     }
     let periods = this.state.periods;
     let period = {
-      public_id: _.uniqueId("period_"),
+      id_manual: _.uniqueId("period_"),
       fecha_inicio: _.cloneDeep(this.state.ini_date),
       fecha_final: _.cloneDeep(this.state.end_date),
       detalle: _.cloneDeep(this.state.detalle),
       responsable: this.responsable,
+      editado: true,
     } as unavailability;
 
     // añadir periodo: // no existe id público todavía por lo que tiene un nuevo id
@@ -196,31 +339,49 @@ export class Modal_indisponibilidad_component extends Component<
     }
     // editar periodo: // utiliza el mismo Id a editar
     else {
-      let idx = this._search_this_period_by_id(this.state.public_id);
+      let idx = this._search_this_period_by_id(this.state.id_manual);
       if (idx < 0) {
         return;
       }
-      periods[idx] = period;
-      this.setState({ public_id: undefined });
+      period.editado = true;
+      period.id_manual = _.cloneDeep(this.state.id_manual);
+      periods[idx] = _.cloneDeep(period);
     }
-    this.setState({ periods: periods, editing: false });
+    periods.sort((a, b) =>
+      a.fecha_inicio > b.fecha_inicio
+        ? 1
+        : b.fecha_inicio > a.fecha_inicio
+        ? -1
+        : 0
+    );
+    this.setState({ periods: periods, editing: false, id_manual: undefined });
   };
 
-  _search_this_period_by_id = (public_id) => {
+  _search_this_period_by_id = (id_manual) => {
     let idx = -1;
     for (const period of this.state.periods) {
       idx += 1;
-      if (period.public_id === public_id) {
+      if (period.id_manual === id_manual) {
         break;
       }
     }
     return idx;
   };
 
-  _remove_period = (period: unavailability) => {
+  _remove_period = async (period: unavailability) => {
+    let isNew = period.id_manual.includes("period_");
+    // si ya existe en base de datos:
+    if (!isNew) {
+      if (window.confirm("Desea eliminar este registro de la base de datos?")) {
+        let resp = await this._delete_period(period);
+        this.setState({ message: resp });
+      } else {
+        return;
+      }
+    }
     let new_periods = [];
     for (const _period of this.state.periods) {
-      if (period.public_id !== _period.public_id) {
+      if (period.id_manual !== _period.id_manual) {
         new_periods.push(_period);
       }
     }
@@ -246,7 +407,7 @@ export class Modal_indisponibilidad_component extends Component<
       ini_date: period.fecha_inicio,
       end_date_str: to_yyyy_mm_dd_hh_mm_ss(period.fecha_final),
       end_date: period.fecha_final,
-      public_id: period.public_id,
+      id_manual: _.cloneDeep(period.id_manual),
       range: [range],
     });
   };
@@ -259,7 +420,7 @@ export class Modal_indisponibilidad_component extends Component<
         <div
           key={"per_" + id}
           className={
-            period.public_id === this.state.public_id
+            period.id_manual === this.state.id_manual
               ? "period-edited"
               : "period-item"
           }
@@ -364,7 +525,7 @@ export class Modal_indisponibilidad_component extends Component<
     for (const period of this.state.periods) {
       // si se está editando un periodo, entonces se debe esquivar
       // la revisión de fechas contra este periodo:
-      if (this.state.public_id === period.public_id) {
+      if (this.state.id_manual === period.id_manual) {
         continue;
       }
       // Caso contrario, se debe revisar que no exista superposición de fechas
@@ -456,6 +617,10 @@ export class Modal_indisponibilidad_component extends Component<
     );
   };
 
+  _to_lines = (msg: string) => {
+    return msg.split("\n").map((str) => <p>{str}</p>);
+  };
+
   render() {
     return (
       <>
@@ -531,7 +696,7 @@ export class Modal_indisponibilidad_component extends Component<
                 <></>
               ) : (
                 <Alert variant="info" style={{ padding: "7px" }}>
-                  {this.state.message}
+                  {this._to_lines(this.state.message)}
                 </Alert>
               )}
             </Form>

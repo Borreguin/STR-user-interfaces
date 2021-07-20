@@ -8,7 +8,7 @@ export const modal_indisponibilidad_submenu_function = (
   handle_close: Function,
   handle_changes_in_root: Function
 ) => {
-  console.log("indisponibilidad_submenu_function!", object["document"]);
+  console.log("indisponibilidad_submenu_function!", object["document"], object);
 
   let document = object["document"];
 

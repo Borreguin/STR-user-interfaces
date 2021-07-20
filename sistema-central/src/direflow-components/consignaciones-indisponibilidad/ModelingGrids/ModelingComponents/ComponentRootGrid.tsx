@@ -6,8 +6,6 @@ import createEngine, {
   DiagramEngine,
 } from "@projectstorm/react-diagrams";
 import { CanvasWidget } from "@projectstorm/react-canvas-core";
-import { TrayWidget } from "./NodeModels/DragAndDropWidget/TrayWidget";
-import { TrayItemWidget } from "./NodeModels/DragAndDropWidget/TrayItemWidget";
 import "../ModelingComponents/NodeModels/DragAndDropWidget/styles.css";
 import * as _ from "lodash";
 import { Button } from "react-bootstrap";
@@ -23,6 +21,12 @@ import { comp_root, leaf_component, menu, submenu } from "../../types";
 import { DefaultState } from "../DefaultState";
 import { StyledCanvasWidget } from "../helpers/StyledCanvasWidget";
 import { SCT_API_URL } from "../../../../Constantes";
+import {
+  get_fisrt_dates_of_last_month,
+  to_yyyy_mm_dd_hh_mm_ss,
+} from "../../common_functions";
+import { DateRange } from "react-date-range";
+import { es } from "date-fns/locale";
 
 type BlockLeafGridProps = {
   menu: menu;
@@ -35,42 +39,22 @@ type WeightedConnection = {
   weight: string;
 };
 
-/* 
-  Esta grid permite el manejo de bloques leafs.
-  Se transforma a las siguientes estructuras de datos:
-    From:
-    type static_menu = {
-        parent_id: string,
-        name: string,
-        public_id: string,
-        icon?: IconDefinition,
-        blocks?: Array<block>
-        object: Object,
-    }
-    type block = {
-        name: string,
-        public_id: string,
-        object: Object,
-    }
-        
-    To:
-    type Node = {
-        name: string;
-        type: string;
-        editado: boolean;
-        public_id: string;
-        parent_id?: string;
-        posx: number;
-        posy: number;
-        parallel_connections: Array<Node>;
-        serial_connection: Node | undefined;
-    };
-*/
+type Range = {
+  startDate: Date;
+  endDate: Date;
+  key: string;
+};
 
 class ComponentRootGrid extends Component<BlockLeafGridProps> {
   state: {
     engine: DiagramEngine;
     model: DiagramModel;
+    show_date: boolean;
+    ini_date: Date;
+    ini_date_str: string;
+    end_date: Date;
+    end_date_str: string;
+    range: Array<Range>;
   };
 
   engine: DiagramEngine;
@@ -84,9 +68,31 @@ class ComponentRootGrid extends Component<BlockLeafGridProps> {
     this.model = null;
     this.last_props = _.cloneDeep(props);
     this.parent_id = "";
+    let ini_period_str = localStorage.getItem("$ini_period");
+    let ini_period = new Date(ini_period_str);
+    let end_period_str = localStorage.getItem("$end_period");
+    let end_period = new Date(end_period_str);
+    let period = null;
+    if (ini_period === null || end_period === null) {
+      period = get_fisrt_dates_of_last_month();
+    } else {
+      period = { first_day_month: ini_period, last_day_month: end_period };
+    }
+
+    let range = {
+      startDate: period.first_day_month,
+      endDate: period.last_day_month,
+      key: "selection",
+    };
     this.state = {
       engine: null,
       model: null,
+      show_date: false,
+      ini_date: period.first_day_month,
+      ini_date_str: to_yyyy_mm_dd_hh_mm_ss(period.first_day_month),
+      end_date: period.last_day_month,
+      end_date_str: to_yyyy_mm_dd_hh_mm_ss(period.last_day_month),
+      range: [range],
     };
   }
 
@@ -102,7 +108,11 @@ class ComponentRootGrid extends Component<BlockLeafGridProps> {
     let submenu_change =
       this.props.menu.submenu.length !== this.last_props.menu.submenu.length;
     let name_submenu_change = this.props.menu.name !== newProps.menu.name;
-    console.log("ComponentRootGrid componentWillReceiveProps", submenu_change, name_submenu_change);
+    console.log(
+      "ComponentRootGrid componentWillReceiveProps",
+      submenu_change,
+      name_submenu_change
+    );
     // si hay cambio de nombre o cambio en el submenu
     if (name_submenu_change || submenu_change) {
       // limpiar el modelo antes de iniciar nuevamente
@@ -125,10 +135,13 @@ class ComponentRootGrid extends Component<BlockLeafGridProps> {
     let submenu_change =
       this.props.menu.submenu.length !== this.last_props.menu.submenu.length;
     let name_submenu_change =
-      prevProps !== undefined &&
-      this.props.menu.name !== prevProps.menu.name;
-      console.log("ComponentRootGrid componentDidUpdate", submenu_change, name_submenu_change);
-   
+      prevProps !== undefined && this.props.menu.name !== prevProps.menu.name;
+    console.log(
+      "ComponentRootGrid componentDidUpdate",
+      submenu_change,
+      name_submenu_change
+    );
+
     if (name_submenu_change || submenu_change) {
       const resp = this._init_graph();
       let engine = this.state.engine;
@@ -447,97 +460,6 @@ class ComponentRootGrid extends Component<BlockLeafGridProps> {
     });
   };
 
-  create_selected_node = (type: string, parent_id: string) => {
-    // Se crea un nodo dependiendo el botón seleccionado:
-    var node = null;
-    let data = null;
-    switch (type) {
-      case "AverageNode":
-        // Nodo de tipo promedio
-        data = {
-          name: "PROMEDIO",
-          editado: false,
-          public_id: _.uniqueId("AverageNode_"),
-          parent_id: parent_id,
-          connections: [],
-          serial_connection: [],
-        };
-        node = new AverageNodeModel({
-          node: data,
-          handle_msg: this._handle_messages,
-          handle_changes: this._handle_changes,
-        });
-        // añadiendo mínimo 2 puertos promedio:
-        node.addAveragePort();
-        node.addAveragePort();
-        break;
-
-      case "WeightedNode":
-        data = {
-          name: "PONDERADO",
-          editado: false,
-          public_id: _.uniqueId("WeightedNode_"),
-          parent_id: parent_id,
-          connections: [
-            {
-              public_id: _.uniqueId("WeightedPort_"),
-              weight: 50,
-            },
-            {
-              public_id: _.uniqueId("WeightedPort_"),
-              weight: 50,
-            },
-          ],
-          serial_connection: [],
-        };
-        node = new WeightedNodeModel({
-          node: data,
-          handle_msg: this._handle_messages,
-          handle_changes: this._handle_changes,
-        });
-        // añadiendo mínimo 2 puertos ponderados:
-        // node.addWeightedPort(null, 50);
-        // node.addWeightedPort(null, 50);
-        break;
-    }
-    return node;
-  };
-
-  save_all = async (e) => {
-    let msg = { state: "Empezando proceso", validate: {} };
-    let all_is_valid = true;
-    // validar todas las topologías:
-    // solve all promises:
-    let nodes = this.model.getNodes();
-    for (const node of nodes) {
-      const check = await node.fireEvent(e, "validate");
-      msg.validate[check["name"]] = check["valid"];
-      all_is_valid = all_is_valid && check["valid"];
-      if (!check["valid"]) {
-        msg.state = `El elemento ${check["name"]} no es válido`;
-      }
-    }
-    // si todo es válido entonces se puede proceder a
-    if (all_is_valid) {
-      all_is_valid = true;
-      for (const node of nodes) {
-        const check = await node.fireEvent(e, "save topology");
-        console.log(node["data"]["name"], check);
-        all_is_valid = all_is_valid && check["success"];
-        if (!check["success"]) {
-          msg.state = `El elemento ${node["data"]["name"]} no es válido`;
-          msg["log"] = check;
-        }
-      }
-      if (all_is_valid) {
-        msg.state = "Se ha guardado de manera correcta la modelación";
-      }
-      this._handle_messages(msg);
-    }
-    this._handle_messages(msg);
-    //this.reload_graph();
-  };
-
   reload_graph = () => {
     if (this.props.handle_reload !== undefined) {
       this.get_object_from_db().then((json) => {
@@ -548,7 +470,7 @@ class ComponentRootGrid extends Component<BlockLeafGridProps> {
     }
   };
 
-  get_object_from_db = async() => {
+  get_object_from_db = async () => {
     // permite actualizar desde la base de datos:
     console.log(this.props.menu);
     let answer = null;
@@ -558,16 +480,15 @@ class ComponentRootGrid extends Component<BlockLeafGridProps> {
       .then((json) => {
         if (json.success) {
           answer = json;
-        }
-        else {
+        } else {
           this._handle_messages({ succes: false, msg: json.msg });
         }
       })
       .catch((error) =>
         this._handle_messages({ success: false, error: "" + error })
-    );
+      );
     return answer;
-  }
+  };
 
   create_menu_from_json = (json) => {
     let rootComponent = json.componente as comp_root;
@@ -593,7 +514,7 @@ class ComponentRootGrid extends Component<BlockLeafGridProps> {
       submenu: submenus
     } as menu;
     return new_menu;
-  }
+  };
 
   _init_graph = () => {
     //1) setup the diagram engine
@@ -647,27 +568,62 @@ class ComponentRootGrid extends Component<BlockLeafGridProps> {
     return { model: model, engine: engine };
   };
 
-  render() {
-    //const resp = this._init_graph();
-    //console.log(this.state.engine);
-    //let model = resp.model;
-    //let engine = resp.engine;
+  handleSelect = (range) => {
+    this.setState({
+      range: [range.selection],
+      ini_date: range.selection.startDate,
+      ini_date_str: to_yyyy_mm_dd_hh_mm_ss(range.selection.startDate),
+      end_date: range.selection.endDate,
+      end_date_str: to_yyyy_mm_dd_hh_mm_ss(range.selection.endDate),
+    });
+    localStorage.setItem("$ini_period", "" + range.selection.startDate);
+    localStorage.setItem("$end_period", "" + range.selection.endDate);
+  };
 
+  onChangeDate = (e, id) => {
+    let dt = Date.parse(e.target.value);
+    let isIniDate = id === "ini_date";
+    let isEndDate = id === "end_date";
+    if (!isNaN(dt)) {
+      if (isIniDate) {
+        this.setState({ ini_date: new Date(dt) });
+        localStorage.setItem("$ini_period", "" + new Date(dt));
+      }
+      if (isEndDate) {
+        this.setState({ end_date: new Date(dt) });
+        localStorage.setItem("$end_period", "" + new Date(dt));
+      }
+    }
+    if (isIniDate) {
+      this.setState({ ini_date_str: e.target.value });
+    }
+    if (isEndDate) {
+      this.setState({ end_date_str: e.target.value });
+    }
+  };
+
+  render() {
     return (
       <>
-        <TrayWidget>
-          <TrayItemWidget model={{ type: "AverageNode" }} name="Promedio" />
-          <TrayItemWidget
-            model={{ type: "WeightedNode" }}
-            name="Promedio ponderado"
-          />
+        <div className="BarWidget">
           <Button
-            style={{ float: "right" }}
-            variant="outline-warning"
-            onClick={this.save_all}
+            variant="outline-info"
+            onClick={() => {
+              this.setState({ show_date: !this.state.show_date });
+            }}
           >
-            Guardar
-          </Button>
+            {!this.state.show_date ? "Mostrar calendario" : "Aceptar selección"}
+          </Button>{" "}
+          <input
+            className="date-input"
+            value={this.state.ini_date_str}
+            onChange={(e) => this.onChangeDate(e, "ini_date")}
+          />{" "}
+          <input
+            className="date-input"
+            value={this.state.end_date_str}
+            onChange={(e) => this.onChangeDate(e, "end_date")}
+          />
           <Button
             style={{ float: "right" }}
             variant="outline-success"
@@ -675,30 +631,27 @@ class ComponentRootGrid extends Component<BlockLeafGridProps> {
           >
             Actualizar
           </Button>
-        </TrayWidget>
+        </div>
         <div
-          className="Layer"
-          onDrop={(event) => {
-            var data = JSON.parse(
-              event.dataTransfer.getData("storm-diagram-node")
-            );
-            console.log("check me this", data, this.props.menu);
-            let node = this.create_selected_node(data.type, this.parent_id);
-            var point = this.state.engine.getRelativeMousePoint(event);
-            node.setPosition(point);
-            let model = this.state.model;
-            let engine = this.state.engine;
-            model.addNode(node);
-            engine.setModel(model);
-            // manteniendo actualizado:
-            this.model = model;
-            this.engine = engine;
-            this.setState({ engine: engine, model: model });
-          }}
-          onDragOver={(event) => {
-            event.preventDefault();
-          }}
+          className={
+            this.state.show_date
+              ? "date-range-show-fixed"
+              : "date-range-no-show"
+          }
         >
+          <DateRange
+            locale={es}
+            ranges={this.state.range}
+            showMonthAndYearPickers={true}
+            dateDisplayFormat={"yyyy MMM d"}
+            onChange={this.handleSelect}
+            months={1}
+            direction="horizontal"
+            fixedHeight={true}
+            column="true"
+          />
+        </div>
+        <div className="Layer">
           {this.state.engine === null ? (
             <></>
           ) : (

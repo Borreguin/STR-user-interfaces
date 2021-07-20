@@ -69,3 +69,7 @@ export const get_fisrt_dates_of_last_month = () => {
   let last_day_month = new Date(now.getFullYear(), now.getMonth(), 1);
   return { first_day_month: first_day_month, last_day_month: last_day_month };
 };
+
+export const to_range = (ini_date: Date, end_date: Date) => {
+  return (`${to_yyyy_mm_dd_hh_mm_ss(ini_date)}/${to_yyyy_mm_dd_hh_mm_ss(end_date)}`);
+}

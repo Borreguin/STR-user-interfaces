@@ -127,11 +127,12 @@ export type selectedBlock = {
 
 
 export type unavailability = {
-  public_id: string | undefined,
+  id_manual: string | undefined,
   fecha_inicio: Date,
   fecha_final: Date,
   detalle: detalle_indisponibilidad,
-  responsable: string
+  responsable: string,
+  editado?: boolean
 }
 
 export type detalle_indisponibilidad = {

@@ -15,7 +15,7 @@
 
  // importando Componentes:
  import {
-  ZDireflowNavigate, ZDireflowTemplate, ComponentModeling, IngresarInfo
+  ZDireflowNavigate, ZDireflowTemplate, ComponentModeling, IngresarInfo, InterfaceCalculo
 } from './component-exports';
 import TemplateComp from './direflow-components/zdireflow-navigate';
  
@@ -25,6 +25,7 @@ export const routes = [
   { path: "/zdireflow-template", component: ZDireflowTemplate, description: "Plantilla" },
   { path: "/modelamiento-componentes", component: ComponentModeling, description: "Modelación de componentes" },
   { path: "/consignaciones-indisponibilidad", component: IngresarInfo, description: "Ingreso indisponibilidad y consignaciones" },
+  { path: "/interface-calculo", component: InterfaceCalculo, description: "Interface de Cálculo" },
 ]
 
  //<Route exact path="/icons" component={IconLibrary} />

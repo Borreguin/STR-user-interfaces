@@ -1,0 +1,660 @@
+.grid {
+  height: 95%;
+}
+
+.page-wrapper .page-content {
+  display: inline-block;
+  width: 100%;
+  transition: padding-left 0.3s ease;
+  overflow-x: hidden;
+  padding-left: 270px !important;
+  background-color: rgb(33, 32, 32);
+}
+
+.content-shift {
+  margin-top: -10px;
+  height: calc(100% - 1px);
+  padding: 0px !important;
+}
+
+.TrayWidget {
+  min-width: 150px;
+  background: #141414;
+  flex-grow: 0;
+  flex-shrink: 0;
+  padding: 2px;
+}
+
+.Layer {
+  position: relative;
+  flex-grow: 1;
+  height: 100%;
+}
+
+.css-nlpftr {
+  position: absolute;
+  user-select: none;
+  cursor: move;
+  pointer-events: all;
+}
+
+.sr-port {
+  margin-top: 4px;
+  min-width: 12px;
+  height: 16px;
+  z-index: 10;
+  border-top-left-radius: 6px;
+  border-bottom-left-radius: 6px;
+  cursor: pointer;
+  float: right;
+  margin-left: 2px;
+}
+.out-serial-port {
+  height: 24px;
+  float: right;
+  cursor: pointer;
+}
+.out-serial-port:hover {
+  background-color: rgb(37, 112, 182);
+}
+
+.in_error {
+  border-color: red !important;
+}
+
+.sr-root {
+  box-sizing: border-box;
+  white-space: nowrap;
+  pointer-events: all;
+  background-color: hsla(43, 83%, 45%, 0.705);
+  color: white;
+  border-radius: 1px;
+  border: black solid 1px;
+  width: 180px;
+}
+
+.widget-disconnect {
+  background-color: rgba(194, 72, 58, 0.926);
+  border-color: rgba(126, 6, 6, 0.781);
+  border-radius: 50%;
+  color: rgba(194, 72, 58, 0.926);
+  width: 20px;
+  height: 20px;
+  margin-left: 3px;
+  margin-top: 3px;
+}
+
+.root-port {
+  height: 23px;
+  cursor: pointer;
+  position: absolute;
+  right: 2px;
+}
+
+.Port-Container {
+  height: 24px;
+  margin: 2px;
+  display: flex;
+  justify-content: space-between;
+  align-content: space-between;
+}
+
+.css-12q0bj3 {
+  inset: 0px;
+  position: absolute;
+  pointer-events: none;
+  transform-origin: 0px 0px 0px;
+  width: 100%;
+  height: 100%;
+  overflow: visible;
+}
+
+.BtnContainer {
+  position: absolute;
+  right: 3px;
+  top: 3px;
+}
+
+.sr-port {
+  margin-top: 4px;
+  min-width: 12px;
+  height: 16px;
+  z-index: 10;
+  border-top-left-radius: 6px;
+  border-bottom-left-radius: 6px;
+  cursor: pointer;
+  float: right;
+  margin-left: 2px;
+}
+.sr-port-connect {
+  max-width: 100px;
+  width: fit-content;
+  float: right;
+}
+
+.disconnect {
+  background: rgba(83, 83, 85, 0.781);
+}
+
+.connect {
+  background: rgba(135, 218, 135, 0.281);
+}
+
+.sr-port:hover {
+  background: rgba(167, 89, 16, 0.753);
+}
+
+.sr-port-block {
+  margin-left: 4px;
+  min-width: 200px;
+  font-size: 11pt;
+  font-family: Courier, monospace !important;
+}
+
+.sr-port-label {
+  max-width: 80px;
+}
+
+.sr-block-tipo {
+  background-color: rgba(158, 145, 145, 0.534);
+  padding: 2%;
+  font-size: 9pt;
+}
+
+.sr-node {
+  box-sizing: border-box;
+  white-space: nowrap;
+  pointer-events: all;
+  background-color: rgba(149, 213, 229, 0.705);
+  color: #fff;
+  border-radius: 1px;
+  border: 1px solid #000;
+  border-top-color: rgb(0, 0, 0);
+  border-right-color: rgb(0, 0, 0);
+  border-bottom-color: rgb(0, 0, 0);
+  border-left-color: rgb(0, 0, 0);
+  width: 200px;
+}
+
+.sr-node-title {
+  background: rgba(2, 2, 2, 0.671);
+  text-align: left;
+  min-width: 100px;
+  max-width: 140px;
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+  font-size: 10pt;
+  padding: 3px;
+}
+.sr-node-subtitle {
+  background: rgba(0, 0, 0, 0.3);
+  text-align: left;
+  font-weight: bolder;
+  font-size: 10pt;
+  color: rgb(250, 246, 246);
+  border: black solid 0px;
+  padding: 1px;
+}
+
+.sr-input {
+  background-color: transparent;
+  border: 0;
+  color: white;
+  font-weight: bolder;
+  padding: 4px;
+  font-size: 12pt;
+  max-width: 120px;
+}
+
+.btn-save {
+  margin-right: 2px;
+  float: right;
+  max-height: 48px;
+  min-width: 48px;
+  padding: 2px;
+}
+
+.btn-active {
+  cursor: allowed;
+  pointer-events: all;
+  background-color: rgba(69, 163, 50, 0.678);
+}
+.btn-active:hover {
+  background-color: rgba(11, 88, 151, 0.664);
+}
+
+.btn-disabled {
+  cursor: not-allowed;
+  pointer-events: none;
+  background-color: rgba(55, 56, 49, 0.753);
+}
+
+.to-drag {
+  height: 6px;
+  background-color: rgb(2, 35, 54);
+}
+
+.btn-delete {
+  margin-right: 2px;
+  margin-top: -1px;
+  max-height: 22px;
+  max-width: 20px;
+  padding: 1px;
+  background-color: transparent;
+  border: 0;
+  color: rgba(247, 140, 113, 0.753);
+}
+
+.btn-delete:hover {
+  color: red;
+  background-color: transparent;
+}
+
+.icon-off {
+  height: 22px;
+  margin-top: 0px;
+  color: rgb(245, 248, 245);
+  padding-top: 0;
+  cursor: pointer;
+  float: right;
+}
+
+.icon-on {
+  height: 22px;
+  margin-top: 0px;
+  color: rgb(245, 248, 245);
+  padding-top: 0;
+  cursor: pointer;
+  float: right;
+}
+
+.chk-entity {
+  margin: 1px;
+  max-height: 20px;
+  display: inline-block;
+  text-align: center;
+  vertical-align: middle;
+}
+
+.InPort,
+.SerialOutPort {
+  background-color: #2b2a29;
+  border-radius: 50%;
+  margin-top: 3px;
+}
+
+.SerialOutPort {
+  height: 20px;
+  width: 20px;
+  float: right;
+}
+
+.InPort {
+  height: 18px;
+  width: 18px;
+  float: left;
+}
+
+.badge-space {
+  margin-left: 2px;
+  margin-right: 2px;
+  position: relative;
+  height: 20px;
+  top: -2px;
+}
+
+.widget-add {
+  background-color: rgba(69, 163, 50, 0.678);
+  min-width: 198px;
+  margin-top: 4px;
+  border-color: rgba(83, 83, 85, 0.781);
+  font-family: Impact, Haettenschweiler, "Arial Narrow Bold", sans-serif;
+  font-weight: 900;
+}
+
+.widget-delete {
+  background-color: rgba(194, 72, 58, 0.926);
+  padding-right: 1px;
+  padding-left: 1px;
+  margin-top: 3px;
+  width: 20px;
+  height: 19px;
+  border-radius: 50%;
+  border-color: rgba(126, 6, 6, 0.781);
+  font-family: Impact, Haettenschweiler, "Arial Narrow Bold", sans-serif;
+  color: transparent;
+  font-weight: 900;
+  z-index: -100;
+}
+
+.in-port {
+  height: 24px;
+  float: left;
+  width: 80px;
+}
+
+.ParallelLabel {
+  float: left;
+  width: 152px;
+  overflow: hidden;
+  height: 20px;
+}
+.right {
+  float: right;
+  margin-top: 5px;
+}
+
+.ParallelPort {
+  float: right;
+  height: 20px;
+  width: 20px;
+  background-color: #383630;
+  border-radius: 50%;
+  cursor: pointer;
+  margin-top: 2px;
+}
+
+.icon-off {
+  height: 20px;
+  margin-top: 0px;
+  color: rgb(32, 145, 45);
+  padding-top: 0;
+  cursor: pointer;
+  float: right;
+}
+
+.icon-on {
+  height: 20px;
+  margin-top: 0px;
+  color: rgb(55, 51, 51);
+  padding-top: 0;
+  cursor: pointer;
+  float: right;
+}
+
+.chk-entity {
+  margin: 1px;
+  max-height: 20px;
+  display: inline-block;
+  text-align: center;
+  vertical-align: middle;
+}
+.AveragePort,
+.WeightedPort {
+  width: 20px;
+  background-color: #383630;
+  border-radius: 50%;
+  margin-top: 2px;
+}
+
+.sr-weigthed {
+  box-sizing: border-box;
+  white-space: nowrap;
+  pointer-events: all;
+  background-color: rgba(101, 96, 78, 0.96);
+  color: #fff;
+  border-radius: 1px;
+  border: 1px solid #000;
+  border-top-color: rgb(0, 0, 0);
+  border-right-color: rgb(0, 0, 0);
+  border-bottom-color: rgb(0, 0, 0);
+  border-left-color: rgb(0, 0, 0);
+  width: 200px;
+}
+
+.sr-average {
+  box-sizing: border-box;
+  white-space: nowrap;
+  pointer-events: all;
+  background-color: hsla(146, 13%, 35%, 0.933);
+  color: white;
+  border-radius: 1px;
+  border: black solid 1px;
+  width: 200px;
+}
+
+.AveragePort,
+.WeightedPort {
+  float: right;
+  height: 20px;
+  cursor: pointer;
+}
+
+.removeIcon {
+  height: 17px;
+  margin-top: 1px;
+  color: rgb(220, 76, 76);
+  padding-top: 0;
+  cursor: pointer;
+  float: right;
+}
+
+.input-style {
+  background-color: rgba(128, 126, 130, 0.248);
+  color: white;
+  border: thin;
+  margin-left: 10px;
+  width: 90%;
+  text-align: center;
+  max-height: 21px;
+}
+
+.logger {
+  margin-top: -60px;
+  height: 100px;
+  background-color: rgb(39, 40, 34);
+}
+
+.cmp-root {
+  box-sizing: border-box;
+  white-space: nowrap;
+  pointer-events: all;
+  background-color: rgba(41, 47, 230, 0.583);
+  color: #fff;
+  border-radius: 1px;
+  border: 1px solid #000;
+  border-top-color: rgb(0, 0, 0);
+  border-right-color: rgb(0, 0, 0);
+  border-bottom-color: rgb(0, 0, 0);
+  border-left-color: rgb(0, 0, 0);
+  width: 180px;
+}
+
+.page-wrapper {
+  height: 99vh;
+  padding: 7px;
+}
+
+.page-content {
+  display: inline-block;
+  width: 100%;
+  transition: padding-left 0.3s ease;
+  overflow-x: hidden;
+  padding-left: 270px !important;
+  background-color: rgb(33, 32, 32);
+}
+
+.content-shift {
+  margin-top: -10px;
+  height: calc(100% - 1px);
+  padding: 0px !important;
+  padding-left: 0px;
+}
+
+.sidebar-wrapper {
+  width: 270px;
+  height: 85%;
+  position: absolute;
+  z-index: 999;
+}
+
+.sidebar-wrapper .sidebar-content {
+  height: calc(100% - 35px);
+  /*overflow-y: scroll;*/
+  position: relative;
+  overflow-y: auto
+}
+
+.sidebar-wrapper .sidebar-item {
+  -webkit-transition: all 0.3s linear;
+  transition: all 0.3s linear;
+}
+
+.sidebar-wrapper ul {
+  list-style-type: none;
+  padding: 0px;
+}
+
+.sidebar-wrapper .sidebar-menu {
+  padding-bottom: 10px;
+}
+
+.container_menu {
+  padding: 2px;
+  background-color: rgba(87, 81, 80, 0.692) !important;
+}
+
+.card {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+  word-wrap: break-word;
+  background-color: #fff;
+  background-clip: border-box;
+  border: 1px solid rgba(0, 0, 0, 0.125);
+  border-radius: 0.25rem;
+}
+
+.submenu-item:hover {
+  background-color: rgba(68, 120, 216, 0.699) !important;
+  color: white;
+}
+
+.submenu-item {
+  padding: 2px;
+  padding-left: 2px;
+  padding-left: 8px;
+  background-color: rgba(240, 232, 230, 0.164);
+  color: white;
+}
+
+.active-menu {
+  background-color: rgba(113, 243, 243, 0.26) !important;
+  color: black !important;
+}
+
+.static_menu {
+  padding: 2px !important;
+  color: white;
+}
+
+.static_menu:hover {
+  background-color: rgba(68, 120, 216, 0.699) !important;
+  color: white;
+}
+
+.right-button-section {
+  position: absolute;
+  right: 4px;
+  padding: 2px;
+}
+
+.add_button {
+  position: absolute;
+  right: 7px;
+  cursor: pointer;
+}
+.add_button:hover {
+  color: rgba(36, 209, 252, 0.911);
+}
+.edit_block_button {
+  position: absolute;
+  right: 26px;
+  cursor: pointer;
+}
+.edit_block_button:hover {
+  color: rgba(36, 209, 252, 0.911);
+}
+
+.submenu-container {
+  padding: 2px;
+}
+
+.consignacion_button {
+  color: rgba(106, 236, 62, 0.933);
+  margin-right: 8px;
+  cursor: pointer;
+  font-size: 15pt;
+}
+
+.indisponibilidad_button {
+  color: rgb(243, 22, 22);
+  cursor: pointer;
+  font-size: 16pt;
+}
+
+.sidebar-menu-container{
+  padding: 2px !important;
+}
+
+.menu-text{
+  max-width: 180px;
+  display: inline-flex;
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow:ellipsis;
+}
+
+.submenu-text{
+  max-width: 160px;
+  display: inline-flex;
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow:ellipsis;
+}
+
+.hide{
+  display: none;
+}
+.source-container{
+  margin-top: 25px;
+}
+
+.test-manual-btn{
+  margin-top: -5px;
+  margin-left: 10px;
+}
+
+.btn-date-fixed{
+  max-height: 38px;
+  margin-right: 10px;
+  margin-left: 10px;
+  margin-top: -5px;
+}
+
+
+.BarWidget{
+  min-width: 150px;
+  min-height: 50px;
+  background: rgb(20, 20, 20);
+  flex-grow: 0;
+  flex-shrink: 0;
+      padding: 2px;
+}
+
+
+.date-range-show-fixed {
+  margin-top: 4px;
+  width: min-content;
+  height: min-content;
+  background-color: rgb(252, 253, 253);
+  overflow: hidden;
+  padding: 1px !important;
+  margin: 1px;
+  display: block;
+  /*position: fixed;*/
+  top: 50px;
+  z-index: 1000;
+}

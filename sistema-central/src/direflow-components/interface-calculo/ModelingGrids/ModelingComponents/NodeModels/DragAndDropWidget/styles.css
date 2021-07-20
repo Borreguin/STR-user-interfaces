@@ -1,0 +1,27 @@
+.Tray{
+    color: white;
+		font-family: Helvetica, Arial;
+		padding: 5px;
+		margin: 0px 10px;
+		border-radius: 5px;
+		margin-bottom: 2px;
+		cursor: pointer;
+        background-color: cadetblue;
+}
+
+.TrayWidget{
+    min-width: 150px;
+		background: rgb(20, 20, 20);
+		flex-grow: 0;
+		flex-shrink: 0;
+        padding: 2px;
+}
+
+.Layer{
+    position: relative;
+	flex-grow: 1;
+    height: 100%;
+}
+.tray-item{
+    margin: 1px;
+}

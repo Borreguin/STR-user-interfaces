@@ -54,7 +54,7 @@ class ComponentModeling extends Component<props, state> {
     this.root_public_id =
       this.props.root_public_id !== undefined
         ? this.props.root_public_id
-        : "no_definido";
+        : "disponibilidad_ems";
   }
 
   componentDidMount = async () => {

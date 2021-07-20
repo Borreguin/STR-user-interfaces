@@ -1,0 +1,260 @@
+.sr-port {
+  margin-top: 4px;
+  min-width: 12px;
+  height: 16px;
+  z-index: 10;
+  border-top-left-radius: 6px;
+  border-bottom-left-radius: 6px;
+  cursor: pointer;
+  float: right;
+  margin-left: 2px;
+}
+.out-serial-port {
+  height: 24px;
+  float: right;
+  cursor: pointer;
+  width: 92px;
+}
+.out-serial-port:hover{
+  background-color: rgb(37, 112, 182);
+
+}
+
+.in-port{
+  height: 24px;
+  float: left;
+  width: 80px;
+}
+.in-port:hover{
+  background-color:  rgb(37, 112, 182);
+}
+
+
+.disconnect {
+  background: rgba(83, 83, 85, 0.781);
+}
+
+.connect {
+  background: rgba(135, 218, 135, 0.281);
+}
+
+.sr-port:hover {
+  background: rgba(167, 89, 16, 0.753);
+}
+
+.sr-port-block {
+  margin-left: 4px;
+  min-width: 200px;
+  font-size: 11pt;
+  font-family: Courier, monospace !important;
+}
+
+.sr-port-label {
+  max-width: 80px;
+}
+
+.sr-block-tipo {
+  background-color: rgba(158, 145, 145, 0.534);
+  padding: 2%;
+  font-size: 9pt;
+}
+
+.sr-node {
+  box-sizing: border-box;
+  white-space: nowrap;
+  pointer-events: all;
+  background-color: hsla(192, 60%, 74%, 0.705);
+  color: white;
+  border-radius: 1px;
+  border: black solid 1px;
+  width: 200px;
+}
+
+.sr-node-title {
+  background: rgba(2, 2, 2, 0.671);
+  text-align: left;
+  min-width: 100px;
+  max-width: 120px;
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+  font-size: 10pt;
+  padding: 3px;
+}
+
+
+.sr-input {
+  background-color: transparent;
+  border: 0;
+  color: white;
+  font-weight: bolder;
+  padding: 4px;
+  font-size: 12pt;
+  max-width: 120px;
+}
+
+.btn-save {
+  margin-right: 2px;
+  float: right;
+  max-height: 48px;
+  min-width: 48px;
+  padding: 2px;
+}
+
+.btn-active {
+  cursor: allowed;
+  pointer-events: all;
+  background-color: rgba(69, 163, 50, 0.678);
+}
+.btn-active:hover {
+  background-color: rgba(11, 88, 151, 0.664);
+}
+
+.btn-disabled {
+  cursor: not-allowed;
+  pointer-events: none;
+  background-color: rgba(55, 56, 49, 0.753);
+}
+
+.to-drag {
+  height: 6px;
+  background-color: rgb(2, 35, 54);
+}
+
+.btn-delete {
+  margin-right: 2px;
+  margin-top: -1px;
+  max-height: 22px;
+  max-width: 20px;
+  padding: 1px;
+  background-color: transparent;
+  border: 0;
+  color: rgba(247, 140, 113, 0.753);
+}
+
+.btn-delete:hover {
+  color: red;
+  background-color: transparent;
+}
+
+.icon-off {
+  height: 25px;
+  margin-top: 0px;
+  color: rgb(7, 77, 15);
+  padding-top: 0;
+  cursor: pointer;
+  float: right;
+}
+
+.icon-on {
+  height: 25px;
+  margin-top: 0px;
+  color: rgb(17, 17, 17);
+  padding-top: 0;
+  cursor: pointer;
+  float: right;
+}
+
+.chk-entity {
+  margin: 1px;
+  max-height: 20px;
+  display: inline-block;
+  text-align: center;
+  vertical-align: middle;
+}
+
+.BtnContainer {
+  position: absolute;
+  right: 3px;
+  top: 3px;
+}
+
+.widget-add {
+  background-color: rgba(69, 163, 50, 0.678);
+  min-width: 198px;
+  margin-top: 4px;
+  border-color: rgba(83, 83, 85, 0.781);
+  font-family: Impact, Haettenschweiler, 'Arial Narrow Bold', sans-serif;
+  font-weight: 900;
+}
+
+.widget-delete {
+  background-color: rgba(194, 72, 58, 0.926);
+  padding-right: 1px;
+  padding-left: 1px;
+  margin-top: 3px;
+  width: 20px;
+  height: 19px;
+  border-radius: 50%;
+  border-color: rgba(126, 6, 6, 0.781);
+  font-family: Impact, Haettenschweiler, 'Arial Narrow Bold', sans-serif;
+  color:  rgba(194, 72, 58, 0.926);
+  font-weight: 900;
+  z-index: -100;
+}
+
+.left-port {
+  float: left;
+  width: 20%;
+}
+
+.right-port {
+  float: right;
+  width: 20%;
+}
+.widget-port{
+  height: 20px;
+}
+
+.SerialOutPort{
+  height: 20px;
+  width: 20px;
+  float: right;
+  background-color: rgb(56, 54, 48);
+  border-radius: 50%;
+  margin-top: 3px;
+}
+
+.InPort{
+  height: 18px;
+  width: 18px;
+  float: left;
+  background-color: rgb(56, 54, 48);
+  border-radius: 50%;
+  margin-top: 3px;
+}
+
+.Port-Container{
+  height: 24px;
+  margin: 2px;
+}
+
+.ParallelPort{
+  float: right;
+  height: 20px;
+  width: 20px;
+  background-color: rgb(56, 54, 48);
+  border-radius: 50%;
+  cursor: pointer;
+  margin-top: 2px;
+}
+
+.right{
+  float: right;
+  margin-top: 5px;
+}
+
+.ParallelLabel{
+  float: left;
+  max-width: 153px;
+  overflow: hidden;
+  height: 20px;
+}
+
+.badge-space{
+  margin-left: 2px;
+  margin-right: 2px;
+  position: relative;
+  height: 20px;
+  top: -5px;
+}

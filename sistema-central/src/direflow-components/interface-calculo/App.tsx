@@ -34,7 +34,7 @@ type state = {
 // const root_public_id = "disponibilidad_ems";
 
 // Tagname de publicación en index.tsx
-class IngresarInfo extends Component<props, state> {
+class InterfaceCalculo extends Component<props, state> {
   root_public_id: string;
   constructor(props) {
     super(props);
@@ -381,4 +381,4 @@ class IngresarInfo extends Component<props, state> {
   }
 }
 
-export default withStyles([styles])(IngresarInfo);
+export default withStyles([styles])(InterfaceCalculo);

@@ -1,0 +1,53 @@
+
+
+.WeightedPort{
+  float: right;
+  height: 20px;
+  width: 20px;
+  background-color: rgb(56, 54, 48);
+  border-radius: 50%;
+  cursor: pointer;
+  margin-top: 2px;
+}
+
+.removeIcon{
+  height: 20px;
+  margin-top: 3px;
+  color: rgb(220, 76, 76);
+  padding-top: 0;
+  cursor: pointer;
+  float: right;
+}
+
+.sr-weigthed {
+  box-sizing: border-box;
+  white-space: nowrap;
+  pointer-events: all;
+  background-color: hsla(47, 13%, 35%, 0.96);
+  color: white;
+  border-radius: 1px;
+  border: black solid 1px;
+  width: 200px;
+}
+
+.input-style{
+  background-color: rgba(128, 126, 130, 0.248);
+  color: white;
+  border: thin;
+  margin-left: 10px;
+  width: 90%;
+  text-align: center;
+  z-index: 1000;
+}
+
+/* Chrome, Safari, Edge, Opera */
+input::-webkit-outer-spin-button,
+input::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+
+/* Firefox */
+input[type=number] {
+  -moz-appearance: textfield;
+}

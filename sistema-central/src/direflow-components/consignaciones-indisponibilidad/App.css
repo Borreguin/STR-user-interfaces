@@ -654,7 +654,7 @@
   padding: 1px !important;
   margin: 1px;
   display: block;
-  position: fixed;
+  /*position: fixed;*/
   top: 50px;
   z-index: 1000;
 }

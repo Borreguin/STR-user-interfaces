@@ -139,3 +139,20 @@ export type detalle_indisponibilidad = {
   descripcion_corta: string,
   detalle: string
 }
+
+
+
+export type consignacion = {
+  id_consignacion: string | undefined,
+  no_consignacion: string,
+  fecha_inicio: Date,
+  fecha_final: Date,
+  detalle: detalle_consignacion,
+  responsable: string,
+  editado?: boolean
+}
+
+export type detalle_consignacion = {
+  descripcion_corta: string,
+  detalle: string
+}

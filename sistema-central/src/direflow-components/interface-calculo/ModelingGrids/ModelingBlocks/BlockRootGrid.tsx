@@ -24,8 +24,10 @@ import { DateRange } from "react-date-range";
 import { es } from "date-fns/locale";
 import {
   get_fisrt_dates_of_last_month,
+  to_range,
   to_yyyy_mm_dd_hh_mm_ss,
 } from "../../common_functions";
+import { SCT_API_URL } from "../../../../Constantes";
 
 type BlockRootGridProps = {
   menu: menu;
@@ -410,6 +412,19 @@ class BlockRootGrid extends Component<BlockRootGridProps> {
     }
   };
 
+  calculate_all = () => {
+    let path = `${SCT_API_URL}/calculation/execute/${this.parent_id}/${to_range(this.state.ini_date, this.state.end_date)}`;
+    fetch(path, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+    })
+      .then((res) => res.json())
+      .then((json) => {
+        this._handle_messages({ log: json });
+      })
+      .catch(console.log);
+  }
+
   _init_graph = () => {
     //1) setup the diagram engine
     // IMPORTANTE: No se registra la manera por defecto de eliminar elementos
@@ -517,7 +532,7 @@ class BlockRootGrid extends Component<BlockRootGridProps> {
           <Button
             style={{ float: "right" }}
             variant="outline-warning"
-            onClick={this.reload_graph}
+            onClick={this.calculate_all}
           >
             Calcular
           </Button>

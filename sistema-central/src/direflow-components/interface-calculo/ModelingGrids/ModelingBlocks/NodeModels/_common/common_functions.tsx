@@ -1,5 +1,7 @@
 import { PortModel } from "@projectstorm/react-diagrams";
 import { SCT_API_URL } from "../../../../../../Constantes";
+import { to_yyyy_mm_dd_hh_mm_ss } from "../../../../../modelamiento-componentes/common_functions";
+import { get_fisrt_dates_of_last_month } from "../../../../common_functions";
 export const canLinkToInportPort = (port: PortModel) => {
   // Esta función comprueba si se puede realizar las conexiones:
   // 1. Input -> SERIE
@@ -105,3 +107,18 @@ export const update_leaf_topology = async (
     });
   return resp;
 };
+
+export const get_range = () => {
+  let ini_period_str = localStorage.getItem("$ini_period");
+  let ini_period = new Date(ini_period_str);
+  let end_period_str = localStorage.getItem("$end_period");
+  let end_period = new Date(end_period_str);
+  let period = null;
+
+  if (ini_period_str === null || end_period_str === null) {
+    period = get_fisrt_dates_of_last_month();
+  } else {
+    period = {first_day_month: ini_period, last_day_month: end_period}
+  }
+  return `${to_yyyy_mm_dd_hh_mm_ss(period.first_day_month)}/${to_yyyy_mm_dd_hh_mm_ss(period.last_day_month)}`;
+}

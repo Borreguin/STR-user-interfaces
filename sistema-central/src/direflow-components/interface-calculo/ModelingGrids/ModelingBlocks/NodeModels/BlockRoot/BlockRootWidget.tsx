@@ -21,6 +21,8 @@ import * as _ from "lodash";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { Button } from "react-bootstrap";
 import ReactTooltip from "react-tooltip";
+import { SCT_API_URL } from "../../../../../../Constantes";
+import { get_range } from "../_common/common_functions";
 
 export interface BlockWidgetProps {
   node: BlockRootModel;
@@ -112,6 +114,21 @@ export class BlockRootWidget extends React.Component<BlockWidgetProps> {
     }
   };
 
+  get_calculation = () => {
+   /* let path = `${SCT_API_URL}/calculation/reporte-final/${this.props.node.data.public_id}${get_range()}`
+    let disp = -1;
+    await fetch(path, {
+      method: "GET",
+      headers: { "Content-Type": "application/json" },
+    })
+      .then((res) => res.json())
+      .then((json) => {
+        this._handle_message({ log: json });
+      })
+      .catch(console.log);*/
+    return <span className="badge badge-info">{1000}</span>
+  }
+
 
   /* Generación del título del nodo */
   generateTitle(node) {
@@ -121,7 +138,7 @@ export class BlockRootWidget extends React.Component<BlockWidgetProps> {
           {node.data.name}
         </div>
         <ReactTooltip />
-        <div>100%</div>
+        {this.get_calculation()}
       </div>
     );
   }

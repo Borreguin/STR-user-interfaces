@@ -53,6 +53,7 @@ export interface modal_state {
   check_form: boolean;
   id_manual: string | undefined;
   editing: boolean;
+  responsable: string;
 }
 
 let modal_id = "Modal_indisponibilidad_componente";
@@ -61,7 +62,6 @@ export class Modal_indisponibilidad_component extends Component<
   modal_props,
   modal_state
 > {
-  responsable: string;
   constructor(props) {
     super(props);
     let range = {
@@ -86,11 +86,11 @@ export class Modal_indisponibilidad_component extends Component<
       },
       check_form: false,
       editing: false,
+      responsable:
+        localStorage.getItem("userRole") +
+        " | " +
+        localStorage.getItem("userDisplayName"),
     };
-    this.responsable =
-      localStorage.getItem("userRole") +
-      " | " +
-      localStorage.getItem("userDisplayName");
   }
 
   // Component functions:
@@ -329,7 +329,11 @@ export class Modal_indisponibilidad_component extends Component<
       fecha_inicio: _.cloneDeep(this.state.ini_date),
       fecha_final: _.cloneDeep(this.state.end_date),
       detalle: _.cloneDeep(this.state.detalle),
-      responsable: this.responsable,
+      responsable: _.cloneDeep(
+        localStorage.getItem("userRole") +
+          " | " +
+          localStorage.getItem("userDisplayName")
+      ),
       editado: true,
     } as unavailability;
 
@@ -390,6 +394,12 @@ export class Modal_indisponibilidad_component extends Component<
 
   _edit_period = (period: unavailability) => {
     this._set_period(period, true);
+    // responsable de la edición
+    let responsable =
+      localStorage.getItem("userRole") +
+      " | " +
+      localStorage.getItem("userDisplayName");
+    this.setState({ responsable: responsable });
   };
 
   _set_period = (period: unavailability, editing: boolean) => {
@@ -409,6 +419,7 @@ export class Modal_indisponibilidad_component extends Component<
       end_date: period.fecha_final,
       id_manual: _.cloneDeep(period.id_manual),
       range: [range],
+      responsable: period.responsable,
     });
   };
 
@@ -669,7 +680,7 @@ export class Modal_indisponibilidad_component extends Component<
                     <Form.Control
                       plaintext
                       readOnly
-                      defaultValue={this.responsable}
+                      value={this.state.responsable}
                     />
                   </Col>
                 </Form.Group>

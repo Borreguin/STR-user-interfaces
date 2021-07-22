@@ -54,12 +54,12 @@ export interface modal_state {
   id_consignacion: string | undefined;
   editing: boolean;
   no_consignacion: string;
+  responsable: string;
 }
 
-let modal_id = "Modal_add_consigment";
+let modal_id = "Modal_consignment_componente";
 
-export class Modal_add_consignment extends Component<modal_props, modal_state> {
-  responsable: string;
+export class Modal_consignment_componente extends Component<modal_props, modal_state> {
   constructor(props) {
     super(props);
     let range = {
@@ -84,12 +84,12 @@ export class Modal_add_consignment extends Component<modal_props, modal_state> {
       },
       check_form: false,
       editing: false,
-      no_consignacion: ""
+      no_consignacion: "",
+      responsable:
+        localStorage.getItem("userRole") +
+        " | " +
+        localStorage.getItem("userDisplayName"),
     };
-    this.responsable =
-      localStorage.getItem("userRole") +
-      " | " +
-      localStorage.getItem("userDisplayName");
   }
 
   // Component functions:
@@ -742,7 +742,7 @@ export const modal_consignaciones_block_function = (
   handle_changes_in_root: Function
 ) => {
   return (
-    <Modal_add_consignment
+    <Modal_consignment_componente
       object={object}
       handle_close={handle_close}
       handle_edited_root_block={handle_changes_in_root}

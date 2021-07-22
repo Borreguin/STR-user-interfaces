@@ -73,7 +73,7 @@ class BlockRootGrid extends Component<BlockRootGridProps> {
     let end_period_str = localStorage.getItem("$end_period");
     let end_period = new Date(end_period_str);
     let period = null;
-    if (ini_period === null || end_period === null) {
+    if (ini_period_str === null || end_period_str === null) {
       period = get_fisrt_dates_of_last_month();
     } else {
       period = {first_day_month: ini_period, last_day_month: end_period}

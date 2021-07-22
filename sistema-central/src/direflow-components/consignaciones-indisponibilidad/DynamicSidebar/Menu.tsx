@@ -15,9 +15,7 @@ interface pros {
   handle_edited_menu?: Function;
   handle_click_menu_button: Function;
   // Modals:
-  edit_menu_modal?: Function;
-  add_submenu_modal?: Function;
-  edit_submenu_modal?: Function;
+  consignment_submenu_modal?: Function;
   indisponibilidad_submenu_modal?: Function;
   // to keep track of changes
   modal_show?: boolean;
@@ -196,26 +194,16 @@ class Menu extends Component<pros, state> {
   show_modal = () => {
     // Llamando modal para añadir elementos internos
     switch (this.state.show_modal_id) {
-      case "add_submenu_modal":
-        return this.props.add_submenu_modal(
-          this.state.selected_object,
-          this._handle_close,
-          this.props.handle_edited_menu
-        );
-      case "edit_submenu_modal":
-        return this.props.edit_submenu_modal(
-          this.state.selected_object,
-          this._handle_close,
-          this.props.handle_edited_menu
-        );
+   
+ 
       case "indisponibilidad_submenu_modal":
         return this.props.indisponibilidad_submenu_modal(
           this.state.selected_object,
           this._handle_close,
           this.props.handle_edited_menu
         );
-      case "edit_menu_modal":
-        return this.props.edit_menu_modal(
+      case "consignment_submenu_modal":
+        return this.props.consignment_submenu_modal(
           this.state.selected_object,
           this._handle_close,
           this.props.handle_edited_menu
@@ -309,7 +297,7 @@ class Menu extends Component<pros, state> {
                                 className="consignacion_button"
                                 onClick={() =>
                                   this.on_click_show(
-                                    "edit_submenu_modal",
+                                    "consignment_submenu_modal",
                                     sub_menu.object
                                   )
                                 }

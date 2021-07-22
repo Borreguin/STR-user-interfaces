@@ -515,6 +515,14 @@ class BlockRootGrid extends Component<BlockRootGridProps> {
           />
           <Button
             style={{ float: "right" }}
+            variant="outline-warning"
+            onClick={this.reload_graph}
+          >
+            Calcular
+          </Button>
+
+          <Button
+            style={{ float: "right" }}
             variant="outline-success"
             onClick={this.reload_graph}
           >

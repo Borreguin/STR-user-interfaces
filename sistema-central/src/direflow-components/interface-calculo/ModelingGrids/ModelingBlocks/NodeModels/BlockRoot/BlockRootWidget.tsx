@@ -121,6 +121,7 @@ export class BlockRootWidget extends React.Component<BlockWidgetProps> {
           {node.data.name}
         </div>
         <ReactTooltip />
+        <div>100%</div>
       </div>
     );
   }

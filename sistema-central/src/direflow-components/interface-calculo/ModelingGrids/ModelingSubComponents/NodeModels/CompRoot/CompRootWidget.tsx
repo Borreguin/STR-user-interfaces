@@ -112,6 +112,7 @@ export class CompRootWidget extends React.Component<CompWidgetProps> {
           {node.data.name}
         </div>
         <ReactTooltip />
+        <div>100%</div>
       </div>
     );
   }

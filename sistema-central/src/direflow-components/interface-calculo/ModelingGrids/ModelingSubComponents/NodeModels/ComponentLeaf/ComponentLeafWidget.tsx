@@ -166,6 +166,7 @@ export class ComponentLeafWidget extends React.Component<ComponentLeafProps> {
           {node.data.name}
         </div>
         <ReactTooltip />
+        <div>100%</div>
       </div>
     );
   }

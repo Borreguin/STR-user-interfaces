@@ -158,7 +158,7 @@ export class WeightedNodeWidget extends React.Component<WeightedNodeWidgetProps>
           {node.data.name}
         </div>
         <ReactTooltip />
-
+        <div>100%</div>
       </div>
     );
   }

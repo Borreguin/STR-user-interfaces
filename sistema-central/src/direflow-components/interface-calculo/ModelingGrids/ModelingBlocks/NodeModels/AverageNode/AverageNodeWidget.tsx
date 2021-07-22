@@ -153,6 +153,7 @@ export class AverageNodeWidget extends React.Component<AverageNodeWidgetProps> {
           {node.data.name}
         </div>
         <ReactTooltip />
+        <div>100%</div>
       </div>
     );
   }

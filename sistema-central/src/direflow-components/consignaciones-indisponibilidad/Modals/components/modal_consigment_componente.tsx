@@ -331,7 +331,11 @@ export class Modal_consignment_componente extends Component<modal_props, modal_s
       fecha_inicio: _.cloneDeep(this.state.ini_date),
       fecha_final: _.cloneDeep(this.state.end_date),
       detalle: _.cloneDeep(this.state.detalle),
-      responsable: this.responsable,
+      responsable: _.cloneDeep(
+        localStorage.getItem("userRole") +
+          " | " +
+          localStorage.getItem("userDisplayName")
+      ),
       no_consignacion:  _.cloneDeep(this.state.no_consignacion),
       editado: true,
     } as consignacion;
@@ -393,6 +397,12 @@ export class Modal_consignment_componente extends Component<modal_props, modal_s
 
   _edit_period = (period: consignacion) => {
     this._set_period(period, true);
+    // responsable de la edición
+    let responsable =
+      localStorage.getItem("userRole") +
+      " | " +
+      localStorage.getItem("userDisplayName");
+    this.setState({ responsable: responsable });
   };
 
   _set_period = (period: consignacion, editing: boolean) => {
@@ -412,7 +422,8 @@ export class Modal_consignment_componente extends Component<modal_props, modal_s
       end_date: period.fecha_final,
       id_consignacion: _.cloneDeep(period.id_consignacion),
       range: [range],
-      no_consignacion: _.cloneDeep(period.no_consignacion)
+      no_consignacion: _.cloneDeep(period.no_consignacion),
+      responsable: period.responsable,
     });
   };
 
@@ -689,7 +700,7 @@ export class Modal_consignment_componente extends Component<modal_props, modal_s
                     <Form.Control
                       plaintext
                       readOnly
-                      defaultValue={this.responsable}
+                      value={this.state.responsable}
                     />
                   </Col>
                 </Form.Group>

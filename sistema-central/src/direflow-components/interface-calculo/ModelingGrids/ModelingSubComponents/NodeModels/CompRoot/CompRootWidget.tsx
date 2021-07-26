@@ -12,6 +12,8 @@ import {
 import * as _ from "lodash";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import ReactTooltip from "react-tooltip";
+import { get_reporte_parcial } from "../../../ModelingBlocks/NodeModels/_common/common_functions";
+import { PartialReport } from "../../../../types";
 
 export interface CompWidgetProps {
   node: CompRootModel;
@@ -32,23 +34,30 @@ export class CompRootWidget extends React.Component<CompWidgetProps> {
   node: CompRootModel; // edited node
   state = {
     edited: false,
+    disponibilidad_promedio_porcentage: -1
   };
 
   constructor(props) {
     super(props);
     this.state = {
       edited: false,
+      disponibilidad_promedio_porcentage: -1
     };
     this.node = _.cloneDeep(props.node);
     this.bck_node = _.cloneDeep(props.node);
   }
 
- componentDidUpdate = () => {
+ componentDidUpdate = async () => {
    if (this.node !== this.bck_node && !this.state.edited) {
      this.bck_node = _.cloneDeep(this.node);
      this.setState({ edited: true });
      this.node.data.editado = true;
-   } 
+   }
+   let resp = await get_reporte_parcial(this.node.data.parent_id, this.node.data.public_id);
+    if (resp !== null) {
+      let reporte_parcial = resp as PartialReport;
+      this.setState({disponibilidad_promedio_porcentage:reporte_parcial.disponibilidad_promedio_porcentage});
+    }
   }
 
   _handle_message(msg: Object) {
@@ -112,7 +121,7 @@ export class CompRootWidget extends React.Component<CompWidgetProps> {
           {node.data.name}
         </div>
         <ReactTooltip />
-        <div>100%</div>
+        <span className="badge badge-info">{this.state.disponibilidad_promedio_porcentage}</span>
       </div>
     );
   }

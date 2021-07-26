@@ -6,6 +6,8 @@ import { faSave, faCheck, faTrash } from "@fortawesome/free-solid-svg-icons";
 import * as _ from "lodash";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import ReactTooltip from "react-tooltip";
+import { get_reporte_parcial } from "../_common/common_functions";
+import { PartialReport } from "../../../../types";
 
 export interface WeightedNodeWidgetProps {
   node: WeightedNodeModel;
@@ -27,6 +29,7 @@ export class WeightedNodeWidget extends React.Component<WeightedNodeWidgetProps>
   state = {
     edited: false,
     weight: {},
+    disponibilidad_promedio_porcentage: -1
   };
 
   constructor(props) {
@@ -41,9 +44,21 @@ export class WeightedNodeWidget extends React.Component<WeightedNodeWidgetProps>
         this.state = {
           edited: false,
           weight: weight,
+          disponibilidad_promedio_porcentage: -1
         };
       });
     }
+  }
+
+
+  componentDidMount = async () => {
+    console.log("weighted", this.node.data);
+    let resp = await get_reporte_parcial(this.node.data.parent_id, this.node.data.public_id);
+    if (resp === null || resp === undefined) return;
+      console.log(resp);
+      let reporte_parcial = resp as PartialReport;
+      this.setState({disponibilidad_promedio_porcentage:reporte_parcial.disponibilidad_promedio_porcentage});
+    
   }
 
   _handle_message(msg: Object) {
@@ -158,7 +173,7 @@ export class WeightedNodeWidget extends React.Component<WeightedNodeWidgetProps>
           {node.data.name}
         </div>
         <ReactTooltip />
-        <div>100%</div>
+        <span className="badge badge-info">{this.state.disponibilidad_promedio_porcentage}</span>
       </div>
     );
   }

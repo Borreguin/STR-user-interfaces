@@ -1,5 +1,3 @@
-
-
 export type bloque_leaf = {
   parent_id: string;
   public_id: string;
@@ -33,126 +31,152 @@ export type root_component_form = {
 };
 
 export type menu = {
-  level: number,
-  public_id: string,
-  parent_id?: string,
-  name: string,
-  document: string,
-  submenu: Array<submenu>,
-  object: Object
-}
+  level: number;
+  public_id: string;
+  parent_id?: string;
+  name: string;
+  document: string;
+  submenu: Array<submenu>;
+  object: Object;
+};
 
 export type submenu = {
-  level: number,
-  public_id: string,
-  parent_id?: string,
-  name: string,
-  document: string,
-  object: Object
-}
-
+  level: number;
+  public_id: string;
+  parent_id?: string;
+  name: string;
+  document: string;
+  object: Object;
+};
 
 export type properties = {
-  parent_id?: string,
-  public_id: string,
-  document: string,
-  name: string,
-  position_x_y: Array<Number>,
-  block_leafs?: Array<block_leaf>,
-  operations: Array<operation>
-  topology: Object,
-}
+  parent_id?: string;
+  public_id: string;
+  document: string;
+  name: string;
+  position_x_y: Array<Number>;
+  block_leafs?: Array<block_leaf>;
+  operations: Array<operation>;
+  topology: Object;
+};
 
 export type source = {
-  type: string,
-  parameters: Object
-}
+  type: string;
+  parameters: Object;
+};
 
 export type leaf_component = {
-  parent_id: string,
-  public_id: string,
-  calculation_type: string,
-  document: string,
-  name: string,
-  position_x_y: Array<Number>,
-  topology: Object,
-  comp_root: comp_root | null,
-  sources: Array<source>
-}
+  parent_id: string;
+  public_id: string;
+  calculation_type: string;
+  document: string;
+  name: string;
+  position_x_y: Array<Number>;
+  topology: Object;
+  comp_root: comp_root | null;
+  sources: Array<source>;
+};
 
 export type comp_root = {
-  bloque: string,
-  document: string,
-  leafs: Array<leaf_component>,
-  name: string,
-  position_x_y: Array<Number>,
-  public_id: string,
-  parent_id: string,
-  topology?: Object
-}
+  bloque: string;
+  document: string;
+  leafs: Array<leaf_component>;
+  name: string;
+  position_x_y: Array<Number>;
+  public_id: string;
+  parent_id: string;
+  topology?: Object;
+};
 
 export type block_leaf = {
-  parent_id: string,
-  public_id: string,
-  calculation_type: string,
-  document: string,
-  name: string,
-  position_x_y: Array<Number>,
-  topology?: Object, 
-  comp_root: comp_root
-}
+  parent_id: string;
+  public_id: string;
+  calculation_type: string;
+  document: string;
+  name: string;
+  position_x_y: Array<Number>;
+  topology?: Object;
+  comp_root: comp_root;
+};
 
 export type operation = {
-  public_id: string,
-  name: string,
-  type: string,
-  operator_ids: Array<string>,
-  position_x_y: Array<Number>,
-  operation: operation,
-}
+  public_id: string;
+  name: string;
+  type: string;
+  operator_ids: Array<string>;
+  position_x_y: Array<Number>;
+  operation: operation;
+};
 
 export type block = {
-  name: string,
-  parent_id: string,
-  public_id: string,
-  object?: properties
-}
+  name: string;
+  parent_id: string;
+  public_id: string;
+  object?: properties;
+};
 
 export type selectedBlock = {
-  name: string,
-  parent_id: string,
-  public_id: string,
-  object?: block_leaf
-}
-
+  name: string;
+  parent_id: string;
+  public_id: string;
+  object?: block_leaf;
+};
 
 export type unavailability = {
-  id_manual: string | undefined,
-  fecha_inicio: Date,
-  fecha_final: Date,
-  detalle: detalle_indisponibilidad,
-  responsable: string,
-  editado?: boolean
-}
+  id_manual: string | undefined;
+  fecha_inicio: Date;
+  fecha_final: Date;
+  detalle: detalle_indisponibilidad;
+  responsable: string;
+  editado?: boolean;
+};
 
 export type detalle_indisponibilidad = {
-  descripcion_corta: string,
-  detalle: string
-}
-
-
+  descripcion_corta: string;
+  detalle: string;
+};
 
 export type consignacion = {
-  id_consignacion: string | undefined,
-  no_consignacion: string,
-  fecha_inicio: Date,
-  fecha_final: Date,
-  detalle: detalle_consignacion,
-  responsable: string,
-  editado?: boolean
-}
+  id_consignacion: string | undefined;
+  no_consignacion: string;
+  fecha_inicio: Date;
+  fecha_final: Date;
+  detalle: detalle_consignacion;
+  responsable: string;
+  editado?: boolean;
+};
 
 export type detalle_consignacion = {
-  descripcion_corta: string,
-  detalle: string
-}
+  descripcion_corta: string;
+  detalle: string;
+};
+
+export type FinalReport = {
+  id_report: string;
+  nombre: string;
+  document: string;
+  calculation_type: string;
+  block_id: string;
+  periodo_evaluacion_minutos: string;
+  fecha_inicio: string;
+  fecha_final: string;
+  disponibilidad_promedio_porcentage: number;
+  tiempo_indisponibilidad_minutos: number;
+  con_periodos_indisponibles: boolean;
+};
+
+
+export type PartialReport = {
+  id_report: string;
+  nombre: string;
+  document: string;
+  calculation_type: string;
+  parent_id: string;
+  public_id: string;
+  periodo_evaluacion_minutos: string;
+  fecha_inicio: string;
+  fecha_final: string;
+  disponibilidad_promedio_porcentage: number;
+  tiempo_indisponibilidad_minutos: number;
+  con_periodos_indisponibles: boolean;
+};

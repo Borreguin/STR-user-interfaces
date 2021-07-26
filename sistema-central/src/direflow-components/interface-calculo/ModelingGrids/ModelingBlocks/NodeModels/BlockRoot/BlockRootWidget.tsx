@@ -23,6 +23,7 @@ import { Button } from "react-bootstrap";
 import ReactTooltip from "react-tooltip";
 import { SCT_API_URL } from "../../../../../../Constantes";
 import { get_range } from "../_common/common_functions";
+import { FinalReport, PartialReport } from "../../../../types";
 
 export interface BlockWidgetProps {
   node: BlockRootModel;
@@ -43,15 +44,38 @@ export class BlockRootWidget extends React.Component<BlockWidgetProps> {
   node: BlockRootModel; // edited node
   state = {
     edited: false,
+    disponibilidad_promedio_porcentage: -1
   };
 
   constructor(props) {
     super(props);
     this.state = {
       edited: false,
+      disponibilidad_promedio_porcentage:-1
     };
     this.node = _.cloneDeep(props.node);
     this.bck_node = _.cloneDeep(props.node);
+  }
+
+  componentDidMount = async () => {
+    console.log("check me!", this.props.node.data);
+    let path = `${SCT_API_URL}/calculation/reporte-parcial/${this.props.node.data.public_id}/${this.props.node.data.public_id}/${get_range()}`
+    let disp = -1;
+    await fetch(path, {
+      method: "GET",
+      headers: { "Content-Type": "application/json" },
+    })
+      .then((res) => res.json())
+      .then((json) => {
+        this._handle_message({ log: json });
+        console.log("check me!", json);
+        if (json.success) {
+          let final_report = json.reporte_parcial as PartialReport;
+          disp = final_report.disponibilidad_promedio_porcentage;
+        }
+      })
+      .catch(console.log);
+    this.setState({disponibilidad_promedio_porcentage: disp})
   }
 
  componentDidUpdate = () => {
@@ -114,21 +138,6 @@ export class BlockRootWidget extends React.Component<BlockWidgetProps> {
     }
   };
 
-  get_calculation = () => {
-   /* let path = `${SCT_API_URL}/calculation/reporte-final/${this.props.node.data.public_id}${get_range()}`
-    let disp = -1;
-    await fetch(path, {
-      method: "GET",
-      headers: { "Content-Type": "application/json" },
-    })
-      .then((res) => res.json())
-      .then((json) => {
-        this._handle_message({ log: json });
-      })
-      .catch(console.log);*/
-    return <span className="badge badge-info">{1000}</span>
-  }
-
 
   /* Generación del título del nodo */
   generateTitle(node) {
@@ -138,7 +147,7 @@ export class BlockRootWidget extends React.Component<BlockWidgetProps> {
           {node.data.name}
         </div>
         <ReactTooltip />
-        {this.get_calculation()}
+        <span className="badge badge-info">{this.state.disponibilidad_promedio_porcentage}</span>
       </div>
     );
   }

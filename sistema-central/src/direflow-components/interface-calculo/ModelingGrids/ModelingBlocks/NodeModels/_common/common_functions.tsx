@@ -122,3 +122,21 @@ export const get_range = () => {
   }
   return `${to_yyyy_mm_dd_hh_mm_ss(period.first_day_month)}/${to_yyyy_mm_dd_hh_mm_ss(period.last_day_month)}`;
 }
+
+export const get_reporte_parcial = async (parent_id:string, public_id:string) => {
+  let path = `${SCT_API_URL}/calculation/reporte-parcial/${parent_id}/${public_id}/${get_range()}`
+  let reporte_parcial = null;
+  await fetch(path, {
+    method: "GET",
+    headers: { "Content-Type": "application/json" },
+  })
+    .then((res) => res.json())
+    .then((json) => {
+      console.log(json);
+      if (json.success) {
+        reporte_parcial = json.reporte_parcial;
+      }
+    })
+    .catch(console.log);
+  return reporte_parcial;
+}

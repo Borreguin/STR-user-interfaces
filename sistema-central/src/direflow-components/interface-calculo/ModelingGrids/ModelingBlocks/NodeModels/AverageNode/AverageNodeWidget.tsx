@@ -6,6 +6,8 @@ import { faTrash, faSave, faCheck } from "@fortawesome/free-solid-svg-icons";
 import * as _ from "lodash";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import ReactTooltip from "react-tooltip";
+import { get_reporte_parcial } from "../_common/common_functions";
+import { PartialReport } from "../../../../types";
 
 export interface AverageNodeWidgetProps {
   node: AverageNodeModel;
@@ -26,15 +28,25 @@ export class AverageNodeWidget extends React.Component<AverageNodeWidgetProps> {
   node: AverageNodeModel; // edited node
   state = {
     edited: false,
+    disponibilidad_promedio_porcentage: -1
   };
 
   constructor(props) {
     super(props);
     this.state = {
       edited: false,
+      disponibilidad_promedio_porcentage: -1,
     };
     this.node = _.cloneDeep(props.node);
     this.bck_node = _.cloneDeep(props.node);
+  }
+
+  componentDidMount = async() => {
+    let resp = await get_reporte_parcial(this.node.data.parent_id, this.node.data.public_id);
+    if (resp !== null) {
+      let reporte_parcial = resp as PartialReport;
+      this.setState({disponibilidad_promedio_porcentage:reporte_parcial.disponibilidad_promedio_porcentage});
+    }
   }
 
   _handle_message(msg: Object) {
@@ -153,7 +165,7 @@ export class AverageNodeWidget extends React.Component<AverageNodeWidgetProps> {
           {node.data.name}
         </div>
         <ReactTooltip />
-        <div>100%</div>
+        <span className="badge badge-info">{this.state.disponibilidad_promedio_porcentage}</span>
       </div>
     );
   }

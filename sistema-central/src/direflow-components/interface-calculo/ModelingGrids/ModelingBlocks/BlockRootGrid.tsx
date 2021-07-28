@@ -33,6 +33,7 @@ type BlockRootGridProps = {
   menu: menu;
   handle_messages: Function;
   handle_reload: Function;
+  model_id: string;
 };
 
 type WeightedConnection = {
@@ -413,7 +414,7 @@ class BlockRootGrid extends Component<BlockRootGridProps> {
   };
 
   calculate_all = () => {
-    let path = `${SCT_API_URL}/calculation/execute/${this.parent_id}/${to_range(this.state.ini_date, this.state.end_date)}`;
+    let path = `${SCT_API_URL}/calculation/execute/${this.props.model_id}/${to_range(this.state.ini_date, this.state.end_date)}`;
     fetch(path, {
       method: "POST",
       headers: { "Content-Type": "application/json" },

@@ -66,7 +66,7 @@ class InterfaceCalculo extends Component<props, state> {
   // manejar el cierre de los modales:
   handle_modal_close = (update: boolean) => {
     // let update_modal_show_state = this.state.modal_show;
-    console.log("handle_modal_close", update);
+    // console.log("handle_modal_close", update);
     this.setState({ modal_show: update });
   };
 
@@ -80,14 +80,14 @@ class InterfaceCalculo extends Component<props, state> {
   };
 
   handle_messages = (msg) => {
-    console.log("handle_messages", msg);
+    // console.log("handle_messages", msg);
     if (msg !== undefined) {
       this.setState({ log: msg });
     }
   };
 
   handle_edited_menu = (object) => {
-    console.log("handle_edited_menu", object);
+    // console.log("handle_edited_menu", object);
     if (object === undefined) return;
     if (object["document"] === "BloqueRoot") {
       this._create_initial_menu(object as bloque_root);
@@ -97,12 +97,12 @@ class InterfaceCalculo extends Component<props, state> {
   };
 
   handle_reload = (menu: menu) => {
-    console.log("handle_reload", menu);
+    // console.log("handle_reload", menu);
     if (menu === undefined) return;
     let document = menu.document;
     let level = menu.level;
     let new_menu = this.state.menu;
-    console.log("handle_reload document",document);
+    // console.log("handle_reload document",document);
     switch (document) {
       case "BloqueRoot":
         this._search_root_block().then((bloqueroot) =>
@@ -132,7 +132,7 @@ class InterfaceCalculo extends Component<props, state> {
     let new_object = null;
     if (bloqueleaf !== undefined) new_object = bloqueleaf as bloque_leaf;
     if (componente_root !== undefined) new_object = componente_root as comp_root;
-    console.log("update menu", json, new_menus, new_object);
+    // console.log("update menu", json, new_menus, new_object);
     
     // Se compara de esta manera ya que bloqueleaf es padre de ComponenteRoot
     for (const menu of new_menus) {
@@ -146,16 +146,16 @@ class InterfaceCalculo extends Component<props, state> {
         // si es un bloque de tipo leaf
         if ( bloqueleaf && submenu.public_id === new_object.public_id) {
           submenu.object = new_object;
-          console.log("done", submenu, bloqueleaf);
+          // console.log("done", submenu, bloqueleaf);
         }
         // si es un componente leaf
         if (componente_leaf && submenu.public_id === new_object.public_id) {
-          console.log("update?", submenu);
+          // console.log("update?", submenu);
         }
       }
       // Si el objeto se encuentra dentro del menu:
       if (menu.public_id === new_object.public_id) {
-        console.log("need to check", menu, new_object)
+        // console.log("need to check", menu, new_object)
         let submenus = [];
         let leafs = [];
         if (new_object.document === "BloqueLeaf") leafs = new_object.comp_root.leafs;
@@ -292,6 +292,7 @@ class InterfaceCalculo extends Component<props, state> {
             menu={this.state.selected_menu}
             handle_messages={this.handle_messages}
             handle_reload={this.handle_reload}
+            model_id={this.root_public_id}
           />
         );
       case "ComponenteRoot":
@@ -301,6 +302,7 @@ class InterfaceCalculo extends Component<props, state> {
             menu={this.state.selected_menu}
             handle_messages={this.handle_messages}
             handle_reload={this.handle_reload}
+            model_id={this.root_public_id}
           />
         );
       case "ComponenteLeaf":
@@ -309,6 +311,7 @@ class InterfaceCalculo extends Component<props, state> {
             menu={this.state.selected_menu}
             handle_messages={this.handle_messages}
             handle_reload={this.handle_reload}
+            model_id={this.root_public_id}
           />
         );
     }

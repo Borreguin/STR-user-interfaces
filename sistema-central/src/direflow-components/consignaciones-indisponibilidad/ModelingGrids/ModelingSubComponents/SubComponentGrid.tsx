@@ -240,7 +240,7 @@ class SubComponentGrid extends Component<GridProps> {
       type: root_component.document,
       editado: false,
       public_id: root_component.public_id,
-      parent_id: bloqueleaf.public_id,
+      parent_id: root_component.parent_id,
       posx: root_component.position_x_y[0],
       posy: root_component.position_x_y[1],
     };

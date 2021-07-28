@@ -1,14 +1,8 @@
 import * as React from "react";
 import { CompRootModel } from "./CompRootModel";
-import {
-  DiagramEngine,
-  PortWidget,
-} from "@projectstorm/react-diagrams";
+import { DiagramEngine, PortWidget } from "@projectstorm/react-diagrams";
 import "./CompRootStyle.css";
-import {
-  faCheck,
-  faBullseye,
-} from "@fortawesome/free-solid-svg-icons";
+import { faCheck, faBullseye } from "@fortawesome/free-solid-svg-icons";
 import * as _ from "lodash";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import ReactTooltip from "react-tooltip";
@@ -34,31 +28,40 @@ export class CompRootWidget extends React.Component<CompWidgetProps> {
   node: CompRootModel; // edited node
   state = {
     edited: false,
-    disponibilidad_promedio_porcentage: -1
+    disponibilidad_promedio_porcentage: -1,
   };
 
   constructor(props) {
     super(props);
     this.state = {
       edited: false,
-      disponibilidad_promedio_porcentage: -1
+      disponibilidad_promedio_porcentage: -1,
     };
     this.node = _.cloneDeep(props.node);
     this.bck_node = _.cloneDeep(props.node);
   }
 
- componentDidUpdate = async () => {
-   if (this.node !== this.bck_node && !this.state.edited) {
-     this.bck_node = _.cloneDeep(this.node);
-     this.setState({ edited: true });
-     this.node.data.editado = true;
-   }
-   let resp = await get_reporte_parcial(this.node.data.parent_id, this.node.data.public_id);
+  componentDidMount = async () => {
+    let resp = await get_reporte_parcial(
+      this.node.data.parent_id,
+      this.node.data.public_id
+    );
     if (resp !== null) {
       let reporte_parcial = resp as PartialReport;
-      this.setState({disponibilidad_promedio_porcentage:reporte_parcial.disponibilidad_promedio_porcentage});
+      this.setState({
+        disponibilidad_promedio_porcentage:
+          reporte_parcial.disponibilidad_promedio_porcentage,
+      });
     }
-  }
+  };
+
+  componentDidUpdate = async () => {
+    if (this.node !== this.bck_node && !this.state.edited) {
+      this.bck_node = _.cloneDeep(this.node);
+      this.setState({ edited: true });
+      this.node.data.editado = true;
+    }
+  };
 
   _handle_message(msg: Object) {
     if (this.props.handle_messages !== undefined) {
@@ -86,9 +89,8 @@ export class CompRootWidget extends React.Component<CompWidgetProps> {
         // los cambios no fueron guardados en base de datos
         this.node.data.editado = true;
       }
-      
-    }) 
-  }
+    });
+  };
 
   _disconnect_port = (port) => {
     var links = port.getLinks();
@@ -100,18 +102,17 @@ export class CompRootWidget extends React.Component<CompWidgetProps> {
     this.node._handle_msg(msg);
     // actualizando el Canvas
     this.props.engine.repaintCanvas();
-  }
+  };
 
   is_edited = () => {
     if (_.isEqual(this.bck_node, this.node)) {
       this.setState({ edited: false });
-      this.node.data.editado= false;
+      this.node.data.editado = false;
     } else {
       this.setState({ edited: true });
       this.node.data.editado = true;
     }
   };
-
 
   /* Generación del título del nodo */
   generateTitle(node) {
@@ -121,7 +122,9 @@ export class CompRootWidget extends React.Component<CompWidgetProps> {
           {node.data.name}
         </div>
         <ReactTooltip />
-        <span className="badge badge-info">{this.state.disponibilidad_promedio_porcentage}</span>
+        <span className="badge badge-info">
+          {this.state.disponibilidad_promedio_porcentage}
+        </span>
       </div>
     );
   }
@@ -130,7 +133,6 @@ export class CompRootWidget extends React.Component<CompWidgetProps> {
   generateInAndOutSerialPort = () => {
     return (
       <div className="Port-Container">
-        
         <div className="root-port" key={_.uniqueId("ROOT")}>
           <span className="badge badge-warning badge-space">Root</span>
           <PortWidget
@@ -142,8 +144,6 @@ export class CompRootWidget extends React.Component<CompWidgetProps> {
       </div>
     );
   };
-
-
 
   // Esta sección define la vista/diseño de cada nodo
   // Widget
@@ -157,7 +157,9 @@ export class CompRootWidget extends React.Component<CompWidgetProps> {
         }}
         key={this.props.node.getID()}
       >
-        <div className={this.props.node.valid? "cmp-root": "cmp-root in_error"} >
+        <div
+          className={this.props.node.valid ? "cmp-root" : "cmp-root in_error"}
+        >
           {this.generateTitle(node)}
           {this.generateInAndOutSerialPort()}
         </div>
@@ -165,4 +167,3 @@ export class CompRootWidget extends React.Component<CompWidgetProps> {
     );
   }
 }
-

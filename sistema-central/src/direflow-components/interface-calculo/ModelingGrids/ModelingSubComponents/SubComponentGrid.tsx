@@ -6,8 +6,6 @@ import createEngine, {
   DiagramEngine,
 } from "@projectstorm/react-diagrams";
 import { CanvasWidget } from "@projectstorm/react-canvas-core";
-import { TrayWidget } from "../ModelingComponents/NodeModels/DragAndDropWidget/TrayWidget";
-import { TrayItemWidget } from "../ModelingComponents/NodeModels/DragAndDropWidget/TrayItemWidget";
 import "../ModelingComponents/NodeModels/DragAndDropWidget/styles.css";
 import * as _ from "lodash";
 import { Button } from "react-bootstrap";
@@ -19,11 +17,21 @@ import { WeightedNodeModel } from "./NodeModels/WeightedNode/WeightedNodeModel";
 import { ComponentLeafFactory } from "./NodeModels/ComponentLeaf/ComponentLeafFactory";
 import { AverageNodeFactory } from "./NodeModels/AverageNode/AverageNodeFactory";
 import { WeightedNodeFactory } from "./NodeModels/WeightedNode/WeightedNodeFactory";
-import { bloque_leaf, comp_root, leaf_component, menu, submenu } from "../../types";
+import {
+  bloque_leaf,
+  comp_root,
+  leaf_component,
+  menu,
+  submenu,
+} from "../../types";
 import { DefaultState } from "../DefaultState";
 import { StyledCanvasWidget } from "../helpers/StyledCanvasWidget";
 import { SCT_API_URL } from "../../../../Constantes";
-import { get_fisrt_dates_of_last_month, to_yyyy_mm_dd_hh_mm_ss } from "../../common_functions";
+import {
+  get_fisrt_dates_of_last_month,
+  to_range,
+  to_yyyy_mm_dd_hh_mm_ss,
+} from "../../common_functions";
 import { DateRange } from "react-date-range";
 import { es } from "date-fns/locale";
 
@@ -31,6 +39,7 @@ type GridProps = {
   menu: menu;
   handle_messages: Function;
   handle_reload: Function;
+  model_id: string;
 };
 
 type WeightedConnection = {
@@ -107,7 +116,11 @@ class SubComponentGrid extends Component<GridProps> {
     let submenu_change =
       this.props.menu.submenu.length !== this.last_props.menu.submenu.length;
     let name_submenu_change = this.props.menu.name !== newProps.menu.name;
-    console.log("SubComponentGrid componentWillReceiveProps", submenu_change, name_submenu_change);
+    console.log(
+      "SubComponentGrid componentWillReceiveProps",
+      submenu_change,
+      name_submenu_change
+    );
     // si hay cambio de nombre o cambio en el submenu
     if (submenu_change || name_submenu_change) {
       // limpiar el modelo antes de iniciar nuevamente
@@ -135,8 +148,12 @@ class SubComponentGrid extends Component<GridProps> {
       prevProps !== undefined &&
       this.props.menu.name !== prevProps.menu.name &&
       bloqueleaf.comp_root !== undefined;
-    console.log("SubComponentGrid componentDidUpdate", submenu_change, name_submenu_change);
-   
+    console.log(
+      "SubComponentGrid componentDidUpdate",
+      submenu_change,
+      name_submenu_change
+    );
+
     if (name_submenu_change || submenu_change) {
       const resp = this._init_graph();
       let engine = this.state.engine;
@@ -240,7 +257,7 @@ class SubComponentGrid extends Component<GridProps> {
       type: root_component.document,
       editado: false,
       public_id: root_component.public_id,
-      parent_id: bloqueleaf.public_id,
+      parent_id: root_component.parent_id,
       posx: root_component.position_x_y[0],
       posy: root_component.position_x_y[1],
     };
@@ -514,39 +531,20 @@ class SubComponentGrid extends Component<GridProps> {
     return node;
   };
 
-  save_all = async (e) => {
-    let msg = { state: "Empezando proceso", validate: {} };
-    let all_is_valid = true;
-    // validar todas las topologías:
-    // solve all promises:
-    let nodes = this.model.getNodes();
-    for (const node of nodes) {
-      const check = await node.fireEvent(e, "validate");
-      msg.validate[check["name"]] = check["valid"];
-      all_is_valid = all_is_valid && check["valid"];
-      if (!check["valid"]) {
-        msg.state = `El elemento ${check["name"]} no es válido`;
-      }
-    }
-    // si todo es válido entonces se puede proceder a
-    if (all_is_valid) {
-      all_is_valid = true;
-      for (const node of nodes) {
-        const check = await node.fireEvent(e, "save topology");
-        console.log(node["data"]["name"], check);
-        all_is_valid = all_is_valid && check["success"];
-        if (!check["success"]) {
-          msg.state = `El elemento ${node["data"]["name"]} no es válido`;
-          msg["log"] = check;
-        }
-      }
-      if (all_is_valid) {
-        msg.state = "Se ha guardado de manera correcta la modelación";
-      }
-      this._handle_messages(msg);
-    }
-    this._handle_messages(msg);
-    //this.reload_graph();
+  calculate_all = () => {
+    let path = `${SCT_API_URL}/calculation/execute/${this.props.model_id}/${to_range(
+      this.state.ini_date,
+      this.state.end_date
+    )}`;
+    fetch(path, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+    })
+      .then((res) => res.json())
+      .then((json) => {
+        this._handle_messages({ log: json });
+      })
+      .catch(console.log);
   };
 
   reload_graph = () => {
@@ -559,7 +557,7 @@ class SubComponentGrid extends Component<GridProps> {
     }
   };
 
-  get_object_from_db = async() => {
+  get_object_from_db = async () => {
     // permite actualizar desde la base de datos:
     console.log(this.props.menu);
     let answer = null;
@@ -569,16 +567,15 @@ class SubComponentGrid extends Component<GridProps> {
       .then((json) => {
         if (json.success) {
           answer = json;
-        }
-        else {
+        } else {
           this._handle_messages({ succes: false, msg: json.msg });
         }
       })
       .catch((error) =>
         this._handle_messages({ success: false, error: "" + error })
-    );
+      );
     return answer;
-  }
+  };
 
   create_menu_from_json = (json) => {
     let rootComponent = json.componente as comp_root;
@@ -590,7 +587,7 @@ class SubComponentGrid extends Component<GridProps> {
         public_id: leaf.public_id,
         parent_id: leaf.parent_id,
         name: leaf.name,
-        object: leaf
+        object: leaf,
       } as submenu;
       submenus.push(submenu);
     }
@@ -601,10 +598,10 @@ class SubComponentGrid extends Component<GridProps> {
       parent_id: rootComponent.parent_id,
       name: rootComponent.name,
       object: rootComponent,
-      submenu: submenus
+      submenu: submenus,
     } as menu;
     return new_menu;
-  }
+  };
 
   _init_graph = () => {
     //1) setup the diagram engine
@@ -693,10 +690,9 @@ class SubComponentGrid extends Component<GridProps> {
   };
 
   render() {
-
     return (
       <>
-                <div className="BarWidget">
+        <div className="BarWidget">
           <Button
             variant="outline-info"
             onClick={() => {
@@ -715,6 +711,13 @@ class SubComponentGrid extends Component<GridProps> {
             value={this.state.end_date_str}
             onChange={(e) => this.onChangeDate(e, "end_date")}
           />
+          <Button
+            style={{ float: "right" }}
+            variant="outline-warning"
+            onClick={this.calculate_all}
+          >
+            Calcular
+          </Button>
           <Button
             style={{ float: "right" }}
             variant="outline-success"

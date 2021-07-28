@@ -23,6 +23,7 @@ import { StyledCanvasWidget } from "../helpers/StyledCanvasWidget";
 import { SCT_API_URL } from "../../../../Constantes";
 import {
   get_fisrt_dates_of_last_month,
+  to_range,
   to_yyyy_mm_dd_hh_mm_ss,
 } from "../../common_functions";
 import { DateRange } from "react-date-range";
@@ -32,6 +33,7 @@ type BlockLeafGridProps = {
   menu: menu;
   handle_messages: Function;
   handle_reload: Function;
+  model_id: string;
 };
 
 type WeightedConnection = {
@@ -242,7 +244,7 @@ class ComponentRootGrid extends Component<BlockLeafGridProps> {
       type: componentRoot.document,
       editado: false,
       public_id: componentRoot.public_id,
-      parent_id: componentRoot.public_id,
+      parent_id: componentRoot.parent_id,
       posx: componentRoot.position_x_y[0],
       posy: componentRoot.position_x_y[1],
     };
@@ -500,7 +502,7 @@ class ComponentRootGrid extends Component<BlockLeafGridProps> {
         public_id: leaf.public_id,
         parent_id: leaf.parent_id,
         name: leaf.name,
-        object: leaf
+        object: leaf,
       } as submenu;
       submenus.push(submenu);
     }
@@ -511,10 +513,23 @@ class ComponentRootGrid extends Component<BlockLeafGridProps> {
       parent_id: rootComponent.parent_id,
       name: rootComponent.name,
       object: rootComponent,
-      submenu: submenus
+      submenu: submenus,
     } as menu;
     return new_menu;
   };
+
+  calculate_all = () => {
+    let path = `${SCT_API_URL}/calculation/execute/${this.props.model_id}/${to_range(this.state.ini_date, this.state.end_date)}`;
+    fetch(path, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+    })
+      .then((res) => res.json())
+      .then((json) => {
+        this._handle_messages({ log: json });
+      })
+      .catch(console.log);
+  }
 
   _init_graph = () => {
     //1) setup the diagram engine
@@ -624,6 +639,14 @@ class ComponentRootGrid extends Component<BlockLeafGridProps> {
             value={this.state.end_date_str}
             onChange={(e) => this.onChangeDate(e, "end_date")}
           />
+          <Button
+            style={{ float: "right" }}
+            variant="outline-warning"
+            onClick={this.calculate_all}
+          >
+            Calcular
+          </Button>
+          {" "}
           <Button
             style={{ float: "right" }}
             variant="outline-success"

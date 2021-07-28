@@ -168,9 +168,7 @@ export class Modal_add_consignment extends Component<modal_props, modal_state> {
 
   _get_periods = (keep_msg = true) => {
     let range = this._get_range();
-    let path = `${SCT_API_URL}/component-leaf/comp-root/${
-      this.props.object.parent_id
-    }/comp-leaf/${this.props.object.public_id}/consignaciones/${to_range(
+    let path = `${SCT_API_URL}/component-leaf/comp-leaf/${this.props.object.public_id}/consignaciones/${to_range(
       range.ini_period,
       range.end_period
     )}`;
@@ -220,9 +218,7 @@ export class Modal_add_consignment extends Component<modal_props, modal_state> {
   };
 
   _post_period = async (period: consignacion) => {
-    let path = `${SCT_API_URL}/component-leaf/comp-root/${
-      this.props.object.parent_id
-    }/comp-leaf/${this.props.object.public_id}/consignaciones/${to_range(
+    let path = `${SCT_API_URL}/component-leaf/comp-leaf/${this.props.object.public_id}/consignaciones/${to_range(
       period.fecha_inicio,
       period.fecha_final
     )}`;
@@ -252,9 +248,7 @@ export class Modal_add_consignment extends Component<modal_props, modal_state> {
   };
 
   _put_period = async (period: consignacion) => {
-    let path = `${SCT_API_URL}/component-leaf/comp-root/${
-      this.props.object.parent_id
-    }/comp-leaf/${this.props.object.public_id}/consignaciones/${to_range(
+    let path = `${SCT_API_URL}/component-leaf/comp-leaf/${this.props.object.public_id}/consignaciones/${to_range(
       period.fecha_inicio,
       period.fecha_final
     )}`;
@@ -285,7 +279,7 @@ export class Modal_add_consignment extends Component<modal_props, modal_state> {
   };
 
   _delete_period = async (period: consignacion) => {
-    let path = `${SCT_API_URL}/component-leaf/comp-root/${this.props.object.parent_id}/comp-leaf/${this.props.object.public_id}/consignacion/${period.id_consignacion}`;
+    let path = `${SCT_API_URL}/component-leaf/comp-leaf/${this.props.object.public_id}/consignacion/${period.id_consignacion}`;
     let resp = "";
 
     await fetch(path, {

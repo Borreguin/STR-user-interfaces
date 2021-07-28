@@ -48,6 +48,7 @@ export class DateRangeTime extends React.Component<
   RangeDateProps,
   RangeDateState
 > {
+  start_date: Date;
   constructor(props) {
     super(props);
     this.state = {
@@ -71,6 +72,7 @@ export class DateRangeTime extends React.Component<
       };
     }
     this.handle_picker_change();
+    this.start_date = this.state.ini_date;
   }
 
   // funcion que llama a funcion de parametro onChange

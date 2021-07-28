@@ -242,7 +242,7 @@ class ComponentRootGrid extends Component<BlockLeafGridProps> {
       type: componentRoot.document,
       editado: false,
       public_id: componentRoot.public_id,
-      parent_id: componentRoot.public_id,
+      parent_id: componentRoot.parent_id,
       posx: componentRoot.position_x_y[0],
       posy: componentRoot.position_x_y[1],
     };

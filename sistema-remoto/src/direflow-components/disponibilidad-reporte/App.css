@@ -166,12 +166,14 @@
 .space {
   margin-top: -4px;
 }
-.update_label {
-  position: relative;
-  left: 92%;
-  margin-bottom: -10px;
+.update_label{
+  min-width: 100%;
+  min-height: 40px;
 }
-
+.btn-actualizar{
+  float: right;
+  margin-top: 7px;
+}
 .cons-header {
   padding: 4px;
 }

@@ -47,16 +47,21 @@ export class CompRootWidget extends React.Component<CompWidgetProps> {
     this.bck_node = _.cloneDeep(props.node);
   }
 
+  componentDidMount = async () => {
+    console.log("see this root", this.node.data);
+    let resp = await get_reporte_parcial(this.node.data.parent_id, this.node.data.public_id);
+    if (resp !== null) {
+      let reporte_parcial = resp as PartialReport;
+      console.log("see this root", reporte_parcial);
+      this.setState({disponibilidad_promedio_porcentage:reporte_parcial.disponibilidad_promedio_porcentage});
+    }
+  }
+
  componentDidUpdate = async() => {
    if (this.node !== this.bck_node && !this.state.edited) {
      this.bck_node = _.cloneDeep(this.node);
      this.setState({ edited: true });
      this.node.data.editado = true;
-   }
-   let resp = await get_reporte_parcial(this.node.data.parent_id, this.node.data.public_id);
-   if (resp !== null) {
-     let reporte_parcial = resp as PartialReport;
-     this.setState({disponibilidad_promedio_porcentage:reporte_parcial.disponibilidad_promedio_porcentage});
    }
   }
 

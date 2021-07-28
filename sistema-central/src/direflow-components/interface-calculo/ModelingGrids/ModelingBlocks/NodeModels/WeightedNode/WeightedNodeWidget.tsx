@@ -52,13 +52,10 @@ export class WeightedNodeWidget extends React.Component<WeightedNodeWidgetProps>
 
 
   componentDidMount = async () => {
-    console.log("weighted", this.node.data);
     let resp = await get_reporte_parcial(this.node.data.parent_id, this.node.data.public_id);
     if (resp === null || resp === undefined) return;
-      console.log(resp);
       let reporte_parcial = resp as PartialReport;
       this.setState({disponibilidad_promedio_porcentage:reporte_parcial.disponibilidad_promedio_porcentage});
-    
   }
 
   _handle_message(msg: Object) {

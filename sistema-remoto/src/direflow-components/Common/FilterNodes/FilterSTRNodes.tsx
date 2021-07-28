@@ -4,7 +4,6 @@ import ReactTooltip from "react-tooltip";
 import { SRM_API_URL } from "../../../Constantes";
 import { Entity, Node } from "../GeneralTypes";
 
-
 export interface SRConsigProps {
   onChange: Function;
 }
@@ -31,7 +30,7 @@ class FilterSTRNodes extends Component<SRConsigProps, SRConsigState> {
       loading: false,
       nodes: [],
       options: {},
-      msg: "Espere por favor, cargando... "
+      msg: "Espere por favor, cargando... ",
     };
     this.selected = {};
     this.entidades = [];
@@ -102,7 +101,10 @@ class FilterSTRNodes extends Component<SRConsigProps, SRConsigState> {
         }
       })
       .catch((e) => {
-        this.setState({ loading: true, msg: "Problema de conexión con la API-RMT" });
+        this.setState({
+          loading: true,
+          msg: "Problema de conexión con la API-RMT",
+        });
         console.log(e);
       });
     this._node_types();
@@ -283,7 +285,9 @@ class FilterSTRNodes extends Component<SRConsigProps, SRConsigState> {
     let options = this.state.options;
     // El nodo ha sido seleccionado previamente:
     let node = this.selected_node;
-    if (node === undefined) { return }
+    if (node === undefined) {
+      return;
+    }
     for (var idx in node.entidades) {
       let entidad = node.entidades[idx];
       if (
@@ -370,24 +374,25 @@ class FilterSTRNodes extends Component<SRConsigProps, SRConsigState> {
           <div>
             <br></br>
             <Spinner animation="border" role="status" size="sm" />
-            <span> { this.state.msg}</span>
+            <span> {this.state.msg}</span>
           </div>
         ) : (
           <Form className="tab-container">
-            <Form.Row>
-              <Form.Label className="update_label">
-                <Button
+            <div className="update_label">
+              <Button
                   data-tip={"Actualiza todos los campos"}
                   onClick={this._update_filter}
                   variant="outline-success"
                   size="sm"
-                >
-                  Actualizar
-                </Button>
-                <ReactTooltip />
-              </Form.Label>
-            </Form.Row>
-            <Form.Label className="cons-label space">Seleccione Nodo</Form.Label>
+                  className="btn-actualizar"
+              >
+                Actualizar
+              </Button>
+              <ReactTooltip />
+            </div>
+            <Form.Label className="cons-label space">
+              Seleccione Nodo
+            </Form.Label>
             <Form.Row>
               <Form.Group as={Col} className="cons-col">
                 <Form.Control

@@ -87,7 +87,7 @@ class DatosMantenimiento extends Component<SRConsigProps, SRConsigState> {
                 <Form.Group as={Row}>
                   <Col sm="5">
                     <span className="cons-mandatory">* </span>
-                    <Form.Label>Código de consignación: </Form.Label>
+                    <Form.Label>Código de consignación (min 4 caracteres): </Form.Label>
                     <Form.Control
                       size="sm"
                       type="text"

@@ -18,7 +18,7 @@
  // importando Componentes:
 import {
   ZDireflowNavigate, ZDireflowTemplate, NodeManagement, UTRandTagsManagement, SRBackupFiles, SRCalDisponibilidad,
-  ConsignacionesConsulta, ConsignacionesIngreso
+  ConsignacionesConsulta, ConsignacionesIngreso, TendenciaDisponibilidadAdquisicion
 } from './component-exports';
  import TemplateComp from './direflow-components/zdireflow-navigate';
  
@@ -33,6 +33,7 @@ import {
    { path: "/disponibilidad-reporte", component:  SRCalDisponibilidad , description: "Reporte disponibilidad" },
    { path: "/consignaciones-ingreso", component:  ConsignacionesIngreso , description: "Ingreso de consignaciones" },
    { path: "/consignaciones-consulta", component:  ConsignacionesConsulta , description: "Consultar consignaciones" },
+   { path: "/tendencia-disponibilidad-adquisicion", component:  TendenciaDisponibilidadAdquisicion, description: "Tendencia de disponibilidad de adquisicion de datos" },
  
  ]
  

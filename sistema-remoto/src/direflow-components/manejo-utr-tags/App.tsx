@@ -46,7 +46,7 @@ class UTRandTagsManagement extends Component {
     };
 
     return (
-      <Styled styles={[styles, bootstrap, react_bootstrap]} scoped={ false}>
+      <Styled styles={[styles, bootstrap]} scoped={ false}>
         <div className="page-content">
           <div className="cons-container">
             <Tabs

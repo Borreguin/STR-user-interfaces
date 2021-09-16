@@ -16,10 +16,11 @@
  import SRBackupFiles from './direflow-components/versionamiento-nodos/App';
 import SRCalDisponibilidad from './direflow-components/disponibilidad-reporte/App';
 import ConsignacionesConsulta from './direflow-components/consignaciones-consulta/App';
- import ConsignacionesIngreso from './direflow-components/consignaciones-ingreso/App';
+import ConsignacionesIngreso from './direflow-components/consignaciones-ingreso/App';
+ import TendenciaDisponibilidadAdquisicion from './direflow-components/tendencia-disponibilidad-adquisicion/App';
  
  
  export { 
   ZDireflowNavigate, ZDireflowTemplate, NodeManagement, UTRandTagsManagement, SRBackupFiles, SRCalDisponibilidad,
-  ConsignacionesConsulta, ConsignacionesIngreso
+  ConsignacionesConsulta, ConsignacionesIngreso, TendenciaDisponibilidadAdquisicion
  };

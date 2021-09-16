@@ -110,7 +110,7 @@ class ConsignacionesIngreso extends Component<Props, States> {
     let payload = {
       elemento: this.state.forma.selected,
       no_consignacion: this.state.forma["no_consignacion"],
-      detalle: { observaciones: this.state.forma.detalle },
+      detalle: { detalle: this.state.forma.detalle },
     };
     fetch(path, {
       method: "POST",

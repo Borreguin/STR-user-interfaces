@@ -56,7 +56,7 @@ export class SREditarTags extends Component<
     // Cuando se actualizan valores dentro de la tabla:
     // Se permite guardar cualquier cambio en la tabla
     if (this.tags_table !== this.state.filter_tags) {
-      this.setState({filter_tags: this.tags_table})
+      this.setState({ filter_tags: this.tags_table });
     }
 
     // Cuando es actualizando el controlador de selección de UTRs
@@ -77,7 +77,6 @@ export class SREditarTags extends Component<
         this._filter_tags(this.state.search)
       );
     }
-    
   }
 
   _filter_tags = (e) => {
@@ -107,7 +106,6 @@ export class SREditarTags extends Component<
     }
     this.tags_table = _.cloneDeep(filter_tags);
     this.setState({ loading: false, filter_tags: _.cloneDeep(filter_tags) });
-    
   };
 
   _edit_tags = () => {
@@ -177,7 +175,9 @@ export class SREditarTags extends Component<
         id={"ch_" + ix}
         type="checkbox"
         checked={row.activado}
-        onChange={(e) => this._handle_change_in_table(e, ix, row.tag_name, field, true)}
+        onChange={(e) =>
+          this._handle_change_in_table(e, ix, row.tag_name, field, true)
+        }
       ></input>
     );
   };
@@ -190,7 +190,9 @@ export class SREditarTags extends Component<
         id={field + ix}
         className="table_input"
         value={row[field]}
-        onChange={(e) => this._handle_change_in_table(e, ix, row.tag_name, field)}
+        onChange={(e) =>
+          this._handle_change_in_table(e, ix, row.tag_name, field)
+        }
       ></input>
     );
   };
@@ -198,14 +200,10 @@ export class SREditarTags extends Component<
   // Actualizar cambios en tabla
   _handle_change_in_table = (e, ix, tag_name, field, isBoolean = false) => {
     console.log("handle_change_in_table");
-    if (
-      this.tags_table === undefined ||
-      this.tags_table.length === 0
-    )
-      return;
+    if (this.tags_table === undefined || this.tags_table.length === 0) return;
     // es necesario clonar el objeto, para perder la referencia del objeto:
     let filter_tags = _.cloneDeep(this.tags_table);
-    
+
     if (filter_tags[ix]["edited"] === undefined) {
       filter_tags[ix]["edited"] = true;
       filter_tags[ix]["tag_name_original"] = tag_name;
@@ -265,6 +263,17 @@ export class SREditarTags extends Component<
               {"Editar TAGS en " + this.props.selected.utr_nombre}
             </Button>
             <ReactTooltip />
+
+            <Button
+              variant="outline-primary"
+              style={{ float: "right", marginRight: "7px" }}
+              data-tip={"<div>Presione aquí para subir archivo Excel</div>"}
+              data-html={true}
+              onClick={this._edit_tags}
+            >
+              {"Editar usando Excel " + this.props.selected.utr_nombre}
+            </Button>
+            <ReactTooltip />
             <Button
               variant="outline-dark"
               style={{ float: "right", marginRight: "7px" }}
@@ -276,7 +285,6 @@ export class SREditarTags extends Component<
                 Descargar CSV
               </CSVLink>
             </Button>
-            <ReactTooltip />
           </Form.Group>
         </Form.Row>
       </div>

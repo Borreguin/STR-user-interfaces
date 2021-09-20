@@ -2,7 +2,6 @@ import React, { Component } from "react";
 import { Styled } from 'direflow-component';
 import styles from './App.css';
 import bootstrap from 'bootstrap/dist/css/bootstrap.min.css';
-import react_bootstrap from "../../../public/bootstrap.4.3.1.min.css"
 import FileManagementStyle from "../Common/FileManagement/style.css"
 import { SRM_API_URL } from "../../Constantes";
 import { Button, Col, Form, Row, Spinner } from "react-bootstrap";
@@ -111,7 +110,7 @@ class SRBackupFiles extends Component {
     };
 
     return (
-      <Styled styles={ [styles, FileManagementStyle, bootstrap, react_bootstrap]}>
+      <Styled styles={ [styles, FileManagementStyle, bootstrap]}>
         
           <div className="page-content">
             <Form.Group as={Row} className="sc-search">

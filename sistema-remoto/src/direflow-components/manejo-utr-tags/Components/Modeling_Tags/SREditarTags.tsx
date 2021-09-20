@@ -6,6 +6,7 @@ import DataTable from "react-data-table-component";
 import * as _ from "lodash";
 import { Selected, SelectedID, TAG, UTR } from "../../../Common/GeneralTypes";
 import { SRM_API_URL } from "../../../../Constantes";
+import FileUpload from "./FileUpload";
 
 type SREditarTagsProps = {
   selected: Selected;
@@ -199,7 +200,6 @@ export class SREditarTags extends Component<
 
   // Actualizar cambios en tabla
   _handle_change_in_table = (e, ix, tag_name, field, isBoolean = false) => {
-    console.log("handle_change_in_table");
     if (this.tags_table === undefined || this.tags_table.length === 0) return;
     // es necesario clonar el objeto, para perder la referencia del objeto:
     let filter_tags = _.cloneDeep(this.tags_table);
@@ -223,8 +223,20 @@ export class SREditarTags extends Component<
     });
   };
 
-  // Fin de manejo de tabla
+  _handle_upload_msg = (json) => {
+    json.msg =
+      (json.success ? "Operación exitosa en " : "Revise el detalle para ") +
+      json.msg;
+    if (json.success && this.props.utr !== undefined) {
+      let utr = _.cloneDeep(this.props.utr);
+      utr.tags = json.tags;
+      this.setState({ utr: utr }, () => this.handle_RTU_changes());
+      this._filter_tags(this.state.search);
+    }
+    this.setState({ success: json.success, msg: json.msg });
+  };
 
+  // Fin de manejo de tabla
   _render_tag_edit = (edit_columns) => {
     return (
       <div>
@@ -253,9 +265,9 @@ export class SREditarTags extends Component<
           <Form.Group id="checkRTU" as={Col}>
             <Button
               variant="outline-primary"
-              style={{ float: "right" }}
+              style={{ float: "right", height: "48px" }}
               data-tip={
-                "<div>Presione aquí para guardar todos los cambios</div>"
+                "<div>Presione aquí para guardar los cambios de la forma</div>"
               }
               data-html={true}
               onClick={this._edit_tags}
@@ -265,18 +277,24 @@ export class SREditarTags extends Component<
             <ReactTooltip />
 
             <Button
-              variant="outline-primary"
+              variant="outline-dark"
               style={{ float: "right", marginRight: "7px" }}
-              data-tip={"<div>Presione aquí para subir archivo Excel</div>"}
+              data-tip={
+                "<div>Presione aquí para editar tags mediante archivo Excel</div>"
+              }
               data-html={true}
-              onClick={this._edit_tags}
             >
-              {"Editar usando Excel " + this.props.selected.utr_nombre}
+              <FileUpload
+                id_node={this.props.selected_id.nodo}
+                id_entity={this.props.selected_id.entidad}
+                id_utr={this.props.selected_id.utr}
+                handle_msg={this._handle_upload_msg}
+              />
             </Button>
             <ReactTooltip />
             <Button
               variant="outline-dark"
-              style={{ float: "right", marginRight: "7px" }}
+              style={{ float: "right", marginRight: "7px", height: "48px" }}
             >
               <CSVLink
                 data={this.state.filter_tags}

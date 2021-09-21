@@ -40,13 +40,12 @@
     "date-fns": "^2.22.1",
     "direflow-component": "3.5.5",
     "direflow-scripts": "3.5.5",
-    "plotly.js": "^2.3.0",
-    "plotly.js-basic-dist": "^2.3.0",
+    "moment": "^2.29.1",
     "rc-progress": "^3.1.4",
     "react": "^16.13.1",
     "react-bootstrap": "^1.6.0",
     "react-csv": "^2.0.3",
-    "react-data-table-component": "^6.11.7",
+    "react-data-table-component": "^6.11.8",
     "react-date-range": "^1.2.0",
     "react-datepicker": "^4.1.1",
     "react-dom": "16.13.1",
@@ -56,6 +55,7 @@
     "react-router-dom": "^5.2.0",
     "react-scripts": "3.4.1",
     "react-tooltip": "^4.2.19",
+    "recharts": "^2.1.4",
     "styled-components": "^5.3.0"
   },
   "devDependencies": {

@@ -1,12 +1,12 @@
 import { Styled } from "direflow-component";
 import React, { Component } from "react";
 import { Alert, Button, Col, Spinner, Tab, Tabs } from "react-bootstrap";
-import styles from "./App.css";
+import style from "./App.css";
 import react_picker from "react-datepicker/dist/react-datepicker.css";
 import { to_yyyy_mm_dd_hh_mm_ss } from "../Common/DatePicker/DateRange";
 import { SRM_API_URL } from "../../Constantes";
 import { to_yyyy_mm_dd } from "../Common/DatePicker/DateRangeTimeOne";
-import Plot from "react-plotly.js";
+import { RechartsAreaChart } from "./RechartsAreaChart";
 
 interface Props {
   componentTitle: string;
@@ -66,29 +66,17 @@ class TendenciaDisponibilidadAdquisicion extends Component<Props, States> {
     //
 
     return (
-      <Styled styles={[styles, react_picker]} scoped={true}>
+      <Styled styles={[style, react_picker]} scoped={true}>
         <div>
-        {false ? (
-          <div>
-            {" "}
-            <Spinner animation="border" />{" "} <span>Cargando valores...</span>
-          </div>
-        ) : (
-          <Plot
-            data={[
-              {
-                x: [1, 2, 3],
-                y: [2, 6, 3],
-                type: "scatter",
-                mode: "lines+markers",
-                marker: { color: "red" },
-              },
-              { type: "bar", x: [1, 2, 3], y: [2, 5, 3] },
-              ]}
-              layout={{ title: 'Disponibilidad de adquisición de datos' }}
-          />
-        )}
-      </div>
+          {false ? (
+            <div>
+              {" "}
+              <Spinner animation="border" /> <span>Cargando valores...</span>
+            </div>
+          ) : (
+            <RechartsAreaChart />
+          )}
+        </div>
       </Styled>
     );
   }

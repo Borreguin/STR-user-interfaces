@@ -1,9 +1,21 @@
 import { Styled } from "direflow-component";
 import React, { Component } from "react";
-import { Alert, Button, Col, Spinner, Tab, Tabs } from "react-bootstrap";
+import {
+  Alert,
+  Button,
+  Col,
+  Form,
+  Row,
+  Spinner,
+  Tab,
+  Tabs,
+} from "react-bootstrap";
 import style from "./App.css";
 import react_picker from "react-datepicker/dist/react-datepicker.css";
-import { to_yyyy_mm_dd_hh_mm_ss } from "../Common/DatePicker/DateRange";
+import {
+  DateRange,
+  to_yyyy_mm_dd_hh_mm_ss,
+} from "../Common/DatePicker/DateRange";
 import { SRM_API_URL } from "../../Constantes";
 import { to_yyyy_mm_dd } from "../Common/DatePicker/DateRangeTimeOne";
 import { RechartsAreaChart } from "./RechartsAreaChart";
@@ -32,20 +44,37 @@ class TendenciaDisponibilidadAdquisicion extends Component<Props, States> {
       active: false,
       log: "",
       success: false,
-      ini_date: new Date(),
-      end_date: new Date(new Date().setDate(new Date().getDate() - 15)),
+      ini_date: new Date(new Date().setDate(new Date().getDate() - 200)),
+      end_date: new Date(),
       values: [],
     };
   }
 
   componentDidMount = () => {
+    this.get_trend_values()
+  };
+
+  get_trend_values = () => {
     let path = `${SRM_API_URL}/sRemoto/tendencia/diaria/json/${to_yyyy_mm_dd(
       this.state.ini_date
     )}/${to_yyyy_mm_dd(this.state.end_date)}`;
+    this.setState({ loading: true });
     fetch(path)
       .then((res) => res.json())
       .then((json) => {
-        console.log(json);
+        if (json.success) {
+          var result = [];
+          for (const idx in json.result.dates) {
+            result.push({
+              date: json.result.dates[idx],
+              "Disponibilidad Adquisición Datos":
+                json.result.values[idx] === null
+                  ? json.result.values[idx]
+                  : json.result.values[idx].toFixed(3),
+            });
+          }
+          this.setState({ values: result, loading: false });
+        }
       })
       .catch((e) => {
         this.setState({
@@ -54,6 +83,11 @@ class TendenciaDisponibilidadAdquisicion extends Component<Props, States> {
         });
         console.log(e);
       });
+  }
+
+  _on_picker_change = (ini_date, end_date) => {
+    this.setState({ ini_date:ini_date, end_date:end_date });
+    console.log(ini_date, end_date);
   };
 
   render() {
@@ -68,13 +102,27 @@ class TendenciaDisponibilidadAdquisicion extends Component<Props, States> {
     return (
       <Styled styles={[style, react_picker]} scoped={true}>
         <div>
-          {false ? (
+          <>
+            <Row>
+              <Col className="btn-aplicar">
+                <Button className="btn-app" variant="outline-secondary" onClick={ this.get_trend_values}>Aplicar</Button>
+              </Col>
+              <Col>
+              <DateRange
+                  last_month={true}
+                  onPickerChange={this._on_picker_change}
+                ></DateRange>
+              </Col>
+            </Row>
+          </>
+
+          {this.state.loading ? (
             <div>
               {" "}
               <Spinner animation="border" /> <span>Cargando valores...</span>
             </div>
           ) : (
-            <RechartsAreaChart />
+            <RechartsAreaChart data={this.state.values} />
           )}
         </div>
       </Styled>

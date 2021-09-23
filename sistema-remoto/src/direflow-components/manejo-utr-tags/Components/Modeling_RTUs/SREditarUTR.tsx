@@ -227,11 +227,12 @@ export class SREditarUTR extends Component<SREditarUTRProps, SREditarUTRState> {
       <Form className="tab-container">
         <Form.Row>
           <Form.Group as={Col} controlId="formIdUTR">
-            <Form.Label>Id UTR</Form.Label>
+            <Form.Label>Click para seleccionar UTR:</Form.Label>
             <Form.Control
               as="select"
               placeholder="Seleccione ID"
               onChange={this._handle_rtu_select}
+              style={{backgroundColor:"rgba(240, 213, 133, 0.774)"}}
             >
               {this.state.options}
             </Form.Control>

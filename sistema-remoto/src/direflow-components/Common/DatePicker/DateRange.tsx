@@ -37,7 +37,7 @@ export const get_last_month_dates = () => {
   let last_day_month = new Date(
     now.getFullYear(),
     now.getMonth(),
-    0
+    1
   );
   return {first_day_month:first_day_month, last_day_month:last_day_month}
 
@@ -69,11 +69,13 @@ export class DateRange extends React.Component<RangeDateProps, RangeDateState>{
   };
 
   setStartDate = (date) => { 
-    this.setState({ini_date:date})
+    this.setState({ ini_date: date });
+    this.props.onPickerChange(date, this.state.end_date);
   }
 
   setEndDate = (date) => { 
-    this.setState({end_date:date})
+    this.setState({ end_date: date });
+    this.props.onPickerChange(this.state.ini_date, date);
   }
 
   render() { 
@@ -89,6 +91,8 @@ export class DateRange extends React.Component<RangeDateProps, RangeDateState>{
               selectsStart
               startDate={this.state.ini_date}
               endDate={this.state.end_date}
+              showMonthDropdown
+              dateFormat="MMM d, yyyy"
             />
           </div>
         </div>
@@ -102,6 +106,8 @@ export class DateRange extends React.Component<RangeDateProps, RangeDateState>{
             startDate={this.state.ini_date}
             endDate={this.state.end_date}
             minDate={this.state.ini_date}
+            showMonthDropdown
+            dateFormat="MMM d, yyyy"
           />
         </div>
       </div>

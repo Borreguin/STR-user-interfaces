@@ -1,15 +1,13 @@
 module.exports = {
     container: {
-      background: "rgb(241, 244, 251)",
+      //background: "rgb(241, 244, 251)",
       borderRadius: 4,
       margin: "16px 0 4px",
       padding: "8px 0 8px",
-      height: 400,
       width: "100%"
     },
     title: {
       margin: 0,
-      textAlign: "center",
       width: "100%",
       fontFamily: "Gill Sans",
       fontWeight: 500
@@ -24,5 +22,5 @@ module.exports = {
       borderRadius: 4
     },
     height: 400,
-    width: 800
+    width: 1000
   };

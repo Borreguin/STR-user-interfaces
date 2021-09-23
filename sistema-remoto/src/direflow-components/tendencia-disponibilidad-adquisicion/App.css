@@ -41,3 +41,35 @@
   float: right;
 }
 
+.div-pick-container{
+  display: flex !important;
+  flex-wrap: wrap !important;
+  justify-content: space-between !important;
+  max-width: 450px;
+  padding: 10px;
+}
+.div_pick-timer-middle{
+  float: left;
+}
+
+.picker-timer-div-right{
+  min-width: 200px !important;
+  align-self: flex-end !important;
+  background-color: brown;
+}
+
+.picker-timer-div-left{
+  min-width: 200px !important;
+  align-self: flex-start !important;
+}
+
+.pick-size{
+  min-width: 200px !important;
+}
+
+.btn-aplicar{
+  max-width: 100px;
+  padding: 7px;
+  text-align: center;
+  padding-left: 25px;
+}

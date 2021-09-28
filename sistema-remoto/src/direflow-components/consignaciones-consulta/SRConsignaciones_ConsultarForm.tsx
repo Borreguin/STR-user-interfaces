@@ -14,15 +14,20 @@ import { to_yyyy_mm_dd_hh_mm_ss } from "../Common/DatePicker/DateRange";
 import { DateRangeTime } from "../Common/DatePicker/DateRangeTime";
 import FilterSTRNodes from "../Common/FilterNodes/FilterSTRNodes";
 
-
-
 // Datos de selección
 export type Forma = {
   fecha_inicio: Date;
   fecha_final: Date;
   selected: Object | undefined;
   selected_id: Object | undefined;
+  detalle: string;
+  descripcion_corta: string;
 };
+
+export type detalle = {
+  detalle: string;
+  descripcion_corta: string
+}
 
 // consignaciones
 export type Consignacion = {
@@ -30,7 +35,8 @@ export type Consignacion = {
   fecha_final: string;
   no_consignacion: string;
   id_consignacion: string;
-  detalle?: Object;
+  detalle: detalle;
+  responsable: string;
 };
 
 export interface SRConsigProps {
@@ -45,8 +51,9 @@ export interface SRConsigState {
   loading: boolean;
   show: boolean;
   consignacion_to_edit: Consignacion | undefined;
-  ini_date: Date,
-  end_date: Date
+  ini_date: Date;
+  end_date: Date;
+  responsable: string;
 }
 
 class DatosConsultar extends Component<SRConsigProps, SRConsigState> {
@@ -58,6 +65,8 @@ class DatosConsultar extends Component<SRConsigProps, SRConsigState> {
         selected_id: undefined,
         fecha_inicio: new Date(),
         fecha_final: new Date(),
+        detalle: "",
+        descripcion_corta: "",
       },
       msg: "",
       success: false,
@@ -66,7 +75,11 @@ class DatosConsultar extends Component<SRConsigProps, SRConsigState> {
       show: false,
       consignacion_to_edit: undefined,
       ini_date: new Date(),
-      end_date: new Date()
+      end_date: new Date(),
+      responsable:
+        localStorage.getItem("userRole") +
+        " | " +
+        localStorage.getItem("userDisplayName"),
     };
   }
 
@@ -100,17 +113,20 @@ class DatosConsultar extends Component<SRConsigProps, SRConsigState> {
   };
 
   // consulta las consignaciones en el periodo deseado:
-  _consulta_consignaciones = (silent=false) => {
+  _consulta_consignaciones = (silent = false) => {
     let path =
-      SRM_API_URL + "/admin-consignacion/consignacion/" +
+      SRM_API_URL +
+      "/admin-consignacion/consignacion/" +
       this.state.forma.selected_id["utr"] +
       "/" +
       to_yyyy_mm_dd_hh_mm_ss(this.state.ini_date) +
       "/" +
       to_yyyy_mm_dd_hh_mm_ss(this.state.end_date);
-    
-    if (!silent) { this.setState({ msg: "Buscando, espere por favor..." }) };
-    
+
+    if (!silent) {
+      this.setState({ msg: "Buscando, espere por favor..." });
+    }
+
     this.setState({
       success: false,
       consignaciones: [],
@@ -120,7 +136,9 @@ class DatosConsultar extends Component<SRConsigProps, SRConsigState> {
     fetch(path)
       .then((res) => res.json())
       .then((report) => {
-        if (!silent) { this.setState({msg: report.msg})}
+        if (!silent) {
+          this.setState({ msg: report.msg });
+        }
         this.setState({
           success: report.success,
           loading: false,
@@ -137,7 +155,8 @@ class DatosConsultar extends Component<SRConsigProps, SRConsigState> {
   // eliminar consignación:
   _delete_consignacion = (id_elemento, consignacion: Consignacion) => {
     let path =
-      SRM_API_URL + "/admin-consignacion/consignacion/" +
+      SRM_API_URL +
+      "/admin-consignacion/consignacion/" +
       id_elemento +
       "/" +
       consignacion.id_consignacion;
@@ -188,6 +207,7 @@ class DatosConsultar extends Component<SRConsigProps, SRConsigState> {
               {consignacion.fecha_inicio}
             </div>
             <div className="consignacion_label">{consignacion.fecha_final}</div>
+            <div className="consignacion_label">{consignacion.responsable}</div>
           </div>
           <div className="consignacion_buttons">
             <Button
@@ -218,8 +238,13 @@ class DatosConsultar extends Component<SRConsigProps, SRConsigState> {
   _handle_consignacion_modal = (consignacion: Consignacion) => {
     let form = this.state.forma;
     form["no_consignacion"] = consignacion.no_consignacion;
-    form["observaciones"] = consignacion.detalle["observaciones"]
-    this.setState({ consignacion_to_edit: consignacion, show: true, forma: form });
+    form.detalle = consignacion.detalle.detalle;
+    form.descripcion_corta = consignacion.detalle.descripcion_corta
+    this.setState({
+      consignacion_to_edit: consignacion,
+      show: true,
+      forma: form,
+    });
   };
 
   // Maneja el cierre de la modal:
@@ -280,16 +305,35 @@ class DatosConsultar extends Component<SRConsigProps, SRConsigState> {
             ></DateRangeTime>
           </Col>
           <Col sm="12">
-            <Form.Label>Observaciones: </Form.Label>
+            <Form.Label>Descripción corta de la consignación: </Form.Label>
+            <Form.Control
+              type="text"
+              placeholder="Cambie descripción corta"
+              defaultValue={
+                this.state.consignacion_to_edit.detalle["descripcion_corta"]
+              }
+              onChange={(e) =>
+                this._handle_form_changes(e, "descripcion_corta")
+              }
+            />
+          </Col>
+          <Col sm="12">
+            <Form.Label>Observaciones/detalles: </Form.Label>
             <Form.Control
               as="textarea"
               aria-label="With textarea"
-              placeholder="Ingrese detalles"
+              placeholder="Cambie detalles"
               defaultValue={
-                this.state.consignacion_to_edit.detalle["observaciones"]
+                this.state.consignacion_to_edit.detalle["detalle"]
               }
-              onChange={(e) => this._handle_form_changes(e, "observaciones")}
+              onChange={(e) => this._handle_form_changes(e, "detalle")}
             />
+          </Col>
+          <Col>
+            <Form.Label>
+              <span style={{ fontWeight: "bold" }}>Responsable: </span>{" "}
+              {this.state.responsable}
+            </Form.Label>
           </Col>
         </Form.Group>
         <Button
@@ -305,21 +349,22 @@ class DatosConsultar extends Component<SRConsigProps, SRConsigState> {
   // enviar consignación editada:
   _send_consignacion_editada = () => {
     let path =
-      SRM_API_URL + "/admin-consignacion/consignacion/" +
+      SRM_API_URL +
+      "/admin-consignacion/consignacion/" +
       this.state.forma.selected_id["utr"] +
       "/" +
       this.state.consignacion_to_edit.id_consignacion;
-    if (this.state.forma["no_consignacion"].length === 0) { 
-      this.setState({msg: "Ingrese un No de consignación válido"})
+    if (this.state.forma["no_consignacion"].length === 0) {
+      this.setState({ msg: "Ingrese un No de consignación válido" });
       return;
     }
     let payload = {
       no_consignacion: this.state.forma["no_consignacion"],
       fecha_inicio: to_yyyy_mm_dd_hh_mm_ss(this.state.forma.fecha_inicio),
       fecha_final: to_yyyy_mm_dd_hh_mm_ss(this.state.forma.fecha_final),
-      detalle: {},
+      detalle: {detalle:this.state.forma.detalle, descripcion_corta:this.state.forma.descripcion_corta},
+      responsable: this.state.responsable,
     };
-    payload.detalle["observaciones"] = this.state.forma["observaciones"];
     fetch(path, {
       method: "PUT",
       headers: { "Content-Type": "application/json" },
@@ -329,12 +374,15 @@ class DatosConsultar extends Component<SRConsigProps, SRConsigState> {
       .then((result) => {
         if (result.success) {
           this._consulta_consignaciones(true);
-        } 
-        this.setState({ msg: result.msg, success: result.success, show:false });
+        }
+        this.setState({
+          msg: result.msg,
+          success: result.success,
+          show: false,
+        });
       })
       .catch(console.log);
   };
-
 
   render() {
     return (
@@ -374,7 +422,7 @@ class DatosConsultar extends Component<SRConsigProps, SRConsigState> {
                         this.state.forma.selected_id["utr"] === undefined ||
                         this.state.loading
                       }
-                      onClick={()=>this._consulta_consignaciones()}
+                      onClick={() => this._consulta_consignaciones()}
                     >
                       Consultar
                     </Button>

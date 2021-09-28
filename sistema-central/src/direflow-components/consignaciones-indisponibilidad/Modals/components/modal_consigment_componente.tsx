@@ -81,6 +81,7 @@ export class Modal_consignment_componente extends Component<modal_props, modal_s
       detalle: {
         descripcion_corta: "",
         detalle: "",
+        elemento: this.props.object
       },
       check_form: false,
       editing: false,
@@ -714,6 +715,7 @@ export class Modal_consignment_componente extends Component<modal_props, modal_s
                 <Form.Row className="period-list">
                   {this._show_periods_to_insert()}
                 </Form.Row>
+                <Form.Label><span style={{color:"red"}}>No olvide enviar estos periodos al servidor</span></Form.Label>
               </Form.Group>
               {this.state.message.length === 0 ? (
                 <></>

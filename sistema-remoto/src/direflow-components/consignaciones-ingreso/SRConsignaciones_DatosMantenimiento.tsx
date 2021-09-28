@@ -10,6 +10,8 @@ export type Forma = {
   detalle: String;
   selected: Object | undefined;
   selected_id: Object | undefined;
+  descripcion_corta: string;
+  responsable: string;
 };
 
 export interface SRConsigProps {
@@ -31,6 +33,11 @@ class DatosMantenimiento extends Component<SRConsigProps, SRConsigState> {
         fecha_inicio: new Date(),
         fecha_final: new Date(),
         detalle: "",
+        descripcion_corta: "",
+        responsable:
+          localStorage.getItem("userRole") +
+          " | " +
+          localStorage.getItem("userDisplayName"),
       },
     };
   }
@@ -87,7 +94,9 @@ class DatosMantenimiento extends Component<SRConsigProps, SRConsigState> {
                 <Form.Group as={Row}>
                   <Col sm="5">
                     <span className="cons-mandatory">* </span>
-                    <Form.Label>Código de consignación (min 4 caracteres): </Form.Label>
+                    <Form.Label>
+                      Código de consignación (min 4 caracteres):{" "}
+                    </Form.Label>
                     <Form.Control
                       size="sm"
                       type="text"
@@ -107,6 +116,18 @@ class DatosMantenimiento extends Component<SRConsigProps, SRConsigState> {
                     ></DateRangeTime>
                   </Col>
                   <Col sm="12">
+                    <Form.Label>
+                      Descripción corta de la consignación:{" "}
+                    </Form.Label>
+                    <Form.Control
+                      type="text"
+                      placeholder="Ingrese descripción corta"
+                      onChange={(e) =>
+                        this._handle_form_changes(e, "descripcion_corta")
+                      }
+                    />
+                  </Col>
+                  <Col sm="12">
                     <Form.Label>Observaciones: </Form.Label>
                     <Form.Control
                       as="textarea"
@@ -114,6 +135,12 @@ class DatosMantenimiento extends Component<SRConsigProps, SRConsigState> {
                       placeholder="Ingrese detalles"
                       onChange={(e) => this._handle_form_changes(e, "detalle")}
                     />
+                  </Col>
+                  <Col>
+                    <Form.Label>
+                      <span style={{ fontWeight: "bold" }}>Responsable: </span>{" "}
+                      {this.state.forma.responsable}
+                    </Form.Label>
                   </Col>
                 </Form.Group>
               </Form>

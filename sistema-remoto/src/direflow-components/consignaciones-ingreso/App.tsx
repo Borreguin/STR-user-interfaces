@@ -29,6 +29,8 @@ type forma = {
   fecha_inicio: Date;
   fecha_final: Date;
   detalle: string;
+  responsable: string;
+  descripcion_corta: string;
 };
 
 interface States {
@@ -49,7 +51,9 @@ class ConsignacionesIngreso extends Component<Props, States> {
       no_consignacion: undefined,
       fecha_inicio: new Date(),
       fecha_final: new Date(),
-      detalle: undefined
+      detalle: undefined,
+      descripcion_corta: "",
+      responsable: localStorage.getItem("userRole") + " | " + localStorage.getItem("userDisplayName"),
     },
     active: false,
     log: "",
@@ -110,7 +114,8 @@ class ConsignacionesIngreso extends Component<Props, States> {
     let payload = {
       elemento: this.state.forma.selected,
       no_consignacion: this.state.forma["no_consignacion"],
-      detalle: { detalle: this.state.forma.detalle },
+      detalle: { detalle: this.state.forma.detalle, descripcion_corta: this.state.forma.descripcion_corta },
+      responsable: this.state.forma.responsable
     };
     fetch(path, {
       method: "POST",

@@ -154,5 +154,6 @@ export type consignacion = {
 
 export type detalle_consignacion = {
   descripcion_corta: string,
-  detalle: string
+  detalle: string,
+  elemento: Object
 }

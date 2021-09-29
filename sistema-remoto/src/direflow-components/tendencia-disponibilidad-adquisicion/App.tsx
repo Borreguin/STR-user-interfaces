@@ -1,24 +1,13 @@
 import { Styled } from "direflow-component";
 import React, { Component } from "react";
-import {
-  Alert,
-  Button,
-  Col,
-  Form,
-  Row,
-  Spinner,
-  Tab,
-  Tabs,
-} from "react-bootstrap";
+import { Button, Col, Row, Spinner } from "react-bootstrap";
 import style from "./App.css";
 import react_picker from "react-datepicker/dist/react-datepicker.css";
-import {
-  DateRange,
-  to_yyyy_mm_dd_hh_mm_ss,
-} from "../Common/DatePicker/DateRange";
+import { DateRange } from "../Common/DatePicker/DateRange";
 import { SRM_API_URL } from "../../Constantes";
 import { to_yyyy_mm_dd } from "../Common/DatePicker/DateRangeTimeOne";
 import { RechartsAreaChart } from "./RechartsAreaChart";
+import { ConsignacionesTable } from "./ConsignacionesTable";
 
 interface Props {
   componentTitle: string;
@@ -51,7 +40,7 @@ class TendenciaDisponibilidadAdquisicion extends Component<Props, States> {
   }
 
   componentDidMount = () => {
-    this.get_trend_values()
+    this.get_trend_values();
   };
 
   get_trend_values = () => {
@@ -83,11 +72,10 @@ class TendenciaDisponibilidadAdquisicion extends Component<Props, States> {
         });
         console.log(e);
       });
-  }
+  };
 
   _on_picker_change = (ini_date, end_date) => {
-    this.setState({ ini_date:ini_date, end_date:end_date });
-    console.log(ini_date, end_date);
+    this.setState({ ini_date: ini_date, end_date: end_date });
   };
 
   render() {
@@ -97,7 +85,9 @@ class TendenciaDisponibilidadAdquisicion extends Component<Props, States> {
           e.preventDefault();
         }
     };
-    //
+    let path = `${SRM_API_URL}/sRemoto/tendencia/diaria/json/${to_yyyy_mm_dd(
+      this.state.ini_date
+    )}/${to_yyyy_mm_dd(this.state.end_date)}`;
 
     return (
       <Styled styles={[style, react_picker]} scoped={true}>
@@ -105,25 +95,42 @@ class TendenciaDisponibilidadAdquisicion extends Component<Props, States> {
           <>
             <Row>
               <Col className="btn-aplicar">
-                <Button className="btn-app" variant="outline-secondary" onClick={ this.get_trend_values}>Aplicar</Button>
+                <Button
+                  className="btn-app"
+                  variant="outline-secondary"
+                  onClick={this.get_trend_values}
+                >
+                  Aplicar
+                </Button>
               </Col>
-              <Col>
-              <DateRange
+              <Col sm="7">
+                <DateRange
                   last_month={true}
                   onPickerChange={this._on_picker_change}
                 ></DateRange>
+              </Col>
+              <Col>
+                <a style={ {float:"right", marginRight:"45px"}} target={"_blank"} href={path}>
+                JSON info
+              </a>
               </Col>
             </Row>
           </>
 
           {this.state.loading ? (
             <div>
-              {" "}
               <Spinner animation="border" /> <span>Cargando valores...</span>
             </div>
           ) : (
-            <RechartsAreaChart data={this.state.values} />
+            <>
+              
+              <RechartsAreaChart data={this.state.values} />
+            </>
           )}
+          <ConsignacionesTable
+            ini_date={this.state.ini_date}
+            end_date={this.state.end_date}
+          />
         </div>
       </Styled>
     );

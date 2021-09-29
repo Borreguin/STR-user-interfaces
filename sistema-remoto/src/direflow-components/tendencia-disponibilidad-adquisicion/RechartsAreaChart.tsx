@@ -1,10 +1,8 @@
 import React, { Component } from "react";
 import moment from "moment";
 import {
-  AreaChart,
   XAxis,
   YAxis,
-  Area,
   Tooltip,
   CartesianGrid,
   Legend,

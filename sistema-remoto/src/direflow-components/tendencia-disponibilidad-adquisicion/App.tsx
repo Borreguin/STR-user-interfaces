@@ -28,6 +28,7 @@ class TendenciaDisponibilidadAdquisicion extends Component<Props, States> {
   /* Configuración de la página: */
   constructor(props: Readonly<Props>) {
     super(props);
+    
     this.state = {
       loading: true,
       active: false,
@@ -103,7 +104,7 @@ class TendenciaDisponibilidadAdquisicion extends Component<Props, States> {
                   Aplicar
                 </Button>
               </Col>
-              <Col sm="7">
+              <Col >
                 <DateRange
                   last_month={true}
                   onPickerChange={this._on_picker_change}

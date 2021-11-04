@@ -1,12 +1,11 @@
 import React, { Component } from "react";
 import { Button, Card } from "react-bootstrap";
 import DataTable from "react-data-table-component";
-import { SCT_API_URL } from "../../Constantes";
 import {
-  to_yyyy_mm_dd,
   to_yyyy_mm_dd_hh_mm_ss,
 } from "../Common/DatePicker/DateRange";
 import { CSVLink } from "react-csv";
+import { SRM_API_URL } from "../../Constantes";
 
 type consignacion = {
   no_consignacion: string;
@@ -52,7 +51,7 @@ export class ConsignacionesTable extends Component<Props, States> {
   };
 
   load_table_data = () => {
-    let path = `${SCT_API_URL}/admin-consignacion/consignaciones/json/${to_yyyy_mm_dd_hh_mm_ss(
+    let path = `${SRM_API_URL}/admin-consignacion/consignaciones/json/${to_yyyy_mm_dd_hh_mm_ss(
       this.props.ini_date
     )}/${to_yyyy_mm_dd_hh_mm_ss(this.props.end_date)}`;
     this.setState({ loading: true });

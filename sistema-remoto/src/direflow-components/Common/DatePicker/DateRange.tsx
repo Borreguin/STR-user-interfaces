@@ -39,7 +39,7 @@ export const get_last_month_dates = () => {
     now.getMonth(),
     1
   );
-  return {first_day_month:first_day_month, last_day_month:last_day_month}
+  return { first_day_month: first_day_month, last_day_month: last_day_month };
 
 }
 

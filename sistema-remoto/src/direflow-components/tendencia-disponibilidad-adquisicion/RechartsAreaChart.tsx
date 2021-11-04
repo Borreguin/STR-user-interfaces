@@ -51,7 +51,7 @@ export class RechartsAreaChart extends Component<Props, States> {
               style={{ fontSize: 10 }}
             />
             <YAxis
-              dataKey="Disponibilidad Adquisición Datos"
+              dataKey="Disp. adquisición datos diaria"
               domain={[min_v, max_v]}
               style={{ fontSize: 10 }}
             />
@@ -61,7 +61,7 @@ export class RechartsAreaChart extends Component<Props, States> {
               stackId="1"
               isAnimationActive={false}
               type="stepAfter"
-              dataKey="Disponibilidad Adquisición Datos"
+              dataKey="Disp. adquisición datos diaria"
               stroke="#0095FF"
             />
             <Brush

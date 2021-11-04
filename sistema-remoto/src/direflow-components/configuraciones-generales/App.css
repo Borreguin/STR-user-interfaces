@@ -1,0 +1,31 @@
+
+.app {
+  width: 600px;
+  height: 575px;
+  padding: 30px 60px;
+  box-sizing: border-box;
+  background-color: white;
+  box-shadow: 0 4px 14px 4px #375c821c;
+  font-family: 'Noto Sans JP', sans-serif;
+  border-bottom: 5px solid #cad5e6;
+}
+
+.border{
+    padding: 12px;
+    min-height: 800px;
+}
+
+.btn-aplicar{
+    max-width: 100px;
+    padding: 7px;
+    text-align: center;
+    padding-left: 25px;
+  }
+
+  .div-pick-container{
+    display: flex !important;
+    flex-wrap: wrap !important;
+    justify-content: space-between !important;
+    max-width: 450px;
+    padding: 10px;
+  }

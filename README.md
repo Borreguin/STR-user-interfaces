@@ -15,6 +15,8 @@ Ejecución de interfaces de usuario para Sistema Remoto:
 - `<div id="component" class="component-container"></div>`
 - `<nombre-componente></nombre-componente>`
 
+![Ejemplo interface Sistema Remoto](/sistema-remoto/Example.JPG) 
+
 # Sistema Central
 
 Ejecución de interfaces de usuario para Sistema Remoto:
@@ -28,9 +30,13 @@ Ejecución de interfaces de usuario para Sistema Remoto:
 - `<div id="component" class="component-container"></div>`
 - `<nombre-componente></nombre-componente>`
 
+![Ejemplo interface Sistema Central](/sistema-central/Example.JPG)
+
 # Wordpress Plugin
 Este plugin permite compartir información propia de Wordpress con los componentes web desarrollados. De esta manera se puede compartir variables del ambiente WordPress para modificar las lógicas internas de los componentes web desarrollados.
 1. Modificar el plugin en [/wordpress-plugin/consignaciones-indisponibilidad.php](/wordpress-plugin/consignaciones-indisponibilidad.php)
 2. Colocar variables a compartir en [/wordpress-plugin/js/custom.js](/wordpress-plugin/js/custom.js)
 3. El plugin debe ser aceptado en la plataforma WordPress **https:/web-wodpress/wp-admin/plugins.php**
 4. Cada componente puede hacer uso de estas variables mediante: `localStorage.getItem("variable")` 
+
+![Pluging](/wordpress-plugin/Plugin.JPG)

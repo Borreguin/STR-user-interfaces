@@ -5,19 +5,9 @@ import {
   to_yyyy_mm_dd_hh_mm_ss,
 } from "../Common/DatePicker/DateRange";
 import { CSVLink } from "react-csv";
-import { SRM_API_URL } from "../../Constantes";
+import { consignacion } from "./types";
+import { service_consignaciones_table } from "./services";
 
-type consignacion = {
-  no_consignacion: string;
-  fecha_inicio: string;
-  fecha_final: string;
-  id_consignacion: string;
-  responsable: string;
-  detalle: string | undefined;
-  descripcion_corta: string | undefined;
-  entidad: string;
-  elemento: string;
-};
 
 interface Props {
   ini_date: Date;
@@ -51,33 +41,18 @@ export class ConsignacionesTable extends Component<Props, States> {
   };
 
   load_table_data = () => {
-    let path = `${SRM_API_URL}/admin-consignacion/consignaciones/json/${to_yyyy_mm_dd_hh_mm_ss(
-      this.props.ini_date
-    )}/${to_yyyy_mm_dd_hh_mm_ss(this.props.end_date)}`;
     this.setState({ loading: true });
-    fetch(path)
-      .then((res) => res.json())
-      .then((json) => {
-        let consignaciones = [] as Array<consignacion>;
-        if (json.success) {
-          for (let consigna of json.consignaciones) {
-            let consg = {
-              no_consignacion: consigna["no_consignacion"],
-              fecha_inicio: consigna["fecha_inicio"],
-              fecha_final: consigna["fecha_final"],
-              id_consignacion: consigna["id_consignacion"],
-              responsable: consigna["responsable"],
-              detalle: consigna["detalle"],
-              descripcion_corta: consigna["descripcion_corta"],
-              entidad: consigna["entidad"],
-              elemento: consigna["elemento"],
-            } as consignacion;
-            consignaciones.push(consg);
-          }
-        }
-        this.setState({ consignaciones: consignaciones, loading: false });
-      });
+    service_consignaciones_table(this.props.ini_date, this.props.end_date).then(
+      (resp) => {
+        console.log(resp);
+        this.setState({
+          consignaciones: resp.consignaciones,
+          loading: false,
+        });
+      }
+    );
   };
+
   render() {
     window.onkeydown = function (e) {
       if (e.keyCode === 8)

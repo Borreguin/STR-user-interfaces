@@ -21,6 +21,10 @@ export const to_yyyy_mm_dd = (date) => {
   );
 };
 
+export const range_to_yyyy_mm_dd = (ini_date: Date, end_date: Date) => {
+  return (`${to_yyyy_mm_dd(ini_date)}/${to_yyyy_mm_dd(end_date)}`);
+}
+
 export const to_yyyy_mm_dd_hh_mm_ss = (date: Date) => {
   return (
     date.getFullYear() +

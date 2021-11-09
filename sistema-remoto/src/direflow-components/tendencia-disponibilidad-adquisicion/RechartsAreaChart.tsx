@@ -17,17 +17,12 @@ import styles from "./styles";
 interface Props {
   data: Array<Object>;
 }
-interface States {}
+interface States {
+}
 
 export class RechartsAreaChart extends Component<Props, States> {
   constructor(props: Readonly<Props>) {
     super(props);
-    this.state = {
-      data: simpleData().map(({ x, y }) => ({
-        date: x,
-        "Disponibilidad Adquisición Datos": y,
-      })),
-    };
   }
   render() {
     const data = this.props.data;
@@ -51,7 +46,7 @@ export class RechartsAreaChart extends Component<Props, States> {
               style={{ fontSize: 10 }}
             />
             <YAxis
-              dataKey="Disp. adquisición datos diaria"
+              dataKey="Disp. diaria adquisición Datos"
               domain={[min_v, max_v]}
               style={{ fontSize: 10 }}
             />
@@ -61,7 +56,7 @@ export class RechartsAreaChart extends Component<Props, States> {
               stackId="1"
               isAnimationActive={false}
               type="stepAfter"
-              dataKey="Disp. adquisición datos diaria"
+              dataKey="Disp. diaria adquisición Datos"
               stroke="#0095FF"
             />
             <Brush

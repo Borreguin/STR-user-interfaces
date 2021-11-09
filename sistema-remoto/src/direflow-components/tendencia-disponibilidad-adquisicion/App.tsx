@@ -5,9 +5,10 @@ import style from "./App.css";
 import react_picker from "react-datepicker/dist/react-datepicker.css";
 import { DateRange } from "../Common/DatePicker/DateRange";
 import { SRM_API_URL } from "../../Constantes";
-import { to_yyyy_mm_dd } from "../Common/DatePicker/DateRangeTimeOne";
+import { range_to_yyyy_mm_dd, to_yyyy_mm_dd } from "../Common/DatePicker/DateRangeTimeOne";
 import { RechartsAreaChart } from "./RechartsAreaChart";
 import { ConsignacionesTable } from "./ConsignacionesTable";
+import { service_daily_dispo_trend } from "./services";
 
 interface Props {
   componentTitle: string;
@@ -28,7 +29,7 @@ class TendenciaDisponibilidadAdquisicion extends Component<Props, States> {
   /* Configuración de la página: */
   constructor(props: Readonly<Props>) {
     super(props);
-    
+
     this.state = {
       loading: true,
       active: false,
@@ -45,34 +46,15 @@ class TendenciaDisponibilidadAdquisicion extends Component<Props, States> {
   };
 
   get_trend_values = () => {
-    let path = `${SRM_API_URL}/sRemoto/tendencia/diaria/json/${to_yyyy_mm_dd(
-      this.state.ini_date
-    )}/${to_yyyy_mm_dd(this.state.end_date)}`;
     this.setState({ loading: true });
-    fetch(path)
-      .then((res) => res.json())
-      .then((json) => {
-        if (json.success) {
-          var result = [];
-          for (const idx in json.result.dates) {
-            result.push({
-              date: json.result.dates[idx],
-              "Disponibilidad Adquisición Datos":
-                json.result.values[idx] === null
-                  ? json.result.values[idx]
-                  : json.result.values[idx].toFixed(3),
-            });
-          }
-          this.setState({ values: result, loading: false });
-        }
-      })
-      .catch((e) => {
+    service_daily_dispo_trend(this.state.ini_date, this.state.end_date).then(
+      (resp) => {
         this.setState({
-          loading: true,
-          log: "Problema de conexión con la API-RMT",
+          values: resp.values,
+          loading: false,
         });
-        console.log(e);
-      });
+      }
+    );
   };
 
   _on_picker_change = (ini_date, end_date) => {
@@ -86,9 +68,7 @@ class TendenciaDisponibilidadAdquisicion extends Component<Props, States> {
           e.preventDefault();
         }
     };
-    let path = `${SRM_API_URL}/sRemoto/tendencia/diaria/json/${to_yyyy_mm_dd(
-      this.state.ini_date
-    )}/${to_yyyy_mm_dd(this.state.end_date)}`;
+    let path = `${SRM_API_URL}/sRemoto/tendencia/diaria/json/${range_to_yyyy_mm_dd(this.state.ini_date, this.state.end_date)}`;
 
     return (
       <Styled styles={[style, react_picker]} scoped={true}>
@@ -104,16 +84,20 @@ class TendenciaDisponibilidadAdquisicion extends Component<Props, States> {
                   Aplicar
                 </Button>
               </Col>
-              <Col >
+              <Col>
                 <DateRange
                   last_month={true}
                   onPickerChange={this._on_picker_change}
                 ></DateRange>
               </Col>
               <Col>
-                <a style={ {float:"right", marginRight:"45px"}} target={"_blank"} href={path}>
-                JSON info
-              </a>
+                <a
+                  style={{ float: "right", marginRight: "45px" }}
+                  target={"_blank"}
+                  href={path}
+                >
+                  JSON info
+                </a>
               </Col>
             </Row>
           </>
@@ -124,7 +108,6 @@ class TendenciaDisponibilidadAdquisicion extends Component<Props, States> {
             </div>
           ) : (
             <>
-              
               <RechartsAreaChart data={this.state.values} />
             </>
           )}

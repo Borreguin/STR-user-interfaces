@@ -1,5 +1,5 @@
 # See https://help.github.com/articles/ignoring-files/ for more about ignoring files.
-
+/.vscode
 
 # dependencies
 sistema-remoto/node_modules
@@ -18,12 +18,13 @@ sistema-remoto/build
 # sistema-central
 sistema-central/build
 
-# misc
+# sistema-remoto
 sistema-remoto/.DS_Store
 sistema-remoto/.env.local
 sistema-remoto/.env.development.local
 sistema-remoto/.env.test.local
 sistema-remoto/.env.production.local
+
 # sistema-central
 sistema-central/.DS_Store
 sistema-central/.env.local
@@ -32,10 +33,12 @@ sistema-central/.env.test.local
 sistema-central/.env.production.local
 
 # logs
+# sistema-remoto
 sistema-remoto/npm-debug.log*
 sistema-remoto/yarn-debug.log*
 sistema-remoto/yarn-error.log*
 sistema-remoto/package-lock.json
+
 # sistema-central
 sistema-central/npm-debug.log*
 sistema-central/yarn-debug.log*

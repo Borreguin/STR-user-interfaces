@@ -8,7 +8,8 @@ import { SRM_API_URL } from "../../Constantes";
 import { range_to_yyyy_mm_dd, to_yyyy_mm_dd } from "../Common/DatePicker/DateRangeTimeOne";
 import { RechartsAreaChart } from "./RechartsAreaChart";
 import { ConsignacionesTable } from "./ConsignacionesTable";
-import { service_daily_dispo_trend } from "./services";
+import { service_daily_dispo_trend, service_monthly_control_disp_trend } from "./services";
+import { daily_value, monthly_value } from "./types";
 
 interface Props {
   componentTitle: string;
@@ -22,7 +23,8 @@ interface States {
   success: boolean;
   ini_date: Date;
   end_date: Date;
-  values: Array<Number>;
+  daily_trend: Array<daily_value>;
+  montly_trend: Array<monthly_value>;
 }
 
 class TendenciaDisponibilidadAdquisicion extends Component<Props, States> {
@@ -37,7 +39,8 @@ class TendenciaDisponibilidadAdquisicion extends Component<Props, States> {
       success: false,
       ini_date: new Date(new Date().setDate(new Date().getDate() - 200)),
       end_date: new Date(),
-      values: [],
+      daily_trend: [],
+      montly_trend: []
     };
   }
 
@@ -46,15 +49,15 @@ class TendenciaDisponibilidadAdquisicion extends Component<Props, States> {
   };
 
   get_trend_values = () => {
-    this.setState({ loading: true });
-    service_daily_dispo_trend(this.state.ini_date, this.state.end_date).then(
-      (resp) => {
-        this.setState({
-          values: resp.values,
-          loading: false,
-        });
-      }
-    );
+    this.setState({loading:true});
+    // Valores diarios de disponibilidad de la información del SCADA
+    var p1 = service_daily_dispo_trend(this.state.ini_date, this.state.end_date);
+    // Valores mensuales de la disponibilidad del Centro de Control
+    var p2 = service_monthly_control_disp_trend(this.state.ini_date, this.state.end_date);
+    // Ejecutar los servicios:
+    Promise.all([p1, p2]).then((resp) => {
+      this.setState({daily_trend: resp[0].values, montly_trend: resp[1].values, loading:false});
+    })
   };
 
   _on_picker_change = (ini_date, end_date) => {
@@ -108,7 +111,7 @@ class TendenciaDisponibilidadAdquisicion extends Component<Props, States> {
             </div>
           ) : (
             <>
-              <RechartsAreaChart data={this.state.values} />
+                <RechartsAreaChart daily_trend={this.state.daily_trend} monthly_trend={ this.state.montly_trend} />
             </>
           )}
           <ConsignacionesTable

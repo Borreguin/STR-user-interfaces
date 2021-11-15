@@ -16,7 +16,7 @@ export const service_daily_dispo_trend = async (
   ini_date: Date,
   end_date: Date
 ) => {
-  let resp = { values: null, success: false, msg: "Loading... " };
+  let resp = { values: [], success: false, msg: "Loading... " };
   let path = `${SRM_API_URL}/sRemoto/tendencia/diaria/json/${to_yyyy_mm_dd(
     ini_date
   )}/${to_yyyy_mm_dd(end_date)}`;
@@ -59,8 +59,9 @@ export const service_daily_dispo_trend = async (
     ini_date: Date,
     end_date: Date
   ) => {
-    let resp = { values: null, success: false, msg: "Loading... " };
-    let path = `${SCT_API_URL}/sRemoto/tendencia/diaria/json/${to_yyyy_mm_dd(
+   let resp = { values: null, success: false, msg: "Loading... " };
+   
+    let path = `${SCT_API_URL}/reports/centro-control/tendencia/mensual/${to_yyyy_mm_dd(
       ini_date
     )}/${to_yyyy_mm_dd(end_date)}`;
     await fetch(path)
@@ -71,7 +72,7 @@ export const service_daily_dispo_trend = async (
           for (const idx in json.result.dates) {
             result.push({
               date: json.result.dates[idx],
-              "Disp. diaria adquisición Datos":
+              "Disp. mensual centro control":
                 json.result.values[idx] === null
                   ? json.result.values[idx]
                   : json.result.values[idx].toFixed(3),

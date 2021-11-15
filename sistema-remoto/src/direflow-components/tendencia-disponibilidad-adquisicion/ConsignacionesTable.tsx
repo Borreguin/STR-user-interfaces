@@ -44,7 +44,6 @@ export class ConsignacionesTable extends Component<Props, States> {
     this.setState({ loading: true });
     service_consignaciones_table(this.props.ini_date, this.props.end_date).then(
       (resp) => {
-        console.log(resp);
         this.setState({
           consignaciones: resp.consignaciones,
           loading: false,

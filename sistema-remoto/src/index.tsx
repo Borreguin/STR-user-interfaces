@@ -53,7 +53,7 @@ import {
    document.getElementById('root')
  );*/
  
- TemplateComp.then((element) => {
+ TemplateComp.then(() => {
    //Access DOM node when it's mounted
    // console.log('sistema-remoto is mounted on the DOM', element);
    // console.log('root', document.getElementById('root'));

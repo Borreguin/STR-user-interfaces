@@ -17,7 +17,7 @@
  
  // importando Componentes:
 import {
-  ZDireflowNavigate, ZDireflowTemplate, NodeManagement, UTRandTagsManagement, SRBackupFiles, SRCalDisponibilidad,
+  ZDireflowTemplate, NodeManagement, UTRandTagsManagement, SRBackupFiles, SRCalDisponibilidad,
   ConsignacionesConsulta, ConsignacionesIngreso, TendenciaDisponibilidadAdquisicion
 } from './component-exports';
  import TemplateComp from './direflow-components/zdireflow-navigate';

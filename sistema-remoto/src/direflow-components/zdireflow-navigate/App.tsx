@@ -1,5 +1,5 @@
-import React, { FC, useContext } from 'react';
-import { EventContext, Styled } from 'direflow-component';
+import React, { FC } from 'react';
+import { Styled } from 'direflow-component';
 import styles from './App.css';
 import { routes } from '../../index'
 import { faDotCircle} from '@fortawesome/free-solid-svg-icons';
@@ -11,20 +11,19 @@ interface IProps {
 }
 
 const App: FC<IProps> = (props) => {
-  const dispatch = useContext(EventContext);
+  // const dispatch = useContext(EventContext);
+  //
+  // const handleClick = () => {
+  //   const event = new Event('my-event');
+  //   dispatch(event);
+  // };
 
-  const handleClick = () => {
-    const event = new Event('my-event');
-    dispatch(event);
-  };
-
-  const renderSampleList = props.sampleList.map((sample: string) => (
-    <div key={sample} className='sample-text'>
-      → {sample}
-    </div>
-  ));
+  // const renderSampleList = props.sampleList.map((sample: string) => (
+  //   <div key={sample} className='sample-text'>
+  //     → {sample}
+  //   </div>
+  // ));
   const create_links = () => {
-    let i = 0;
     return (
       <li className="link-menu">
       {routes.map((item, ix) => (

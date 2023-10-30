@@ -34,11 +34,6 @@ type SRModelingTagsProps = {
   selected_id: SelectedID;
 };
 
-const new_tag = {
-  tag_name: "",
-  filter_expression: "TE # ME",
-  activado: true,
-};
 /* Este componente permite el manejo de tags */
 class SRModelingTag extends Component<SRModelingTagsProps, SRModelingTAGState> {
   selected_utr: string;

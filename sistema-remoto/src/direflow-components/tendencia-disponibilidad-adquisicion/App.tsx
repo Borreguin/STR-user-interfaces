@@ -5,7 +5,7 @@ import style from "./App.css";
 import react_picker from "react-datepicker/dist/react-datepicker.css";
 import { DateRange } from "../Common/DatePicker/DateRange";
 import { SRM_API_URL } from "../../Constantes";
-import { range_to_yyyy_mm_dd, to_yyyy_mm_dd } from "../Common/DatePicker/DateRangeTimeOne";
+import { range_to_yyyy_mm_dd } from "../Common/DatePicker/DateRangeTimeOne";
 import { RechartsAreaChart } from "./RechartsAreaChart";
 import { ConsignacionesTable } from "./ConsignacionesTable";
 import { service_daily_dispo_trend, service_monthly_control_disp_trend } from "./services";

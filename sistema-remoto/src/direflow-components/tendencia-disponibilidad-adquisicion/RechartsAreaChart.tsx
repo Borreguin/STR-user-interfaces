@@ -1,18 +1,9 @@
-import React, { Component } from "react";
+import React, {Component} from "react";
 import moment from "moment";
-import {
-  XAxis,
-  YAxis,
-  Tooltip,
-  CartesianGrid,
-  Legend,
-  LineChart,
-  Line,
-  Brush,
-  ResponsiveContainer,
-} from "recharts";
+import {Brush, CartesianGrid, Legend, Line, LineChart, ResponsiveContainer, Tooltip, XAxis, YAxis,} from "recharts";
 import styles from "./styles";
-import { daily_value, monthly_value } from "./types";
+import {daily_value, monthly_value} from "./types";
+import {dispAdquisicionDatos, dispMensualCentroControl} from "./constants";
 
 interface Props {
   daily_trend: Array<daily_value>;
@@ -21,9 +12,7 @@ interface Props {
 interface States {}
 
 export class RechartsAreaChart extends Component<Props, States> {
-  constructor(props: Readonly<Props>) {
-    super(props);
-  }
+
   render() {
     var data = [];
     const daily_trend = this.props.daily_trend;
@@ -32,24 +21,23 @@ export class RechartsAreaChart extends Component<Props, States> {
     const min_v = 85;
     if (daily_trend.length > 0) {
       let value = null;
-      for (var daily of daily_trend) {
-        for (var monthly of monthly_trend) {
+      for (const daily of daily_trend) {
+        for (const monthly of monthly_trend) {
           if (monthly.date === daily.date) {
-            value = monthly["Disp. mensual centro control"];
+            value = monthly[dispMensualCentroControl];
             break;
           }
         }
         let reg = {
           "date": daily.date,
-          "Disp. diaria adquisición Datos": daily["Disp. diaria adquisición Datos"],
-          "Disp. mensual centro control": value
+          [dispAdquisicionDatos]: daily[dispAdquisicionDatos],
+          [dispMensualCentroControl]: value
         }
         data.push(reg);
       }
     } else {
       data = monthly_trend;
     }
-    console.log("data:", data);
     return (
       <div style={styles.container}>
         <ResponsiveContainer width="95%" height={400}>
@@ -62,8 +50,7 @@ export class RechartsAreaChart extends Component<Props, States> {
             <XAxis
               dataKey="date"
               tickFormatter={(tick) => {
-                const label = moment(tick).format("D-MMM");
-                return label;
+                return moment(tick).format("D-MMM");
               }}
               style={{ fontSize: 10 }}
             />
@@ -95,8 +82,7 @@ export class RechartsAreaChart extends Component<Props, States> {
               style={{ fontSize: 10 }}
               height={30}
               tickFormatter={(tick) => {
-                const label = moment(tick).format("yyyy-M-D");
-                return label;
+                return moment(tick).format("yyyy-M-D");
               }}
               y={0}
             />

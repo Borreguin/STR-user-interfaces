@@ -2,7 +2,6 @@ import React from "react";
 import { Form } from "react-bootstrap";
 import { SRM_API_URL } from "../../../Constantes";
 import Upload, { UploadProps } from "../../Common/Upload/Upload";
-import {routes} from "../../../index";
 
 export interface UploadNodeProps extends UploadProps {
   tipo: String;
@@ -66,7 +65,7 @@ class UploadNode extends Upload<UploadNodeProps> {
             check = check && value[1].status === 200;
           });
         })
-        .catch((e) => {
+        .catch(() => {
           check = false;
         });
       // update the state of the component
@@ -102,13 +101,13 @@ class UploadNode extends Upload<UploadNodeProps> {
           }
         });
 
-        req.upload.addEventListener("load", (event) => {
+        req.upload.addEventListener("load", () => {
           const copy = { ...this.state.uploadProgress };
           copy[file.name] = { state: "done", percentage: 100 };
           this.setState({ uploadProgress: copy });
         });
 
-        req.upload.addEventListener("error", (event) => {
+        req.upload.addEventListener("error", () => {
           const copy = { ...this.state.uploadProgress };
           copy[file.name] = { state: "error", percentage: 0 };
           this.setState({ uploadProgress: copy, errorUploading: true });

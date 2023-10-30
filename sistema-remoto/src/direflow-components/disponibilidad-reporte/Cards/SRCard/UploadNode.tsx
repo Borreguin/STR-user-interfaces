@@ -65,7 +65,7 @@ class UploadNode extends Upload<UploadNodeProps> {
             check = check && value[1].status === 200;
           });
         })
-        .catch((e) => {
+        .catch(() => {
           check = false;
         });
       // update the state of the component
@@ -101,13 +101,13 @@ class UploadNode extends Upload<UploadNodeProps> {
           }
         });
 
-        req.upload.addEventListener("load", (event) => {
+        req.upload.addEventListener("load", () => {
           const copy = { ...this.state.uploadProgress };
           copy[file.name] = { state: "done", percentage: 100 };
           this.setState({ uploadProgress: copy });
         });
 
-        req.upload.addEventListener("error", (event) => {
+        req.upload.addEventListener("error", () => {
           const copy = { ...this.state.uploadProgress };
           copy[file.name] = { state: "error", percentage: 0 };
           this.setState({ uploadProgress: copy, errorUploading: true });

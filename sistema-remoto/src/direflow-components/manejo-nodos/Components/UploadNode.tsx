@@ -2,6 +2,7 @@ import React from "react";
 import { Form } from "react-bootstrap";
 import { SRM_API_URL } from "../../../Constantes";
 import Upload, { UploadProps } from "../../Common/Upload/Upload";
+import {routes} from "../../../index";
 
 export interface UploadNodeProps extends UploadProps {
   tipo: String;
@@ -116,17 +117,19 @@ class UploadNode extends Upload<UploadNodeProps> {
 
         const formData = new FormData();
         formData.append("excel_file", file, file.name);
-        if (this.state.option === "Reemplazar") { 
+        const isReplaceOption = this.state.option === "Reemplazar";
+        if (isReplaceOption) {
           formData.append("option", "REEMPLAZAR");
           const confirm = window.confirm(
-            "Esta opción eliminará el nodo antiguo y construirá uno nuevo, sustituyendo por completo el nodo antiguo. Desea continuar? " 
+            "Check this out, Esta opción eliminará el nodo antiguo y construirá uno nuevo, sustituyendo por completo el nodo antiguo. Desea continuar? "
           );
           // Si no confirma el reemplazo, entonces no se continúa con la sustitución total
           if (!confirm) reject([file.name, req]);
         }
 
         // sending a file each time
-        const route = `${SRM_API_URL}/admin-sRemoto/nodo/${this.props.tipo}/${this.props.node_name}/from-excel`;
+        let route = `${SRM_API_URL}/admin-sRemoto/nodo/${this.props.tipo}/${this.props.node_name}/from-excel`;
+        route = isReplaceOption? route + '?option=REEMPLAZAR': route;
         req.open("PUT", route);
         req.send(formData);
         req.onload = () => {

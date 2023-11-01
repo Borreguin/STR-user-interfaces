@@ -97,6 +97,7 @@ class TendenciaDisponibilidadAdquisicion extends Component<Props, States> {
                 <a
                   style={{ float: "right", marginRight: "45px" }}
                   target={"_blank"}
+                  rel="noopener noreferrer"
                   href={path}
                 >
                   JSON info

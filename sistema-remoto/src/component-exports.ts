@@ -18,6 +18,8 @@ import SRCalDisponibilidad from "./direflow-components/disponibilidad-reporte/Ap
 import ConsignacionesConsulta from "./direflow-components/consignaciones-consulta/App";
 import ConsignacionesIngreso from "./direflow-components/consignaciones-ingreso/App";
 import TendenciaDisponibilidadAdquisicion from "./direflow-components/tendencia-disponibilidad-adquisicion/App";
+import ConverterV2 from "./direflow-components/ConverterV2/App";
+import NodeManagementV2 from "./direflow-components/manejo-nodos-v2/App";
 
 export {
   ZDireflowNavigate,
@@ -29,4 +31,6 @@ export {
   ConsignacionesConsulta,
   ConsignacionesIngreso,
   TendenciaDisponibilidadAdquisicion,
+  ConverterV2,
+  NodeManagementV2
 };

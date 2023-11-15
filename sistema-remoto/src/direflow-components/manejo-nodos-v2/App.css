@@ -1,0 +1,607 @@
+.page-content {
+  display: inline-block;
+  width: 100%;
+  /*overflow-x: hidden;*/
+  padding: 0.5%;
+}
+
+.sc-search {
+  margin: 7px !important;
+}
+.download_excel {
+  height: 35px;
+  overflow: hidden;
+}
+
+.sc-btn-search {
+  margin-top: -9px;
+  min-width: 125px;
+  padding-left: 0px;
+}
+
+
+
+.bt-download {
+  height: 35px;
+  padding: 1px !important;
+}
+
+.btn-add-node {
+  height: 40px;
+  width: 100%;
+  padding: 2px;
+  margin-top: 5px;
+  margin-left: 10px;
+  margin-right: 10px;
+}
+
+.btn-add-node:hover {
+  background-color: rgb(30, 233, 64) !important;
+}
+
+.btn-cal-disp {
+  float: left;
+  height: 30px;
+  width: 25%;
+  padding: 1px;
+  border-radius: 4px;
+  background-color: rgba(20, 57, 110, 0.685);
+  color: white !important;
+}
+
+.btn-dis {
+  background-color: rgba(88, 89, 92, 0.836);
+  pointer-events: none;
+  cursor: progress;
+}
+
+
+
+
+.sc-body-cal {
+  width: 100%;
+  padding-left: 0px;
+  padding-right: 0px;
+  height: 400px;
+  background-color: chartreuse;
+}
+
+.sc-log-changed {
+  width: 100%;
+  border: 3px solid rgba(230, 70, 21, 0.507) !important;
+}
+
+.sc-log-normal {
+  width: 100%;
+  border: 3px solid black !important;
+}
+
+.subtitle-details {
+  text-align: center;
+  color: white;
+  background-color: rgba(1, 23, 32, 0.788);
+  font-size: 12pt;
+  border-radius: 2px;
+}
+
+.lb-bck-version {
+  width: 97%;
+  margin-left: 15px;
+  margin-right: 15px;
+  margin-bottom: 7px;
+  padding-right: 2%;
+  font-size: 10pt;
+}
+
+.sc-src-details {
+  margin-top: 15px;
+  border: 1px solid rgba(121, 121, 121, 0.884);
+  border-radius: 4px;
+}
+
+.cons-container {
+  height: 95vh;
+  width: 100%;
+  padding-left: 10px;
+  padding-right: 10px;
+}
+
+.tab-container {
+  padding: 7px;
+}
+
+.cons-col {
+  margin-bottom: 6px !important;
+}
+
+.cons-label {
+  margin-bottom: 2px !important;
+}
+.space {
+  margin-top: -4px;
+}
+
+.cons-header {
+  padding: 4px;
+}
+
+.cons-mandatory {
+  color: red;
+}
+
+.cns-info {
+  float: right;
+  width: 78%;
+}
+
+.utr-block {
+  min-width: 32.7%;
+  margin: 2px;
+  border: 1px solid rgba(131, 127, 127, 0.774) !important;
+}
+
+.utr-label {
+  min-width: 50%;
+  float: left;
+}
+
+.table_input {
+  min-width: 300px;
+  border: 0px !important;
+}
+
+.btn-add-tag {
+  height: 30px;
+  width: 100%;
+  padding: 2px;
+  background-color: rgba(36, 39, 43, 0.534);
+  margin-top: 2px;
+  margin-bottom: 15px;
+}
+
+.btn-add-tag:hover {
+  background-color: rgb(59, 179, 29);
+}
+
+.consignacion_block {
+  min-width: 330px;
+  margin: 2px;
+  border: 1px solid rgba(131, 127, 127, 0.774) !important;
+}
+.consignacion-title {
+  color: rgb(10, 10, 100);
+}
+.consignacion_label {
+  min-width: 120px;
+  font-size: 10pt;
+  font-style: oblique;
+}
+
+.consg_descrip {
+  min-width: 100px;
+  float: left;
+}
+
+.consignacion_buttons {
+  float: right;
+}
+
+.div-cards {
+  width: 100%;
+  padding-top: 10px;
+  padding-left: 10px;
+  padding-right: 10px;
+}
+
+.download_excel {
+  height: 35px;
+  overflow: hidden;
+}
+
+.sc-btn-search {
+  margin-top: -9px;
+  min-width: 125px;
+  padding-left: 0px;
+}
+
+.sc-pick-menu {
+  padding: 4px;
+  min-width: 340px;
+  max-width: 360px;
+}
+
+.bt-download {
+  height: 35px;
+  padding: 1px !important;
+}
+
+.sc-search-input {
+  margin-top: -2px;
+  padding: 1px !important;
+}
+
+.btn-search {
+  width: 100% !important;
+  margin-left: 5px;
+}
+
+
+.btn-dis {
+  background-color: rgba(88, 89, 92, 0.836);
+  pointer-events: none;
+  cursor: progress;
+}
+
+.btn-cal-disp:hover {
+  background-color: rgb(59, 179, 29);
+}
+
+
+.sc-log-changed {
+  width: 100%;
+  border: 3px solid rgba(230, 70, 21, 0.507) !important;
+}
+
+.sc-log-normal {
+  width: 100%;
+  border: 3px solid black !important;
+}
+
+.subtitle-details {
+  text-align: center;
+  color: white;
+  background-color: rgba(1, 23, 32, 0.788);
+  font-size: 12pt;
+  border-radius: 2px;
+}
+
+.lb-bck-version {
+  width: 97%;
+  margin-left: 15px;
+  margin-right: 15px;
+  margin-bottom: 7px;
+  padding-right: 2%;
+  font-size: 10pt;
+}
+
+.sc-src-details {
+  margin-top: 15px;
+  border: 1px solid rgba(121, 121, 121, 0.884);
+  border-radius: 4px;
+}
+
+.cons-container {
+  height: 95vh;
+  width: 100%;
+  padding-top: 70px;
+  padding-left: 10px;
+  padding-right: 10px;
+}
+
+.tab-container {
+  padding: 7px;
+}
+
+.cons-col {
+  margin-bottom: 6px !important;
+}
+
+.cons-label {
+  margin-bottom: 2px !important;
+}
+.space {
+  margin-top: -4px;
+}
+.update_label{
+  min-width: 100%;
+  min-height: 40px;
+}
+.btn-actualizar{
+  float: right;
+  margin-top: 7px;
+}
+
+.cons-header {
+  padding: 4px;
+}
+
+.cons-mandatory {
+  color: red;
+}
+
+.cns-info {
+  float: right;
+  width: 78%;
+}
+
+.utr-block {
+  min-width: 32.7%;
+  margin: 2px;
+  border: 1px solid rgba(131, 127, 127, 0.774) !important;
+}
+
+.utr-label {
+  min-width: 50%;
+  float: left;
+}
+
+
+.btn-add-tag {
+  height: 30px;
+  width: 100%;
+  padding: 2px;
+  background-color: rgba(36, 39, 43, 0.534);
+  margin-top: 2px;
+  margin-bottom: 15px;
+}
+
+.btn-add-tag:hover {
+  background-color: rgb(59, 179, 29);
+}
+
+.consignacion_block {
+  min-width: 330px;
+  margin: 2px;
+  border: 1px solid rgba(131, 127, 127, 0.774) !important;
+}
+.consignacion-title {
+  color: rgb(10, 10, 100);
+}
+.consignacion_label {
+  min-width: 120px;
+  font-size: 10pt;
+  font-style: oblique;
+}
+
+.consg_descrip {
+  min-width: 100px;
+  float: left;
+}
+
+.consignacion_buttons {
+  float: right;
+}
+
+.toggle-btn {
+  background-color: transparent;
+  position: absolute;
+  top: 25px;
+  left: 12px;
+}
+
+.src-port {
+  margin-top: 4px;
+  min-width: 12px;
+  height: 16px;
+  z-index: 10;
+  border-top-left-radius: 6px;
+  border-bottom-left-radius: 6px;
+  cursor: pointer;
+  float: right;
+  margin-left: 2px;
+}
+.src-port-connect {
+  max-width: 200px;
+  width: fit-content;
+  float: right;
+}
+
+.disconnect {
+  background: rgba(83, 83, 85, 0.781);
+}
+
+.connect {
+  background: rgba(135, 218, 135, 0.281);
+}
+
+.src-port:hover {
+  background: rgba(167, 89, 16, 0.753);
+}
+
+.src-port-block {
+  min-width: 200px;
+  font-size: 11pt;
+  font-family: Courier, monospace !important;
+  background-color: rgba(219, 219, 205, 0.418);
+  padding: 5px;
+  margin: 1px;
+  border-radius: 4px;
+}
+
+.src-port-label {
+  max-width: 80px;
+  border: transparent;
+}
+
+.src-block-tipo {
+  background-color: rgba(83, 94, 102, 0.418);
+  padding: 2%;
+  font-size: 9pt;
+}
+
+.src-node {
+  flex-grow: 1;
+  box-sizing: border-box;
+  white-space: nowrap;
+  cursor: move;
+  pointer-events: all;
+  background-color: hsla(195, 97%, 27%, 0.878);
+  color: white;
+  border-radius: 5px;
+  border: rgb(250, 12, 12) solid 2px;
+}
+
+.src-node-title {
+  background: rgba(5, 50, 109, 0.918);
+  text-align: left;
+  max-width: 250px;
+}
+
+
+.src-input {
+  background: rgba(188, 190, 192, 0.274) !important;
+  font-weight: bolder !important;
+  font-size: 12pt;
+  color: rgb(5, 5, 5);
+  border: black solid 0px;
+  padding: 2px !important;
+  max-width: 300px;
+  width: auto;
+  border-radius: 5px;
+  margin: 5px;
+  position: relative;
+  top:-17px;
+}
+
+.src-input-entity {
+  font-family: Courier, monospace !important;
+  background: rgba(188, 190, 192, 0.274);
+  text-align: left;
+  font-weight: bolder;
+  font-size: 11pt;
+  color: rgb(5, 5, 5);
+  border: black solid 0px;
+  padding: 2px;
+  max-width: 200px;
+  border-radius: 5px;
+  margin: 2px;
+}
+
+.src-btn-right {
+  float: right;
+  margin: 2px;
+  max-height: 40px;
+  min-width: 32px;
+  padding: 3px;
+  border: 1px solid rgb(8, 8, 8) !important;
+
+}
+
+.src-btn-active {
+  cursor: allowed;
+  pointer-events: all;
+  background-color: rgba(25, 153, 8, 0.932) !important;
+  border: 1px solid rgb(8, 8, 8) !important;
+}
+.src-btn-active:hover {
+  background-color: rgba(11, 88, 151, 0.664);
+}
+
+.src-btn-disabled {
+  cursor: not-allowed;
+  pointer-events: none;
+  background-color: rgba(55, 56, 49, 0.753) !important;
+  border: 1px solid rgb(8, 8, 8) !important;
+}
+
+.to-drag {
+  height: 6px;
+  background-color: rgb(2, 35, 54);
+}
+
+.src-btn-delete {
+  margin-top: -10px !important;
+  max-height: 22px !important;
+  max-width: 20px !important;
+  padding: 1px !important;
+  background-color: transparent !important;
+  border: 0 !important;
+  color: rgba(143, 10, 10, 0.966) !important;
+}
+
+.src-btn-delete:hover {
+  color: red !important;
+  background-color: transparent;
+}
+
+.scr-btn-trash {
+  background-color: rgb(117, 31, 31) !important;
+  border: 1px solid rgb(8, 8, 8) !important;
+}
+.scr-btn-trash:hover {
+  background-color: rgba(209, 39, 39, 0.877);
+}
+
+.src-icon-off {
+  margin: 8px;
+  color: rgba(126, 121, 121, 0.89)!important;
+  padding-top: 0!important;
+  cursor: pointer;
+  text-align: center;
+  vertical-align: middle;
+}
+
+.src-icon-on {
+  margin: 8px !important;
+  color: rgb(21, 87, 7) !important;
+  padding-top: 0 !important;
+  cursor: pointer;
+  text-align: center;
+  vertical-align: middle;
+}
+
+.chk-entity {
+  margin: 1px;
+  max-height: 20px;
+  display: inline-block;
+  text-align: center;
+  vertical-align: middle;
+}
+
+.file-seccion {
+  float: left;
+  min-width: 120px;
+  width: 28%;
+  background-color: rgba(219, 219, 205, 0.418);
+  border-radius: 5px;
+  min-width: 280px;
+}
+
+.tile-file-seccion {
+  height: 30px;
+  background-color: rgb(69, 104, 150);
+  border-radius: 5px;
+  padding: 2px;
+  text-align: center;
+  font-weight: bolder;
+  color: cornsilk;
+  
+}
+
+.entity-seccion {
+  min-width: 400px;
+  width: 70%;
+  float: right;
+}
+
+.src-btn-plus {
+  height: 32px !important;
+  width: 100% !important;
+  padding: 1px !important;
+  background-color: rgb(69, 104, 150) !important;
+}
+
+.src-btn-plus:hover {
+  background-color: rgba(48, 158, 76, 0.849) !important;
+}
+
+.alert-msg {
+  margin-bottom: 0px !important;
+  padding: 2px;
+}
+
+.sl-upload {
+  max-width: 50%;
+  max-height: 25px;
+  font-size: 10pt !important;
+  padding: 3px !important;
+  margin-left: 0px;
+  margin-bottom: 1px;
+}
+
+.flexible {
+  display: flex !important;
+  flex-wrap: wrap !important;
+ justify-content: space-evenly !important;
+}
+

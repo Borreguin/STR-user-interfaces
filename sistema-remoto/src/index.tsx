@@ -21,6 +21,8 @@ import {
   ConsignacionesConsulta, ConsignacionesIngreso, TendenciaDisponibilidadAdquisicion
 } from './component-exports';
  import TemplateComp from './direflow-components/zdireflow-navigate';
+import ConverterV2 from './direflow-components/ConverterV2/App';
+import NodeManagementV2 from "./direflow-components/manejo-nodos-v2/App";
  
  
  
@@ -34,7 +36,9 @@ import {
    { path: "/consignaciones-ingreso", component:  ConsignacionesIngreso , description: "Ingreso de consignaciones" },
    { path: "/consignaciones-consulta", component:  ConsignacionesConsulta , description: "Consultar consignaciones" },
    { path: "/tendencia-disponibilidad-adquisicion", component: TendenciaDisponibilidadAdquisicion, description: "Tendencia de disponibilidad de adquisicion de datos" },
- 
+   { path: "/converterV2", component: ConverterV2, description: "ConverterV2" },
+   { path: "/manejo-nodos-v2", component: NodeManagementV2, description: "Manejo de nodos V2" },
+
  ]
  
  //<Route exact path="/icons" component={IconLibrary} />

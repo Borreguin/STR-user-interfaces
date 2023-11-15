@@ -11,7 +11,7 @@ import Progress from "../Common/Upload/Progress.css";
 import Upload from "../Common/Upload/Upload.css";
 import { SRM_API_URL } from "../../Constantes";
 import { new_node, Node } from "./Types";
-import NodePanel from "./Components/NodePanel";
+import NodePanelV2 from "./Components/NodePanelV2";
 
 interface NodeManagement_props {}
 
@@ -25,7 +25,7 @@ interface NodeManagement_state {
 }
 
 // Tagname de publicación en index.tsx
-class NodeManagement extends Component<
+class NodeManagementV2 extends Component<
   NodeManagement_props,
   NodeManagement_state
 > {
@@ -150,21 +150,21 @@ class NodeManagement extends Component<
                 placeholder="Nodo a buscar"
               />
             </Col>
-            {/*<Button*/}
-            {/*  variant="secondary"*/}
-            {/*  className="btn-add-node"*/}
-            {/*  disabled={this.state.loading}*/}
-            {/*  onClick={this._add_node}*/}
-            {/*>*/}
-            {/*  <FontAwesomeIcon inverse icon={faPlusCircle} size="lg" />*/}
-            {/*</Button>*/}
+            <Button
+              variant="secondary"
+              className="btn-add-node"
+              disabled={this.state.loading}
+              onClick={this._add_node}
+            >
+              <FontAwesomeIcon inverse icon={faPlusCircle} size="lg" />
+            </Button>
             <div style={{ marginLeft: "15px" }}>{this._notification()}</div>
           </Form.Group>
           <div className="div-cards">
             {this.state.loading || this.state.nodes.length === 0 ? (
               <div></div>
             ) : (
-              <NodePanel nodes={this.state.filter_nodes} />
+              <NodePanelV2 nodes={this.state.filter_nodes} />
             )}
           </div>
         </div>
@@ -173,4 +173,4 @@ class NodeManagement extends Component<
   }
 }
 
-export default NodeManagement;
+export default NodeManagementV2;

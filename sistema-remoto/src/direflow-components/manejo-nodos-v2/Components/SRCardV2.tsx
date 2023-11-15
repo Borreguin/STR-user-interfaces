@@ -15,14 +15,14 @@ import {
   faDownload,
 } from "@fortawesome/free-solid-svg-icons";
 import { SRM_API_URL } from "../../../Constantes";
-import UploadNode from "./UploadNode";
-import { EntityCards } from "./EntityCards";
+import UploadNodeV2 from "./UploadNodeV2";
+import { EntityCardsV2 } from "./EntityCardsV2";
 
 export interface SRCardProps {
   node: Node;
 }
 
-class SRCard extends Component<SRCardProps> {
+class SRCardV2 extends Component<SRCardProps> {
   state = {
     open: false,
     edited: false,
@@ -226,20 +226,20 @@ class SRCard extends Component<SRCardProps> {
             }
           }}
         >
-          {/*<FontAwesomeIcon*/}
-          {/*  icon={this.state.open ? faAngleDoubleUp : faAngleDoubleDown}*/}
-          {/*  size="sm"*/}
-          {/*  className="toggle-btn"*/}
-          {/*  onClick={() => {*/}
-          {/*    this.setState({ open: !this.state.open });*/}
-          {/*  }}*/}
-          {/*/>*/}
+          <FontAwesomeIcon
+            icon={this.state.open ? faAngleDoubleUp : faAngleDoubleDown}
+            size="sm"
+            className="toggle-btn"
+            onClick={() => {
+              this.setState({ open: !this.state.open });
+            }}
+          />
           <FontAwesomeIcon
             icon={this.lcl_node.activado ? faToggleOn : faToggleOff}
             inverse
             size="2x"
             className={this.lcl_node.activado ? "src-icon-on" : "src-icon-off"}
-            disabled = {true}
+            onClick={this._update_activo}
           />
           <input
             value={this.lcl_node.tipo}
@@ -262,29 +262,29 @@ class SRCard extends Component<SRCardProps> {
           >
             <FontAwesomeIcon icon={faTrash} inverse size="sm" />
           </Button>
-          {/*<Button*/}
-          {/*  variant="outline-light"*/}
-          {/*  className={*/}
-          {/*    this.state.edited*/}
-          {/*      ? "src-btn-right src-btn-active"*/}
-          {/*      : "src-btn-right src-btn-disabled"*/}
-          {/*  }*/}
-          {/*  onClick={this._save_node}*/}
-          {/*>*/}
-          {/*  <FontAwesomeIcon icon={faSave} inverse size="sm" />*/}
-          {/*</Button>*/}
+          <Button
+            variant="outline-light"
+            className={
+              this.state.edited
+                ? "src-btn-right src-btn-active"
+                : "src-btn-right src-btn-disabled"
+            }
+            onClick={this._save_node}
+          >
+            <FontAwesomeIcon icon={faSave} inverse size="sm" />
+          </Button>
 
-          {/*<Button*/}
-          {/*  variant="outline-light"*/}
-          {/*  className={*/}
-          {/*    this.state.edited*/}
-          {/*      ? "src-btn-right src-btn-active"*/}
-          {/*      : "src-btn-right src-btn-disabled"*/}
-          {/*  }*/}
-          {/*  onClick={this._reset_node}*/}
-          {/*>*/}
-          {/*  <FontAwesomeIcon icon={faUndo} inverse size="sm" />*/}
-          {/*</Button>*/}
+          <Button
+            variant="outline-light"
+            className={
+              this.state.edited
+                ? "src-btn-right src-btn-active"
+                : "src-btn-right src-btn-disabled"
+            }
+            onClick={this._reset_node}
+          >
+            <FontAwesomeIcon icon={faUndo} inverse size="sm" />
+          </Button>
 
           <Button
             variant="outline-light"
@@ -306,29 +306,29 @@ class SRCard extends Component<SRCardProps> {
             {this.state.message}{" "}
           </Alert>
         </Card.Header>
-        {/*<Card.Body className={this.state.open ? "collapse show flexible" : "collapse"} >*/}
-        {/*  <div className="file-seccion">*/}
-        {/*    <div className="tile-file-seccion"> Configurar desde archivo </div>*/}
-        {/*    <UploadNode*/}
-        {/*      node_name={this.bck_node.nombre}*/}
-        {/*      tipo={this.bck_node.tipo}*/}
-        {/*      onNodeUpload={this.handle_on_node_upload}*/}
-        {/*    ></UploadNode>*/}
-        {/*  </div>*/}
-        {/*  <div className="entity-seccion">*/}
-        {/*    {this.lcl_node.entidades === undefined ? (*/}
-        {/*      <></>*/}
-        {/*    ) : (*/}
-        {/*      <EntityCards*/}
-        {/*        entidades={this.lcl_node.entidades}*/}
-        {/*        onEntityChange={this.handle_entities_change}*/}
-        {/*      />*/}
-        {/*    )}*/}
-        {/*  </div>*/}
-        {/*</Card.Body>*/}
+        <Card.Body className={this.state.open ? "collapse show flexible" : "collapse"} >
+          <div className="file-seccion">
+            <div className="tile-file-seccion"> Configurar desde archivo </div>
+            <UploadNodeV2
+              node_name={this.bck_node.nombre}
+              tipo={this.bck_node.tipo}
+              onNodeUpload={this.handle_on_node_upload}
+            ></UploadNodeV2>
+          </div>
+          <div className="entity-seccion">
+            {this.lcl_node.entidades === undefined ? (
+              <></>
+            ) : (
+              <EntityCardsV2
+                entidades={this.lcl_node.entidades}
+                onEntityChange={this.handle_entities_change}
+              />
+            )}
+          </div>
+        </Card.Body>
       </Card>
     );
   }
 }
 
-export default SRCard;
+export default SRCardV2;

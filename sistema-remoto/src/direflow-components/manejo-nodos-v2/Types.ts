@@ -1,4 +1,3 @@
-
 import * as _ from "lodash";
 
 export type UTR = {
@@ -32,7 +31,7 @@ export type Node = {
 };
 
 export function new_node() {
-  let node = {
+  return {
     _id: null,
     id_node: _.uniqueId("new_node"),
     nombre: "Ingrese nombre ",
@@ -42,7 +41,6 @@ export function new_node() {
     activado: true,
     entidades: [],
   };
-  return node;
 }
 
 export function new_entity() {

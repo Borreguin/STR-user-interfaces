@@ -127,7 +127,7 @@ class UploadNodeV2 extends Upload<UploadNodeProps> {
         }
 
         // sending a file each time
-        let route = `${SRM_API_URL}/admin-sRemoto/nodo/${this.props.tipo}/${this.props.node_name}/from-excel`;
+        let route = `${SRM_API_URL}/admin-sRemoto/v2/nodo/${this.props.tipo}/${this.props.node_name}/from-excel`;
         route = isReplaceOption? route + '?option=REEMPLAZAR': route;
         req.open("PUT", route);
         req.send(formData);

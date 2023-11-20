@@ -93,7 +93,7 @@ class SRCardV2 extends Component<SRCardProps> {
   };
   _update_activo = async () => {
     this.lcl_node.activado = !this.lcl_node.activado;
-    let path = `${SRM_API_URL}/admin-sRemoto/nodo/id/${this.bck_node.id_node}`;
+    let path = `${SRM_API_URL}/admin-sRemoto/v2/nodo/id/${this.bck_node._id}`;
     if (this.lcl_node.activado) {
       path = path + "/activado";
     } else {
@@ -120,7 +120,7 @@ class SRCardV2 extends Component<SRCardProps> {
   _save_node = async () => {
     this.setState({ message: "Guardando en base de datos...", edited: false });
     this.onShowAlert();
-    let path = SRM_API_URL + "/admin-sRemoto/nodo/id/" + this.bck_node.id_node;
+    let path = SRM_API_URL + "/admin-sRemoto/v2/nodo/id/" + this.bck_node._id;
     await fetch(path, {
       method: "PUT",
       headers: { "Content-Type": "application/json" },
@@ -149,7 +149,7 @@ class SRCardV2 extends Component<SRCardProps> {
 
   _create_new_node = async () => {
     this.setState({ message: "Creando nuevo nodo...", edited: false });
-    let path = SRM_API_URL + "/admin-sRemoto/nodo/id/" + this.bck_node.id_node;
+    let path = SRM_API_URL + "/admin-sRemoto/v2/nodo/id/" + this.bck_node._id;
     await fetch(path, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
@@ -182,7 +182,7 @@ class SRCardV2 extends Component<SRCardProps> {
     );
     if (confirm) {
       let path =
-        SRM_API_URL + "/admin-sRemoto/nodo/id/" + this.bck_node.id_node;
+        SRM_API_URL + "/admin-sRemoto/v2/nodo/id/" + this.bck_node._id;
       console.log("going to delete me");
       await fetch(path, { method: "DELETE" })
         .then((res) => res.json())
@@ -198,7 +198,7 @@ class SRCardV2 extends Component<SRCardProps> {
   };
 
   _download_node = () => {
-    let url = `${SRM_API_URL}/admin-sRemoto/nodo/${this.bck_node.tipo}/${
+    let url = `${SRM_API_URL}/admin-sRemoto/v2/nodo/${this.bck_node.tipo}/${
       this.bck_node.nombre
     }/from-excel?nid=${_.uniqueId(Math.random().toString())}`;
 

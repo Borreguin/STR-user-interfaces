@@ -16,12 +16,12 @@ export type Entity = {
   entidad_nombre: string;
   entidad_tipo: string;
   n_tags: number;
-  n_utrs: number;
-  utrs: Array<UTR>;
+  n_instalaciones: number;
   activado: boolean;
 };
 
 export type Node = {
+  _id: any;
   id_node: string;
   nombre: string;
   tipo: string;
@@ -33,6 +33,7 @@ export type Node = {
 
 export function new_node() {
   let node = {
+    _id: null,
     id_node: _.uniqueId("new_node"),
     nombre: "Ingrese nombre ",
     tipo: "Empresa",
@@ -50,8 +51,7 @@ export function new_entity() {
     entidad_nombre: "Ingrese nombre",
     entidad_tipo: "Nueva entidad",
     n_tags: 0,
-    n_utrs: 0,
-    utrs: [],
+    n_instalaciones: 0,
     activado: false,
   };
 }

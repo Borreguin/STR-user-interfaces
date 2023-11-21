@@ -4,7 +4,7 @@ import App from './App';
 export default DireflowComponent.create({
   component: App,
   configuration: {
-    tagname: 'manejo-nodos',
+    tagname: 'manejo-v2nodos',
     useShadow: true,
   },
   plugins: [

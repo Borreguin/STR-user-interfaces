@@ -94,7 +94,7 @@ export class EntityCardsV2 extends React.Component<SREntityCardProps> {
         </Button>
         {this.props.entidades.map((entidad, ix) => (
           <div key={entidad.id_entidad}>
-            <div className="src-port-block">
+            <div className="src-entity-block">
               <Button
                 variant="danger"
                 className="src-btn-delete"
@@ -117,8 +117,8 @@ export class EntityCardsV2 extends React.Component<SREntityCardProps> {
                 onMouseLeave={this.is_edited}
               ></input>
               <div className="src-port-connect">
-                <span className="badge badge-warning">{entidad.n_utrs} utrs</span>
-                <span className="badge badge-info">{entidad.n_tags} tags</span>
+                <span className="badge badge-warning">{entidad?.n_instalaciones} instalaciones</span>
+                <span className="badge badge-info">{entidad?.n_tags} tags</span>
                 <input
                   type="checkbox"
                   className="chk-entity"

@@ -47,7 +47,7 @@ class NodeManagementV2 extends Component<
 
   _search_nodes_now = async () => {
     this.setState({ nodes: [], loading: true, error: false });
-    let path = SRM_API_URL + "/admin-sRemoto/nodos/" + this.state.search;
+    let path = SRM_API_URL + "/admin-sRemoto/v2/nodos/" + this.state.search;
     await fetch(path)
       .then((res) => res.json())
       .then((json) => {

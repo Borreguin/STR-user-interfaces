@@ -16,6 +16,7 @@ export type Entity = {
   entidad_tipo: string;
   n_tags: number;
   n_instalaciones: number;
+  n_bahias: number;
   activado: boolean;
 };
 

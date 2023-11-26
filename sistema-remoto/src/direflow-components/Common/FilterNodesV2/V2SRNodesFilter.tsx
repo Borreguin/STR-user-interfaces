@@ -37,7 +37,7 @@ const renderUpdateButton = (onClickUpdate: () => void) => {
   );
 };
 
-export const V2SRNodesFilter = (props) => {
+export const V2SRNodesFilter = (props: { onFinalChange: any }) => {
   const { onFinalChange } = props;
   const [loading, setLoading] = useState(true);
   const [msg, setMsg] = useState(msgUpdateNodes);
@@ -54,8 +54,6 @@ export const V2SRNodesFilter = (props) => {
 
   // Installation Management
   const [installations, setInstallations] = useState<Array<v2Installation>>([]);
-  const [selectedInstallation, setSelectedInstallation] =
-    useState<v2Installation>(undefined);
   const [installationOptions, setInstallationOptions] =
     useState<TypeAndNameOptions>(undefined);
 
@@ -146,7 +144,6 @@ export const V2SRNodesFilter = (props) => {
     const installation = installations.find(
       (n) => n.instalacion_id === installationNameOption.id,
     );
-    setSelectedInstallation(installation);
     onFinalChange({
       selectedNode,
       selectedEntity,
@@ -167,7 +164,7 @@ export const V2SRNodesFilter = (props) => {
         label={"Nodo"}
         typeAndNameOptions={nodeOptions}
         onSelection={(
-          nodeTypeOption: SelectOption,
+          _nodeTypeOption: SelectOption,
           nodeNameOption: SelectOption,
         ) => {
           onSelectionNode(nodeNameOption);
@@ -177,7 +174,7 @@ export const V2SRNodesFilter = (props) => {
         label={"Entidad"}
         typeAndNameOptions={entityOptions}
         onSelection={(
-          entityTypeOption: SelectOption,
+          _entityTypeOption: SelectOption,
           entityNameOption: SelectOption,
         ) => {
           onSelectionEntity(entityNameOption);
@@ -187,7 +184,7 @@ export const V2SRNodesFilter = (props) => {
         label={"Instalación"}
         typeAndNameOptions={installationOptions}
         onSelection={(
-          installationTypeOption: SelectOption,
+          _installationTypeOption: SelectOption,
           installationNameOption: SelectOption,
         ) => {
           onSelectionInstallation(installationNameOption);

@@ -1,0 +1,1 @@
+export const msgUpdateNodes = "Cargando información de nodos"

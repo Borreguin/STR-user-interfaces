@@ -23,6 +23,7 @@ import {
  import TemplateComp from './direflow-components/zdireflow-navigate';
 import ConverterV2 from './direflow-components/ConverterV2/App';
 import NodeManagementV2 from "./direflow-components/manejo-nodos-v2/App";
+import InstallationAndBahiasManagement from "./direflow-components/manejo-bahias/App";
  
  
  
@@ -38,6 +39,7 @@ import NodeManagementV2 from "./direflow-components/manejo-nodos-v2/App";
    { path: "/tendencia-disponibilidad-adquisicion", component: TendenciaDisponibilidadAdquisicion, description: "Tendencia de disponibilidad de adquisicion de datos" },
    { path: "/converterV2", component: ConverterV2, description: "ConverterV2" },
    { path: "/manejo-nodos-v2", component: NodeManagementV2, description: "Manejo de nodos V2" },
+   { path: "/manejo-instalaciones", component: InstallationAndBahiasManagement, description: "Manejo de instalaciones V2" },
 
  ]
  

@@ -98,10 +98,9 @@ export class SRCreateUTR extends Component<SRCreateUTRProps, SRCreateUTRState> {
         if (res.ok) {
           return res.json();
         } else {
-          let error = {
+          return {
             msg: "Ciertos parámetros no han sido ingresados correctamente",
           };
-          return error;
         }
       })
       .then((json) => {

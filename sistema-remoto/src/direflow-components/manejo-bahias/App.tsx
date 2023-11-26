@@ -5,7 +5,6 @@ import bootstrap from "bootstrap/dist/css/bootstrap.min.css";
 import { Col, Tab, Tabs } from "react-bootstrap";
 import SRModelingTag from "./Components/Modeling_Tags/SRModelingTags";
 import SRModelingRTU from "./Components/Modeling_Installations/SRModeling_RTUs";
-import FilterV2SRNodes from "../Common/FilterNodesV2/FilterV2SRNodes";
 import { V2SRNodesFilter } from "../Common/FilterNodesV2/V2SRNodesFilter";
 
 // Pagina inicial de manejo de nodos:

@@ -1,4 +1,3 @@
-import { nodeApiUrl } from "../FilterNodesV2/constants";
 import { SCT_API_URL, SRM_API_URL } from "../../../Constantes";
 
 export const fetchGETData = async (url: string): Promise<JSON> => {

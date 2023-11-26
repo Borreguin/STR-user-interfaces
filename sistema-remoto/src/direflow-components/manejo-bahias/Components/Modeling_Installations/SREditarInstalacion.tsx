@@ -4,7 +4,6 @@ import ReactTooltip from "react-tooltip";
 import { SRM_API_URL } from "../../../../Constantes";
 import { Selected, SelectedID, UTR } from "../../../Common/GeneralTypes";
 
-
 type SREditarUTRProps = {
   // utrs: Array<UTR>;
   selected: Selected;
@@ -23,7 +22,10 @@ type SREditarUTRState = {
   utr_valid: boolean;
 };
 
-export class SREditarInstalacion extends Component<SREditarUTRProps, SREditarUTRState> {
+export class SREditarInstalacion extends Component<
+  SREditarUTRProps,
+  SREditarUTRState
+> {
   selected_entity: string;
   selected_utr_id: string;
   constructor(props) {
@@ -71,7 +73,7 @@ export class SREditarInstalacion extends Component<SREditarUTRProps, SREditarUTR
       this.setState(
         { utrs: this.props.utrs },
         // Una vez efectuado el cambio de estado, entonces ejecutar lo siguiente:
-        () => this._rtu_options()
+        () => this._rtu_options(),
       );
     }
   }
@@ -144,7 +146,9 @@ export class SREditarInstalacion extends Component<SREditarUTRProps, SREditarUTR
   _rtu_options = () => {
     let options = [];
     this.state.utrs.forEach((utr, ix) => {
-      if (ix === 0) { this.selected_utr_id = utr.id_utr };
+      if (ix === 0) {
+        this.selected_utr_id = utr.id_utr;
+      }
       options.push(<option key={ix}>{utr.id_utr}</option>);
     });
     this.setState({ options: options });
@@ -214,12 +218,11 @@ export class SREditarInstalacion extends Component<SREditarUTRProps, SREditarUTR
           this.props.selected.entidad_nombre +
           ". " +
           json.msg;
-          this._handle_RTUs_changes(json.utrs);
+        this._handle_RTUs_changes(json.utrs);
         this.setState({ success: json.success, msg: json.msg });
       })
       .catch(console.log);
   };
-
 
   // forma para editar RTUs
   _render_edit_rtu_form = () => {
@@ -232,7 +235,7 @@ export class SREditarInstalacion extends Component<SREditarUTRProps, SREditarUTR
               as="select"
               placeholder="Seleccione ID"
               onChange={this._handle_rtu_select}
-              style={{backgroundColor:"rgba(240, 213, 133, 0.774)"}}
+              style={{ backgroundColor: "rgba(240, 213, 133, 0.774)" }}
             >
               {this.state.options}
             </Form.Control>

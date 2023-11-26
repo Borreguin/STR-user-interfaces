@@ -1,4 +1,3 @@
-import { v2Node } from "../V2GeneralTypes";
 import { TypeAndNameOptions } from "./TypeNameSelector";
 
 export const getOptions = (

@@ -6,6 +6,7 @@ import { Col, Tab, Tabs } from "react-bootstrap";
 import SRModelingTag from "./Components/Modeling_Tags/SRModelingTags";
 import SRModelingRTU from "./Components/Modeling_Installations/SRModeling_RTUs";
 import { V2SRNodesFilter } from "../Common/FilterNodesV2/V2SRNodesFilter";
+import {InstallationActionContainer} from "./Components/Modeling_Installations/InstallationActionContainer";
 
 // Pagina inicial de manejo de nodos:
 class InstallationAndBahiasManagement extends Component {
@@ -55,51 +56,7 @@ class InstallationAndBahiasManagement extends Component {
                 />
               </Tab>
             </Tabs>
-            <Tabs
-              defaultActiveKey="dt-entidad"
-              id="uncontrolled-tab-mod"
-              transition={false}
-              variant="pills"
-            >
-              {this.state.form["selected"] === undefined ||
-              this.state.form["selected"]["entidad_nombre"] === undefined ? (
-                <></>
-              ) : (
-                <Tab
-                  eventKey="dt-entidad"
-                  title={
-                    "Administrar UTRs en " +
-                    this.state.form.selected["entidad_tipo"] +
-                    ": " +
-                    this.state.form.selected["entidad_nombre"]
-                  }
-                >
-                  <SRModelingRTU
-                    selected={this.state.form.selected}
-                    selected_id={this.state.form.selected_id}
-                  />
-                </Tab>
-              )}
-              {this.state.form["selected"] === undefined ||
-              this.state.form["selected"]["utr_nombre"] === undefined ? (
-                <></>
-              ) : (
-                <Tab
-                  eventKey="dt-rtu"
-                  title={
-                    "Administrar Tags en " +
-                    this.state.form.selected["utr_tipo"] +
-                    ": " +
-                    this.state.form.selected["utr_nombre"]
-                  }
-                >
-                  <SRModelingTag
-                    selected={this.state.form.selected}
-                    selected_id={this.state.form.selected_id}
-                  />
-                </Tab>
-              )}
-            </Tabs>
+            <InstallationActionContainer></InstallationActionContainer>
             <Col></Col>
           </div>
         </div>

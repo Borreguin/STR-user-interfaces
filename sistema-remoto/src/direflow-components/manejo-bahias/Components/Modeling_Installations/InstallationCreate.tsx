@@ -1,15 +1,22 @@
 import {Button, Col, Form, Row} from "react-bootstrap";
 import React, {useState} from "react";
+import {createNewInstallation} from "../../../Common/FetchData/V2SRFetchData";
+import {v2Entity} from "../../../Common/V2GeneralTypes";
 
-export function InstallationCreate() {
+export function InstallationCreate(props: { selectedEntity: v2Entity; }) {
+
+    const {selectedEntity} = props
+    const [loading, setLoading] = useState(false);
+    const [validated, setValidated] = useState(false);
+    console.log(selectedEntity)
     const [createForm, setCreateForm] = useState({
-        name: undefined,
-        tipo: undefined,
+        instalacion_nombre: undefined,
+        instalacion_tipo: undefined,
         protocolo: undefined,
-        latitud: undefined,
-        longitud: undefined,
-        activated: undefined,
-        ems_code: undefined
+        latitud: 0,
+        longitud: 0,
+        activado: undefined,
+        instalacion_ems_code: undefined
     })
 
     const handleChange = (event) => {
@@ -19,20 +26,40 @@ export function InstallationCreate() {
     }
 
     const handleSubmit = (event) => {
-        event.preventDefault();
-        alert(JSON.stringify(createForm));
+
+        let formToSend = createForm;
+
+        if(!createForm?.activado){
+            formToSend = {
+                ...createForm,
+                activado: false
+            }
+        }
+
+        const form = event.currentTarget;
+        if (form.checkValidity() === false) {
+            event.preventDefault();
+            event.stopPropagation();
+        }
+
+        setLoading(true)
+        setValidated(true);
+
+        createNewInstallation(selectedEntity.id_entidad, formToSend).then(() => setLoading(false));
+        alert(JSON.stringify(formToSend));
     }
 
 
     return (
-        <Form onSubmit={handleSubmit}>
+        <Form noValidate validated={validated} onSubmit={handleSubmit}>
             <Row className="mb-3">
                 <Col>
                     <Form.Group>
                         <Form.Label className="required">Id Instalación</Form.Label>
                         <Form.Control type="text" placeholder="Ingresar EMS code"
-                                      name="ems_code"
-                                      value={createForm.ems_code || ""}
+                                      required
+                                      name="instalacion_ems_code"
+                                      value={createForm.instalacion_ems_code}
                                       onChange={handleChange}/>
                     </Form.Group>
                 </Col>
@@ -40,8 +67,9 @@ export function InstallationCreate() {
                     <Form.Group>
                         <Form.Label className="required">Tipo</Form.Label>
                         <Form.Control type="text" placeholder="Ingresar Tipo"
-                                      name="tipo"
-                                      value={createForm.tipo || ""}
+                                      required
+                                      name="instalacion_tipo"
+                                      value={createForm.instalacion_tipo}
                                       onChange={handleChange}
                         />
                     </Form.Group>
@@ -52,8 +80,9 @@ export function InstallationCreate() {
                     <Form.Group>
                         <Form.Label className="required">Nombre</Form.Label>
                         <Form.Control type="text" placeholder="Ingresar nombre"
-                                      name="name"
-                                      value={createForm.name || ""}
+                                      required
+                                      name="instalacion_nombre"
+                                      value={createForm.instalacion_nombre}
                                       onChange={handleChange}/>
                     </Form.Group>
                 </Col>
@@ -61,8 +90,9 @@ export function InstallationCreate() {
                     <Form.Group>
                         <Form.Label className="required">Protocolo</Form.Label>
                         <Form.Control type="text" placeholder="Ingresar Protocolo"
+                                      required
                                       name="protocolo"
-                                      value={createForm.protocolo || ""}
+                                      value={createForm.protocolo}
                                       onChange={handleChange}
                         />
                     </Form.Group>
@@ -74,6 +104,7 @@ export function InstallationCreate() {
                     <Form.Group>
                         <Form.Label className="required">Latitud</Form.Label>
                         <Form.Control type="number"
+                                      required
                                       name="latitud"
                                       value={createForm.latitud || 0}
                                       onChange={handleChange}/>
@@ -83,6 +114,7 @@ export function InstallationCreate() {
                     <Form.Group>
                         <Form.Label className="required">Longitud</Form.Label>
                         <Form.Control type="number"
+                                      required
                                       name="longitud"
                                       value={createForm.longitud || 0}
                                       onChange={handleChange}
@@ -92,8 +124,8 @@ export function InstallationCreate() {
             </Row>
             <Form.Group className="mb-3" controlId="formBasicCheckbox">
                 <Form.Check type="checkbox" label="Activada"
-                            name="activated"
-                            value={createForm.activated || false}
+                            name="activado"
+                            value={createForm.activado || false}
                             onChange={handleChange}/>
             </Form.Group>
             <Button variant="primary" type="submit">

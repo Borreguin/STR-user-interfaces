@@ -4,17 +4,19 @@ import {InstallationEdit} from "./InstallationEdit";
 import {InstallationRemove} from "./InstallationRemove";
 import {InstallationCreate} from "./InstallationCreate";
 
-export function InstallationActionContainer() {
+export function InstallationActionContainer(props: any) {
+    const {selectedValues} = props;
+
     return (
         <Tabs
-            defaultActiveKey="edit-installation"
+            defaultActiveKey="create-installation"
             id="uncontrolled-tab-example"
             className="mb-3"
         >
             <Tab eventKey="create-installation" title="Crear">
-                <InstallationCreate></InstallationCreate>
+                <InstallationCreate selectedEntity={selectedValues.selectedEntity}></InstallationCreate>
             </Tab>
-            <Tab eventKey="edit-installation" title="Edit">
+            <Tab eventKey="edit-installation" title="Editar">
                 <InstallationEdit></InstallationEdit>
             </Tab>
             <Tab eventKey="remove-installation" title="Remover" >

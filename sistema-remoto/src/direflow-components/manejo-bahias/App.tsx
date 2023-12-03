@@ -1,4 +1,4 @@
-import React, {Component, useState} from "react";
+import React, {Component, useRef, useState} from "react";
 import {Styled} from "direflow-component";
 import styles from "./App.css";
 import bootstrap from "bootstrap/dist/css/bootstrap.min.css";
@@ -9,6 +9,11 @@ import {InstallationActionContainer} from "./Components/Modeling_Installations/I
 export function InstallationAndBahiasManagement() {
 
     const [selectedValues, setSelectedValues] = useState({})
+    const [toReload, setToReload] = useState(false)
+    const requestReload = () => {
+        console.log('InstallationAndBahiasManagement');
+        setToReload(true);
+    }
 
     return (
         <Styled styles={[styles, bootstrap]} scoped={false}>
@@ -22,15 +27,17 @@ export function InstallationAndBahiasManagement() {
                         <Tab eventKey="dt-mte" title="Información de Instalaciones">
                             <V2SRNodesFilter
                                 onFinalChange={(values: any) => {
-
                                     setSelectedValues(values)
                                     console.log(values)
-                                }
-                                }
+                                }}
+                                toReload={toReload}
+                                onFinishReload={() => setToReload(false)}
                             />
                         </Tab>
                     </Tabs>
-                    <InstallationActionContainer selectedValues={selectedValues}/>
+                    <InstallationActionContainer requestReload={() => {
+                        setToReload(true)
+                    }} selectedValues={selectedValues}/>
                     <Col></Col>
                 </div>
             </div>

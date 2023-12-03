@@ -5,7 +5,7 @@ import {InstallationRemove} from "./InstallationRemove";
 import {InstallationCreate} from "./InstallationCreate";
 
 export function InstallationActionContainer(props: any) {
-    const {selectedValues} = props;
+    const {selectedValues, requestReload} = props;
 
     return (
         <Tabs
@@ -14,13 +14,17 @@ export function InstallationActionContainer(props: any) {
             className="mb-3"
         >
             <Tab eventKey="create-installation" title="Crear">
-                <InstallationCreate selectedEntity={selectedValues.selectedEntity}></InstallationCreate>
+                <InstallationCreate requestReload={requestReload}
+                                    selectedEntity={selectedValues.selectedEntity}></InstallationCreate>
             </Tab>
             <Tab eventKey="edit-installation" title="Editar">
-                <InstallationEdit></InstallationEdit>
+                <InstallationEdit requestReload={requestReload}
+                                  selectedInstallation={selectedValues.selectedInstallation}></InstallationEdit>
             </Tab>
-            <Tab eventKey="remove-installation" title="Remover" >
-                <InstallationRemove></InstallationRemove>
+            <Tab eventKey="remove-installation" title="Remover">
+                <InstallationRemove requestReload={requestReload}
+                                    selectedEntityId={selectedValues?.selectedEntity?.id_entidad}
+                                    selectedInstallation={selectedValues.selectedInstallation}></InstallationRemove>
             </Tab>
         </Tabs>
     );

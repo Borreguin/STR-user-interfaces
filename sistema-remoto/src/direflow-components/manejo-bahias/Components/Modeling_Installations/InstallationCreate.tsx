@@ -3,9 +3,9 @@ import React, {useState} from "react";
 import {createNewInstallation} from "../../../Common/FetchData/V2SRFetchData";
 import {v2Entity} from "../../../Common/V2GeneralTypes";
 
-export function InstallationCreate(props: { selectedEntity: v2Entity; }) {
+export function InstallationCreate(props) {
 
-    const {selectedEntity} = props
+    const {selectedEntity, requestReload} = props
     const [loading, setLoading] = useState(false);
     const [validated, setValidated] = useState(false);
     console.log(selectedEntity)
@@ -45,8 +45,10 @@ export function InstallationCreate(props: { selectedEntity: v2Entity; }) {
         setLoading(true)
         setValidated(true);
 
-        createNewInstallation(selectedEntity.id_entidad, formToSend).then(() => setLoading(false));
-        alert(JSON.stringify(formToSend));
+        createNewInstallation(selectedEntity.id_entidad, formToSend).then(() => {
+            setLoading(false)
+            requestReload();
+        });
     }
 
 
@@ -128,8 +130,8 @@ export function InstallationCreate(props: { selectedEntity: v2Entity; }) {
                             value={createForm.activado || false}
                             onChange={handleChange}/>
             </Form.Group>
-            <Button variant="primary" type="submit">
-                Submit
+            <Button variant="primary" type="submit" disabled={loading}>
+                Crear Instalación
             </Button>
         </Form>
     );

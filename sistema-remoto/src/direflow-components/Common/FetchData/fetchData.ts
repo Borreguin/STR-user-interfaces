@@ -25,6 +25,30 @@ export const fetchPOSTData = async (url: string, body: any): Promise<JSON> => {
       .catch((e) => handleError(url, e));
 };
 
+export const fetchPUTData = async (url: string, body: any): Promise<JSON> => {
+  return await fetch(url,{
+    method: "PUT",
+    body: JSON.stringify(body),
+    headers: {
+      "Content-Type": "application/json",
+    },
+  })
+      .then((res) => res.json())
+      .then((json) => {
+        return json;
+      })
+      .catch((e) => handleError(url, e));
+};
+
+export const fetchDELETEData = async (url: string): Promise<any> => {
+  return await fetch(url,{
+    method: "DELETE"
+  })
+      .then(res => res.text()) // or res.json()
+      .then(res => console.log(res))
+      .catch((e) => handleError(url, e));
+};
+
 const handleError = (url: string, e: any) => {
   if (url.includes(SRM_API_URL)) {
     return {

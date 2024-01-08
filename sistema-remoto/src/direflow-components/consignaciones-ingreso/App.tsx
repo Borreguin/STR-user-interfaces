@@ -19,8 +19,7 @@ type selected_id = {
 type selected = {
   utr_tipo: string | undefined;
   utr_nombre: string | undefined;
-
-}
+};
 
 type forma = {
   selected_id: selected_id;
@@ -47,13 +46,16 @@ class ConsignacionesIngreso extends Component<Props, States> {
     loading: true,
     forma: {
       selected_id: { utr: undefined },
-      selected: {utr_tipo: undefined, utr_nombre: undefined},
+      selected: { utr_tipo: undefined, utr_nombre: undefined },
       no_consignacion: undefined,
       fecha_inicio: new Date(),
       fecha_final: new Date(),
       detalle: undefined,
       descripcion_corta: "",
-      responsable: localStorage.getItem("userRole") + " | " + localStorage.getItem("userDisplayName"),
+      responsable:
+        localStorage.getItem("userRole") +
+        " | " +
+        localStorage.getItem("userDisplayName"),
     },
     active: false,
     log: "",
@@ -73,7 +75,7 @@ class ConsignacionesIngreso extends Component<Props, States> {
     valid =
       valid &&
       this.state.forma["no_consignacion"] !== undefined &&
-      this.state.forma["no_consignacion"].length > 3;
+      this.state.forma["no_consignacion"].length >= 3;
 
     // check selección UTR
     valid =
@@ -114,8 +116,11 @@ class ConsignacionesIngreso extends Component<Props, States> {
     let payload = {
       elemento: this.state.forma.selected,
       no_consignacion: this.state.forma["no_consignacion"],
-      detalle: { detalle: this.state.forma.detalle, descripcion_corta: this.state.forma.descripcion_corta },
-      responsable: this.state.forma.responsable
+      detalle: {
+        detalle: this.state.forma.detalle,
+        descripcion_corta: this.state.forma.descripcion_corta,
+      },
+      responsable: this.state.forma.responsable,
     };
     fetch(path, {
       method: "POST",

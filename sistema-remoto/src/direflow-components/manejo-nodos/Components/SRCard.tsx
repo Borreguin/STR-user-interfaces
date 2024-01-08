@@ -178,7 +178,7 @@ class SRCard extends Component<SRCardProps> {
       "Seguro que desea eliminar? " +
         this.bck_node.tipo +
         ": " +
-        this.bck_node.nombre
+        this.bck_node.nombre,
     );
     if (confirm) {
       let path =
@@ -219,7 +219,8 @@ class SRCard extends Component<SRCardProps> {
     if (this.bck_node === null) return <></>;
     return (
       <Card>
-        <Card.Header style={{maxHeight:60}}
+        <Card.Header
+          style={{ maxHeight: 60 }}
           onClick={(e) => {
             if (e.target.className === "card-header") {
               this.setState({ open: !this.state.open });
@@ -239,7 +240,7 @@ class SRCard extends Component<SRCardProps> {
             inverse
             size="2x"
             className={this.lcl_node.activado ? "src-icon-on" : "src-icon-off"}
-            disabled = {true}
+            onClick={this._update_activo}
           />
           <input
             value={this.lcl_node.tipo}

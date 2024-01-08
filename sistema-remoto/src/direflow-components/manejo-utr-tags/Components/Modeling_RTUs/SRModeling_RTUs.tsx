@@ -1,20 +1,11 @@
 import React, { Component } from "react";
-import {
-  Tab,
-  Form,
-  Col,
-  Tabs,
-  Button,
-  Alert,
-} from "react-bootstrap";
+import { Tab, Form, Col, Tabs, Button, Alert } from "react-bootstrap";
 import ReactTooltip from "react-tooltip";
 import { SREliminarUTR } from "./SREliminarUTR";
 import { SRCreateUTR } from "./SRCreateUTR";
 import { SREditarUTR } from "./SREditarUTR";
 import { Selected, SelectedID, UTR } from "../../../Common/GeneralTypes";
 import { SRM_API_URL } from "../../../../Constantes";
-
-
 
 type SRModelingRTUProps = {
   selected: Selected;
@@ -91,7 +82,7 @@ class SRModelingRTU extends Component<SRModelingRTUProps, SRModelingRTUState> {
     this.state.utrs.forEach((utr, ix) => {
       options.push(<option key={ix}>{utr.id_utr}</option>);
     });
-    this.setState({ options: options});
+    this.setState({ options: options });
   };
 
   // Trae la lista de RTUs de este nodo e identidad
@@ -134,7 +125,7 @@ class SRModelingRTU extends Component<SRModelingRTUProps, SRModelingRTUState> {
       valid =
         valid &&
         this.state.utr_form[f] !== undefined &&
-        this.state.utr_form[f].length > 3;
+        this.state.utr_form[f].length >= 3;
     });
     this.setState({ utr_valid: valid });
   };
@@ -147,7 +138,7 @@ class SRModelingRTU extends Component<SRModelingRTUProps, SRModelingRTUState> {
       valid =
         valid &&
         this.state.edited_utr[f] !== undefined &&
-        this.state.edited_utr[f].length > 3;
+        this.state.edited_utr[f].length >= 3;
     });
     this.setState({ edited_utr_valid: valid });
   };
@@ -175,7 +166,6 @@ class SRModelingRTU extends Component<SRModelingRTUProps, SRModelingRTUState> {
     this.setState({ utr_form: rtu_form });
     this._check_edited_rtu_form();
   };
-
 
   _send_rtu_form = () => {
     this.setState({ success: false, msg: "" });
@@ -241,7 +231,9 @@ class SRModelingRTU extends Component<SRModelingRTUProps, SRModelingRTUState> {
               type="text"
               placeholder="Ingrese tipo"
               value={this.state.edited_utr.utr_tipo}
-              onChange={(e) => this._edit_rtu_string_form_changes(e, "utr_tipo")}
+              onChange={(e) =>
+                this._edit_rtu_string_form_changes(e, "utr_tipo")
+              }
             />
           </Form.Group>
         </Form.Row>
@@ -254,7 +246,9 @@ class SRModelingRTU extends Component<SRModelingRTUProps, SRModelingRTUState> {
               type="text"
               placeholder="Nombre"
               value={this.state.edited_utr.utr_nombre}
-              onChange={(e) => this._edit_rtu_string_form_changes(e, "utr_nombre")}
+              onChange={(e) =>
+                this._edit_rtu_string_form_changes(e, "utr_nombre")
+              }
             />
           </Form.Group>
         </Form.Row>
@@ -323,8 +317,7 @@ class SRModelingRTU extends Component<SRModelingRTUProps, SRModelingRTUState> {
               selected_entidad_id={this.props.selected_id.entidad}
               utrs={this.state.utrs}
               handle_RTUs_changes={this.handle_RTUs_changes}
-            >
-            </SREliminarUTR>
+            ></SREliminarUTR>
           </Tab>
         </Tabs>
         {this.state.msg.length === 0 ? (

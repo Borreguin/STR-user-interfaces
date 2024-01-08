@@ -56,7 +56,7 @@ export class SRCreateUTR extends Component<SRCreateUTRProps, SRCreateUTRState> {
       valid =
         valid &&
         this.state.utr_form[f] !== undefined &&
-        this.state.utr_form[f].length > 3;
+        this.state.utr_form[f].length >= 3;
       if (!valid) {
         this.setState({
           msg: "Revise: El campo '" + f + "' es inválido o está incompleto.",

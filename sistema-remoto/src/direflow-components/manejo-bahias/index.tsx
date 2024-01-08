@@ -1,20 +1,20 @@
-import { DireflowComponent } from 'direflow-component';
-import App from './App';
+import { DireflowComponent } from "direflow-component";
+import App from "./App";
 
 export default DireflowComponent.create({
   component: App,
   configuration: {
-    tagname: 'manejo-bahiass',
+    tagname: "manejo-utr-tags",
     useShadow: false,
   },
   plugins: [
-      {
-      name: 'external-loader',
+    {
+      name: "external-loader",
       options: {
         paths: [
-          'https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css'
+          "https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css",
         ],
       },
-    }
+    },
   ],
 });

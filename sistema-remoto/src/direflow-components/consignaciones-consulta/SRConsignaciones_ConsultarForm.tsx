@@ -26,8 +26,8 @@ export type Forma = {
 
 export type detalle = {
   detalle: string;
-  descripcion_corta: string
-}
+  descripcion_corta: string;
+};
 
 // consignaciones
 export type Consignacion = {
@@ -137,7 +137,7 @@ class DatosConsultar extends Component<SRConsigProps, SRConsigState> {
       .then((res) => res.json())
       .then((report) => {
         if (!silent) {
-          this.setState({ msg: report.msg });
+          this.setState({ msg: report.msg ? report.msg : "No definido" });
         }
         this.setState({
           success: report.success,
@@ -167,7 +167,7 @@ class DatosConsultar extends Component<SRConsigProps, SRConsigState> {
         "\n" +
         consignacion.fecha_inicio +
         "\n" +
-        consignacion.fecha_final
+        consignacion.fecha_final,
     );
     if (!confirm) return;
     this.setState({
@@ -221,14 +221,14 @@ class DatosConsultar extends Component<SRConsigProps, SRConsigState> {
               onClick={() =>
                 this._delete_consignacion(
                   this.state.forma.selected_id["utr"],
-                  consignacion
+                  consignacion,
                 )
               }
             >
               Eliminar
             </Button>
           </div>
-        </Card.Header>
+        </Card.Header>,
       );
     });
     return <CardGroup className="tab-container">{consignaciones}</CardGroup>;
@@ -239,7 +239,7 @@ class DatosConsultar extends Component<SRConsigProps, SRConsigState> {
     let form = this.state.forma;
     form["no_consignacion"] = consignacion.no_consignacion;
     form.detalle = consignacion.detalle.detalle;
-    form.descripcion_corta = consignacion.detalle.descripcion_corta
+    form.descripcion_corta = consignacion.detalle.descripcion_corta;
     this.setState({
       consignacion_to_edit: consignacion,
       show: true,
@@ -323,9 +323,7 @@ class DatosConsultar extends Component<SRConsigProps, SRConsigState> {
               as="textarea"
               aria-label="With textarea"
               placeholder="Cambie detalles"
-              defaultValue={
-                this.state.consignacion_to_edit.detalle["detalle"]
-              }
+              defaultValue={this.state.consignacion_to_edit.detalle["detalle"]}
               onChange={(e) => this._handle_form_changes(e, "detalle")}
             />
           </Col>
@@ -362,7 +360,10 @@ class DatosConsultar extends Component<SRConsigProps, SRConsigState> {
       no_consignacion: this.state.forma["no_consignacion"],
       fecha_inicio: to_yyyy_mm_dd_hh_mm_ss(this.state.forma.fecha_inicio),
       fecha_final: to_yyyy_mm_dd_hh_mm_ss(this.state.forma.fecha_final),
-      detalle: {detalle:this.state.forma.detalle, descripcion_corta:this.state.forma.descripcion_corta},
+      detalle: {
+        detalle: this.state.forma.detalle,
+        descripcion_corta: this.state.forma.descripcion_corta,
+      },
       responsable: this.state.responsable,
     };
     fetch(path, {
@@ -376,7 +377,7 @@ class DatosConsultar extends Component<SRConsigProps, SRConsigState> {
           this._consulta_consignaciones(true);
         }
         this.setState({
-          msg: result.msg,
+          msg: result.msg ? result.msg : "Error no definido",
           success: result.success,
           show: false,
         });

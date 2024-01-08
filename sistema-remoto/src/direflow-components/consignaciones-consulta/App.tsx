@@ -53,7 +53,7 @@ class ConsignacionesConsulta extends Component<Props, States> {
     valid =
       valid &&
       this.state.forma.no_consignacion !== undefined &&
-      this.state.forma.no_consignacion.length > 3;
+      this.state.forma.no_consignacion.length >= 3;
 
     // check selección UTR
     valid =
@@ -74,11 +74,7 @@ class ConsignacionesConsulta extends Component<Props, States> {
     };
 
     return (
-      <Styled
-      styles={[
-        styles, react_picker]}
-      scoped={true}
-    >
+      <Styled styles={[styles, react_picker]} scoped={true}>
         <div className="page-content">
           <div className="cons-container">
             <Tabs

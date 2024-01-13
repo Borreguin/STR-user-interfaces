@@ -9,66 +9,103 @@
  * It can be left blank if not needed.
  */
 
- import { Route, BrowserRouter as Router } from 'react-router-dom'
- import React from 'react';
- import ReactDOM from 'react-dom';
- 
- 
- 
- // importando Componentes:
-import {
-  ZDireflowTemplate, NodeManagement, UTRandTagsManagement, SRBackupFiles, SRCalDisponibilidad,
-  ConsignacionesConsulta, ConsignacionesIngreso, TendenciaDisponibilidadAdquisicion
-} from './component-exports';
- import TemplateComp from './direflow-components/zdireflow-navigate';
-import ConverterV2 from './direflow-components/ConverterV2/App';
-import NodeManagementV2 from "./direflow-components/manejo-nodos-v2/App";
-import {
-    InstallationAndBahiasManagement
-} from "./direflow-components/manejo-bahias/App";
- 
- 
- 
- export const routes = [
-   { path: "/", component: ZDireflowTemplate, description: "Inicio" },
-   { path: "/zdireflow-template", component: ZDireflowTemplate, description: "Plantilla" },
-   { path: "/manejo-nodos", component: NodeManagement , description: "Manejo de nodos" },
-   { path: "/manejo-utr-tags", component: UTRandTagsManagement , description: "Manejo de UTR y Tags" },
-   { path: "/versionamiento-nodos", component: SRBackupFiles , description: "Versionamiento de Nodos" },
-   { path: "/disponibilidad-reporte", component:  SRCalDisponibilidad , description: "Reporte disponibilidad" },
-   { path: "/consignaciones-ingreso", component:  ConsignacionesIngreso , description: "Ingreso de consignaciones" },
-   { path: "/consignaciones-consulta", component:  ConsignacionesConsulta , description: "Consultar consignaciones" },
-   { path: "/tendencia-disponibilidad-adquisicion", component: TendenciaDisponibilidadAdquisicion, description: "Tendencia de disponibilidad de adquisicion de datos" },
-   { path: "/converterV2", component: ConverterV2, description: "ConverterV2" },
-   { path: "/manejo-nodos-v2", component: NodeManagementV2, description: "Manejo de nodos V2" },
-   { path: "/manejo-instalaciones", component: InstallationAndBahiasManagement, description: "Manejo de instalaciones V2" },
+import { Route, BrowserRouter as Router } from "react-router-dom";
+import React from "react";
+import ReactDOM from "react-dom";
 
- ]
- 
- //<Route exact path="/icons" component={IconLibrary} />
- const routing = (
-   <Router>
+// importando Componentes:
+import {
+  ZDireflowTemplate,
+  NodeManagement,
+  UTRandTagsManagement,
+  SRBackupFiles,
+  SRCalDisponibilidad,
+  ConsignacionesConsulta,
+  ConsignacionesIngreso,
+  TendenciaDisponibilidadAdquisicion,
+} from "./component-exports";
+import TemplateComp from "./direflow-components/zdireflow-navigate";
+import ConverterV2 from "./direflow-components/v2/ConverterV2/App";
+import NodeManagementV2 from "./direflow-components/v2/manejo-nodos-v2/App";
+import { InstallationAndBahiasManagement } from "./direflow-components/v2/manejo-bahias/App";
+
+export const routes = [
+  { path: "/", component: ZDireflowTemplate, description: "Inicio" },
+  {
+    path: "/zdireflow-template",
+    component: ZDireflowTemplate,
+    description: "Plantilla",
+  },
+  {
+    path: "/manejo-nodos",
+    component: NodeManagement,
+    description: "Manejo de nodos",
+  },
+  {
+    path: "/manejo-utr-tags",
+    component: UTRandTagsManagement,
+    description: "Manejo de UTR y Tags",
+  },
+  {
+    path: "/versionamiento-nodos",
+    component: SRBackupFiles,
+    description: "Versionamiento de Nodos",
+  },
+  {
+    path: "/disponibilidad-reporte",
+    component: SRCalDisponibilidad,
+    description: "Reporte disponibilidad",
+  },
+  {
+    path: "/consignaciones-ingreso",
+    component: ConsignacionesIngreso,
+    description: "Ingreso de consignaciones",
+  },
+  {
+    path: "/consignaciones-consulta",
+    component: ConsignacionesConsulta,
+    description: "Consultar consignaciones",
+  },
+  {
+    path: "/tendencia-disponibilidad-adquisicion",
+    component: TendenciaDisponibilidadAdquisicion,
+    description: "Tendencia de disponibilidad de adquisicion de datos",
+  },
+  { path: "/converterV2", component: ConverterV2, description: "ConverterV2" },
+  {
+    path: "/manejo-nodos-v2",
+    component: NodeManagementV2,
+    description: "Manejo de nodos V2",
+  },
+  {
+    path: "/manejo-instalaciones",
+    component: InstallationAndBahiasManagement,
+    description: "Manejo de instalaciones V2",
+  },
+];
+
+//<Route exact path="/icons" component={IconLibrary} />
+const routing = (
+  <Router>
     {routes.map((route, ix) => (
-      <Route key={ ix} exact path={ route.path} component={route.component} />
+      <Route key={ix} exact path={route.path} component={route.component} />
     ))}
-   </Router>
- )
- 
- /*ReactDOM.render(
+  </Router>
+);
+
+/*ReactDOM.render(
    <React.StrictMode>
      {routing}
    </React.StrictMode>,
    document.getElementById('root')
  );*/
- 
- TemplateComp.then(() => {
-   //Access DOM node when it's mounted
-   // console.log('sistema-remoto is mounted on the DOM', element);
-   // console.log('root', document.getElementById('root'));
-   ReactDOM.render(
-     <React.StrictMode>
-       {routing}
-     </React.StrictMode>,
-     document.getElementById('component')
-   );
- });
+
+TemplateComp.then(() => {
+  //Access DOM node when it's mounted
+  // console.log('sistema-remoto is mounted on the DOM', element);
+  // console.log('root', document.getElementById('root'));
+  ReactDOM.render(
+    <React.StrictMode>{routing}</React.StrictMode>,
+    document.getElementById("component"),
+  );
+});

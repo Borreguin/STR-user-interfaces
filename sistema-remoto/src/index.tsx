@@ -23,7 +23,9 @@ import {
  import TemplateComp from './direflow-components/zdireflow-navigate';
 import ConverterV2 from './direflow-components/ConverterV2/App';
 import NodeManagementV2 from "./direflow-components/manejo-nodos-v2/App";
-import InstallationAndBahiasManagement from "./direflow-components/manejo-bahias/App";
+import {
+    InstallationAndBahiasManagement
+} from "./direflow-components/manejo-bahias/App";
  
  
  

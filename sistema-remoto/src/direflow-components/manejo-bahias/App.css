@@ -245,3 +245,9 @@
   background-color: rgba(181, 173, 173, 0.33);
   display: flex !important;
 }
+
+.required::before {
+  content: '*';
+  margin-right: 4px;
+  color: red;
+}

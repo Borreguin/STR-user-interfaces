@@ -65,7 +65,7 @@ const ConverterV2: FC<ConverterV2Props> = () => {
             return (
                 <div className="src-loading-container">
                     <div className="spinner-border text-primary m-2"></div>
-                    <div>Convertiendo archivo, espere por favor ...</div>
+                    <div>Convirtiendo archivo, espere por favor ...</div>
                 </div>
             )
         }

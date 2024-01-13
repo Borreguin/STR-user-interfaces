@@ -1,5 +1,4 @@
 export type v2Entity = {
-  _id: string;
   id_entidad: string;
   entidad_nombre: string;
   entidad_tipo: string;
@@ -29,7 +28,7 @@ export type v2Bahia = {
 };
 
 export type v2Installation = {
-  instalacion_id: string;
+  instalacion_id?: string;
   instalacion_ems_code: string;
   instalacion_nombre: string;
   instalacion_tipo: string;
@@ -37,8 +36,8 @@ export type v2Installation = {
   protocolo: string;
   longitud: number;
   latitud: number;
-  bahias: Array<v2Bahia>;
-  actualizado: string;
+  bahias?: Array<v2Bahia>;
+  actualizado?: string;
 };
 
 export type v2TAG = {

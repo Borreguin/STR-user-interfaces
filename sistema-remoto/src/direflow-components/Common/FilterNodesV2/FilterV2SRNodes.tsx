@@ -6,6 +6,7 @@ import { Entity, Node } from "../GeneralTypes";
 
 export interface V2SRNodeFilterProps {
   onChange: Function;
+  reload?: Function;
 }
 
 export interface V2SRNodeFilterState {

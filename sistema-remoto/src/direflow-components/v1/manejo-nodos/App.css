@@ -16,7 +16,7 @@
 .sc-btn-search {
   margin-top: -9px;
   min-width: 125px;
-  padding-left: 0px;
+  padding-left: 0;
 }
 
 
@@ -60,8 +60,8 @@
 
 .sc-body-cal {
   width: 100%;
-  padding-left: 0px;
-  padding-right: 0px;
+  padding-left: 0;
+  padding-right: 0;
   height: 400px;
   background-color: chartreuse;
 }
@@ -147,7 +147,7 @@
 
 .table_input {
   min-width: 300px;
-  border: 0px !important;
+  border: 0 !important;
 }
 
 .btn-add-tag {
@@ -201,7 +201,7 @@
 .sc-btn-search {
   margin-top: -9px;
   min-width: 125px;
-  padding-left: 0px;
+  padding-left: 0;
 }
 
 .sc-pick-menu {
@@ -443,7 +443,7 @@
   font-weight: bolder !important;
   font-size: 12pt;
   color: rgb(5, 5, 5);
-  border: black solid 0px;
+  border: black solid 0;
   padding: 2px !important;
   max-width: 300px;
   width: auto;
@@ -460,7 +460,7 @@
   font-weight: bolder;
   font-size: 11pt;
   color: rgb(5, 5, 5);
-  border: black solid 0px;
+  border: black solid 0;
   padding: 2px;
   max-width: 200px;
   border-radius: 5px;
@@ -585,7 +585,7 @@
 }
 
 .alert-msg {
-  margin-bottom: 0px !important;
+  margin-bottom: 0 !important;
   padding: 2px;
 }
 
@@ -594,7 +594,7 @@
   max-height: 25px;
   font-size: 10pt !important;
   padding: 3px !important;
-  margin-left: 0px;
+  margin-left: 0;
   margin-bottom: 1px;
 }
 

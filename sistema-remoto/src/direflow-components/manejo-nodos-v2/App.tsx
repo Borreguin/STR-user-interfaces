@@ -4,7 +4,7 @@ import styles from "./App.css";
 import { Spinner, Form, Row, Col, Button } from "react-bootstrap";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faPlusCircle } from "@fortawesome/free-solid-svg-icons";
-import iconStyles from "@fortawesome/fontawesome-svg-core/styles.css"
+import iconStyles from "@fortawesome/fontawesome-svg-core/styles.css";
 import bootstrap from "bootstrap/dist/css/bootstrap.min.css";
 import DropZone from "../Common/Upload/DropZone.css";
 import Progress from "../Common/Upload/Progress.css";
@@ -34,7 +34,7 @@ class NodeManagementV2 extends Component<
     this.state = {
       nodes: [],
       search: "",
-      loading: true,
+      loading: false,
       filter_nodes: [],
       msg: "",
       error: false,
@@ -129,14 +129,17 @@ class NodeManagementV2 extends Component<
         }
     };
     return (
-      <Styled styles={[styles, bootstrap, DropZone, Progress, Upload, iconStyles]} scoped={true}>
+      <Styled
+        styles={[styles, bootstrap, DropZone, Progress, Upload, iconStyles]}
+        scoped={true}
+      >
         <div className="page-content">
           <Form.Group as={Row} className="sc-search">
             <Form.Label column sm="2" className="sc-btn-search">
               <Button
                 variant="outline-dark"
                 onClick={this._search_nodes_now}
-                disabled={this.state.nodes.length === 0}
+                disabled={this.state.loading}
                 className="btn-search"
               >
                 Actualizar

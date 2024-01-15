@@ -1,5 +1,6 @@
 export type v2Entity = {
   id_entidad: string;
+  document_id: string;
   entidad_nombre: string;
   entidad_tipo: string;
   instalaciones: Array<v2Installation>;
@@ -9,10 +10,14 @@ export type v2Entity = {
 
 export type v2Node = {
   _id: string;
+  document_id: string;
   id_node: string;
   nombre: string;
   tipo: string;
   n_tags: number;
+  n_entidades: number;
+  n_instalaciones: number;
+  n_bahias: number;
   actualizado: string;
   activado: boolean;
   entidades: Array<v2Entity>;
@@ -29,6 +34,7 @@ export type v2Bahia = {
 
 export type v2Installation = {
   instalacion_id?: string;
+  document_id?: string;
   instalacion_ems_code: string;
   instalacion_nombre: string;
   instalacion_tipo: string;

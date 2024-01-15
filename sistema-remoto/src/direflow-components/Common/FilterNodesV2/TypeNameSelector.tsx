@@ -1,6 +1,7 @@
 import { Col, Form } from "react-bootstrap";
 import React, { useEffect, useState } from "react";
 import { SelectOption } from "./model";
+import { v4 as uuidv4 } from "uuid";
 
 export interface TypeAndNameOptions {
   nameOptionsByType: { [K: string]: SelectOption[] };
@@ -8,14 +9,13 @@ export interface TypeAndNameOptions {
 }
 
 interface TypeSelector {
-  key: string;
   selectedOption: SelectOption | undefined;
   options: Array<SelectOption>;
   onSelection: any;
 }
 
 const RenderSelection = (props: TypeSelector): JSX.Element => {
-  const { key, selectedOption, options, onSelection } = props;
+  const { selectedOption, options, onSelection } = props;
   const [selectedValue, setSelectedValue] = useState<string>(
     selectedOption ? selectedOption.id : "",
   );
@@ -34,7 +34,7 @@ const RenderSelection = (props: TypeSelector): JSX.Element => {
       return <option></option>;
     }
     return options.map((op) => (
-      <option key={op.id} value={op.id}>
+      <option key={`${op.id}_${op.value}`} value={op.id}>
         {op.value}
       </option>
     ));
@@ -50,7 +50,7 @@ const RenderSelection = (props: TypeSelector): JSX.Element => {
   return (
     <>
       <Form.Control
-        key={key}
+        key={uuidv4()}
         as="select"
         size="sm"
         value={selectedValue}

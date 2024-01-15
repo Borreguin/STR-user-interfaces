@@ -23,6 +23,7 @@ import {
   ConsignacionesConsulta,
   ConsignacionesIngreso,
   TendenciaDisponibilidadAdquisicion,
+  ConsignmentManagementV2,
 } from "./component-exports";
 import TemplateComp from "./direflow-components/zdireflow-navigate";
 import ConverterV2 from "./direflow-components/v2/ConverterV2/App";
@@ -81,6 +82,11 @@ export const routes = [
     path: "/manejo-instalaciones",
     component: InstallationAndBahiasManagement,
     description: "Manejo de instalaciones V2",
+  },
+  {
+    path: "/consignaciones-ingreso-v2",
+    component: ConsignmentManagementV2,
+    description: "Ingreso de consignaciones V2",
   },
 ];
 

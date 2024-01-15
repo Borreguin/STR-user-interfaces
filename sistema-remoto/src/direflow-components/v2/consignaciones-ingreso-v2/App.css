@@ -1,0 +1,69 @@
+.page-content {
+  display: inline-block !important;
+  width: 100% !important;
+  /*overflow-x: hidden;*/
+  padding: 0.5% !important;
+}
+
+.update_label {
+  min-width: 100%;
+  min-height: 40px;
+}
+
+btn-sm {
+  padding: .25rem .5rem;
+  font-size: .875rem;
+  border-radius: .2rem;
+}
+
+.btn-outline-success {
+  color: #198754;
+  border-color: #198754;
+}
+
+.cons-container{
+  height: 95vh;
+  width: 100%;
+  padding-left: 10px;
+  padding-right: 10px;
+  font-family: -apple-system,BlinkMacSystemFont,"Segoe UI","Roboto","Oxygen","Ubuntu","Cantarell","Fira Sans","Droid Sans","Helvetica Neue",sans-serif;
+}
+
+.cons-button-active, .cons-button{
+  min-width: 150px !important;
+  margin: 5px;
+}
+
+.cons-button-active{
+  background-color: #198754 !important;
+  min-width: 150px !important;
+  color: white;
+}
+
+.cons-form-container{
+  margin: 10px;
+  width: 100%;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  overflow-y: auto;
+}
+
+.flex-container{
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+}
+
+.consignment-element{
+  max-width: 25%;
+  min-width: 250px;
+  padding: 10px;
+}
+.consignment-form{
+    max-width: 70%;
+    min-width: 250px;
+}
+
+.cons-mandatory {
+  color: red;
+}

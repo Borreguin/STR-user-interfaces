@@ -1,12 +1,12 @@
 import React from "react";
 import ReactJson from "react-json-view";
-import { selection } from "../../Constants/constants";
+import { selection } from "../../v2/common/constants";
 import {
   summarizeEntity,
   summarizeInstallation,
   summarizeNode,
-} from "../../../../Common/V2Summarize";
-import { V2ConsignmentForm } from "../../../common/V2ConsignmentForm";
+} from "../V2Summarize";
+import { V2ConsignmentForm } from "../../v2/common/V2ConsignmentForm";
 
 interface ConsignmentFormV2Props {
   toConsignment: Object;
@@ -19,11 +19,11 @@ interface ConsignmentFormV2Props {
 const srcValueSelected = (value: any, selectedType: string) => {
   switch (selectedType) {
     case selection.node:
-      return summarizeNode(value);
+      return summarizeNode(value, true);
     case selection.entity:
-      return summarizeEntity(value);
+      return summarizeEntity(value, true);
     case selection.installation:
-      return summarizeInstallation(value);
+      return summarizeInstallation(value, true);
   }
 };
 
@@ -36,7 +36,7 @@ export const ConsignmentFormV2 = (props: ConsignmentFormV2Props) => {
   }
 
   const handleOnSubmit = (constForm: any) => {
-    onSubmit(constForm, toConsignment, selectedType);
+    onSubmit(constForm, srcValueSelected(toConsignment, selectedType));
   };
 
   return (

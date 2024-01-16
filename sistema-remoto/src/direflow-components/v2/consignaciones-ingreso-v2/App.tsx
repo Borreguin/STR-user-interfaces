@@ -2,12 +2,15 @@ import React, { useEffect, useState } from "react";
 import { Styled } from "direflow-component";
 import styles from "./App.css";
 import bootstrap from "bootstrap/dist/css/bootstrap.min.css";
-import { Button, Col, Tab, Tabs } from "react-bootstrap";
+import { Alert, Button, Tab, Tabs } from "react-bootstrap";
 import { V2SRNodesFilter } from "../../Common/FilterNodesV2/V2SRNodesFilter";
-import { nameProperty, selection, typeProperty } from "./Constants/constants";
-import { ConsignmentFormV2 } from "./Components/ConsignmentForm/ConsignmentFormV2";
+import { ConsignmentFormV2 } from "../../Common/ConsignmentFormV2/ConsignmentFormV2";
 import { getDescription, getElementId, getNameProperty } from "../common/util";
 import react_picker from "react-datepicker/dist/react-datepicker.css";
+import { insertConsignment } from "../../Common/FetchData/V2SRFetchData";
+import { V2ConsignmentFormValues } from "../common/V2ConsignmentForm";
+import { ConsignmentRequest, ElementInfo } from "../../Common/V2GeneralTypes";
+import { nameProperty, selection } from "../common/constants";
 
 export const getSelectedButtonLabel = (selectedValues: any, label: string) => {
   if (selectedValues && selectedValues[label]) {
@@ -17,13 +20,15 @@ export const getSelectedButtonLabel = (selectedValues: any, label: string) => {
   return undefined;
 };
 
-export function ConsignmentManagementV2() {
+export function ConsignmentManagementV2(action: string) {
   const [selectedValues, setSelectedValues] = useState({});
   const [toReload, setToReload] = useState(false);
   const [toConsignment, setToConsignment] = useState(undefined);
   const [selectedType, setSelectedType] = useState(undefined);
   const [selectedButton, setSelectedButton] = useState(undefined);
-  const [description, setDescription] = useState(undefined);
+  const [formDescription, setFormDescription] = useState(undefined);
+  const [msg, setMsg] = useState(undefined);
+  const [success, setSuccess] = useState(false);
 
   useEffect(() => {
     if (
@@ -39,7 +44,7 @@ export function ConsignmentManagementV2() {
       setSelectedButton(_selectedButton);
       setToConsignment(selectedValues[selection.node]);
       setSelectedType(selection.node);
-      setDescription(
+      setFormDescription(
         getDescription(selectedValues[selection.node], selection.node),
       );
     }
@@ -49,7 +54,7 @@ export function ConsignmentManagementV2() {
     ) {
       setSelectedButton(getSelectedButtonLabel(selectedValues, selectedType));
       setToConsignment(selectedValues[selectedType]);
-      setDescription(
+      setFormDescription(
         getDescription(selectedValues[selectedType], selectedType),
       );
     }
@@ -74,7 +79,7 @@ export function ConsignmentManagementV2() {
             setToConsignment(selectedValues[label]);
             setSelectedType(label);
             setSelectedButton(_selectedButton);
-            setDescription(getDescription(selectedValues[label], label));
+            setFormDescription(getDescription(selectedValues[label], label));
           }}
           active={selectedButton === _selectedButton}
         >
@@ -84,13 +89,28 @@ export function ConsignmentManagementV2() {
     }
     return <></>;
   };
-  const onSubmit = (
-    constForm: any,
-    toConsignment: any,
-    selectedType: string,
-  ) => {
+  const onSubmit = (constForm: V2ConsignmentFormValues, toConsignment: any) => {
     const element_id = getElementId(toConsignment);
-    // TODO: continue here
+    const iniDate = constForm.fecha_inicio;
+    const endDate = constForm.fecha_final;
+    const elementInfo: ElementInfo = {
+      detalle: constForm.detalle,
+      descripcion_corta: constForm.descripcion_corta,
+      consignment_type: "Normal",
+      element: toConsignment,
+    };
+    const body: ConsignmentRequest = {
+      no_consignacion: constForm.no_consignacion,
+      responsable: constForm.responsable,
+      fecha_inicio: iniDate,
+      fecha_final: endDate,
+      element_info: elementInfo,
+    };
+    setMsg("Enviando consignación...");
+    insertConsignment(element_id, iniDate, endDate, body).then((response) => {
+      setMsg(response.msg);
+      setSuccess(response.success);
+    });
   };
 
   return (
@@ -118,14 +138,19 @@ export function ConsignmentManagementV2() {
           <ConsignmentFormV2
             toConsignment={toConsignment}
             selectedType={selectedType}
-            headerLabel={description}
-            buttonLabel={"Ingresar: " + description}
+            headerLabel={formDescription}
+            buttonLabel={"Ingresar: " + formDescription}
             onSubmit={onSubmit}
           />
           <div>
             Los campos con (<span className="cons-mandatory">*</span>) son
             mandatorios
           </div>
+          {!msg ? (
+            <></>
+          ) : (
+            <Alert variant={success ? "info" : "warning"}>{msg}</Alert>
+          )}
         </div>
       </div>
     </Styled>

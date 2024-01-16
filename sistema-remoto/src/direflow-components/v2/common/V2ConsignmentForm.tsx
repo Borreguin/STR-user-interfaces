@@ -8,6 +8,16 @@ interface V2ConsignmentFormProps {
   buttonLabel: string;
   onSubmit: Function;
 }
+
+export interface V2ConsignmentFormValues {
+  no_consignacion: string;
+  fecha_inicio: string;
+  fecha_final: string;
+  detalle: string;
+  descripcion_corta: string;
+  responsable: string;
+}
+
 export const V2ConsignmentForm = (props: V2ConsignmentFormProps) => {
   const { headerLabel, buttonLabel, onSubmit } = props;
 
@@ -21,7 +31,7 @@ export const V2ConsignmentForm = (props: V2ConsignmentFormProps) => {
       localStorage.getItem("userRole") +
       " | " +
       localStorage.getItem("userDisplayName"),
-  });
+  } as V2ConsignmentFormValues);
   const [validatedForm, setValidatedForm] = useState({
     no_consignacion: false,
     fecha_inicio: true,
@@ -108,6 +118,7 @@ export const V2ConsignmentForm = (props: V2ConsignmentFormProps) => {
               <Form.Control
                 type="text"
                 placeholder="Ingrese descripción corta"
+                name="descripcion_corta"
                 onChange={handleChange}
               />
             </Col>
@@ -117,6 +128,7 @@ export const V2ConsignmentForm = (props: V2ConsignmentFormProps) => {
                 as="textarea"
                 aria-label="With textarea"
                 placeholder="Ingrese detalles"
+                name="detalle"
                 onChange={handleChange}
               />
             </Col>

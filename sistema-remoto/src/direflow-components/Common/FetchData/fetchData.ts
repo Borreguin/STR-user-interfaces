@@ -1,52 +1,61 @@
 import { SCT_API_URL, SRM_API_URL } from "../../../Constantes";
 
+const handleResponse = (res: Response) => {
+  if (res.status === 500) {
+    return {
+      success: false,
+      msg: "Error no determinado: No es posible obtener información desde la API",
+    };
+  }
+  return res.json();
+};
+
 export const fetchGETData = async (url: string): Promise<JSON> => {
   return await fetch(url)
-    .then((res) => res.json())
+    .then((res) => handleResponse(res))
     .then((json) => {
       return json;
     })
     .catch((e) => handleError(url, e));
 };
 
-
 export const fetchPOSTData = async (url: string, body: any): Promise<JSON> => {
-  return await fetch(url,{
+  return await fetch(url, {
     method: "POST",
     body: JSON.stringify(body),
     headers: {
       "Content-Type": "application/json",
     },
   })
-      .then((res) => res.json())
-      .then((json) => {
-        return json;
-      })
-      .catch((e) => handleError(url, e));
+    .then((res) => handleResponse(res))
+    .then((json) => {
+      return json;
+    })
+    .catch((e) => handleError(url, e));
 };
 
 export const fetchPUTData = async (url: string, body: any): Promise<JSON> => {
-  return await fetch(url,{
+  return await fetch(url, {
     method: "PUT",
     body: JSON.stringify(body),
     headers: {
       "Content-Type": "application/json",
     },
   })
-      .then((res) => res.json())
-      .then((json) => {
-        return json;
-      })
-      .catch((e) => handleError(url, e));
+    .then((res) => handleResponse(res))
+    .then((json) => {
+      return json;
+    })
+    .catch((e) => handleError(url, e));
 };
 
 export const fetchDELETEData = async (url: string): Promise<any> => {
-  return await fetch(url,{
-    method: "DELETE"
+  return await fetch(url, {
+    method: "DELETE",
   })
-      .then(res => res.text()) // or res.json()
-      .then(res => console.log(res))
-      .catch((e) => handleError(url, e));
+    .then((res) => res.text()) // or res.json()
+    .then((res) => console.log(res))
+    .catch((e) => handleError(url, e));
 };
 
 const handleError = (url: string, e: any) => {
@@ -64,4 +73,4 @@ const handleError = (url: string, e: any) => {
   }
   console.log(e);
   return { success: false, msg: "No es posible obtener información" };
-}
+};

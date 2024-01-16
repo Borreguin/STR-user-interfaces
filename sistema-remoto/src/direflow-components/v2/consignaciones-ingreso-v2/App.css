@@ -10,10 +10,15 @@
   min-height: 40px;
 }
 
-btn-sm {
+.btn-sm {
   padding: .25rem .5rem;
   font-size: .875rem;
   border-radius: .2rem;
+}
+
+.btn-actualizar {
+  float: right;
+  margin-top: 7px;
 }
 
 .btn-outline-success {

@@ -1,8 +1,4 @@
-import {
-  nameProperty,
-  selection,
-  typeProperty,
-} from "../consignaciones-ingreso-v2/Constants/constants";
+import { nameProperty, selection, typeProperty } from "./constants";
 
 export const getNameProperty = (_type: string) => {
   switch (_type) {

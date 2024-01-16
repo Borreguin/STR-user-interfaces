@@ -63,3 +63,18 @@ export type SelectedID = {
   entidad: string;
   utr?: string;
 };
+
+export type ConsignmentRequest = {
+  no_consignacion: string;
+  responsable: string;
+  element_info: ElementInfo;
+  fecha_inicio?: string;
+  fecha_final?: string;
+};
+
+export type ElementInfo = {
+  detalle: string;
+  descripcion_corta: string;
+  consignment_type: string;
+  element: any;
+};

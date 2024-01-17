@@ -57,7 +57,7 @@ export function InstallationEdit(props) {
               placeholder="Ingresar EMS code"
               required
               name="instalacion_ems_code"
-              value={editForm.instalacion_ems_code}
+              defaultValue={editForm.instalacion_ems_code}
               onChange={handleChange}
             />
           </Form.Group>
@@ -70,7 +70,7 @@ export function InstallationEdit(props) {
               placeholder="Ingresar Tipo"
               required
               name="instalacion_tipo"
-              value={editForm.instalacion_tipo}
+              defaultValue ={editForm.instalacion_tipo}
               onChange={handleChange}
             />
           </Form.Group>
@@ -85,7 +85,7 @@ export function InstallationEdit(props) {
               placeholder="Ingresar nombre"
               required
               name="instalacion_nombre"
-              value={editForm.instalacion_nombre}
+              defaultValue ={editForm.instalacion_nombre}
               onChange={handleChange}
             />
           </Form.Group>
@@ -98,7 +98,7 @@ export function InstallationEdit(props) {
               placeholder="Ingresar Protocolo"
               required
               name="protocolo"
-              value={editForm.protocolo}
+              defaultValue ={editForm.protocolo}
               onChange={handleChange}
             />
           </Form.Group>

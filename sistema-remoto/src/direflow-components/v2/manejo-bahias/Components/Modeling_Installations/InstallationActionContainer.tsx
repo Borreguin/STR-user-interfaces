@@ -3,6 +3,7 @@ import React from "react";
 import {InstallationEdit} from "./InstallationEdit";
 import {InstallationRemove} from "./InstallationRemove";
 import {InstallationCreate} from "./InstallationCreate";
+import {BahiaList} from "./BahiaList";
 
 export function InstallationActionContainer(props: any) {
     const {selectedValues, requestReload} = props;
@@ -25,6 +26,10 @@ export function InstallationActionContainer(props: any) {
                 <InstallationRemove requestReload={requestReload}
                                     selectedEntityId={selectedValues?.selectedEntity?.id_entidad}
                                     selectedInstallation={selectedValues.selectedInstallation}></InstallationRemove>
+            </Tab>
+            <Tab eventKey="admin-bahias" title="Administrar Bahias">
+                {selectedValues?.selectedInstallation && <BahiaList requestReload={requestReload}
+                           selectedInstallation={selectedValues.selectedInstallation}></BahiaList>}
             </Tab>
         </Tabs>
     );

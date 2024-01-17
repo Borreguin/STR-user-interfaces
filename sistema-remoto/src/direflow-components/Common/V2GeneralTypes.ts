@@ -27,9 +27,9 @@ export type v2Bahia = {
   bahia_code: string;
   voltaje: number;
   bahia_nombre: string;
-  tags: Array<v2TAG>;
+  tags?: Array<v2TAG>;
   activado: boolean;
-  created: string;
+  created?: string;
 };
 
 export type v2Installation = {

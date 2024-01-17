@@ -50,7 +50,7 @@ export function InstallationRemove(props) {
               placeholder="Ingresar EMS code"
               disabled
               name="instalacion_ems_code"
-              value={deleteForm.instalacion_ems_code}
+              defaultValue={deleteForm.instalacion_ems_code}
             />
           </Form.Group>
         </Col>
@@ -62,7 +62,7 @@ export function InstallationRemove(props) {
               placeholder="Ingresar Tipo"
               disabled
               name="instalacion_tipo"
-              value={deleteForm.instalacion_tipo}
+              defaultValue ={deleteForm.instalacion_tipo}
             />
           </Form.Group>
         </Col>
@@ -76,7 +76,7 @@ export function InstallationRemove(props) {
               placeholder="Ingresar nombre"
               disabled
               name="instalacion_nombre"
-              value={deleteForm.instalacion_nombre}
+              defaultValue ={deleteForm.instalacion_nombre}
             />
           </Form.Group>
         </Col>
@@ -88,7 +88,7 @@ export function InstallationRemove(props) {
               placeholder="Ingresar Protocolo"
               disabled
               name="protocolo"
-              value={deleteForm.protocolo}
+              defaultValue ={deleteForm.protocolo}
             />
           </Form.Group>
         </Col>

@@ -5,18 +5,20 @@ import {
   fetchPUTData,
 } from "./fetchData";
 import {
+  bahiaApiUrl,
   consignmentApiUrl,
   entityByIdUrl,
   installationApiUrl,
   nodeApiUrl,
 } from "../FilterNodesV2/constants";
 import {
+  BahiaResponse,
   CreateConsignmentResponse,
   EntityResponse,
   InstallationResponse,
   NodeResponse,
 } from "./model";
-import { v2Installation } from "../V2GeneralTypes";
+import {v2Bahia, v2Installation} from "../V2GeneralTypes";
 
 export const getAllNodeInfo = async (): Promise<NodeResponse> => {
   const response = (await fetchGETData(nodeApiUrl)) as unknown as NodeResponse;
@@ -72,4 +74,35 @@ export const insertConsignment = async (
     `${consignmentApiUrl}/${element_id}/${ini_date}/${end_date}`,
     consignment,
   )) as unknown as CreateConsignmentResponse;
+};
+
+
+export const createNewBahia = async (
+    installation_id: string,
+    v2Bahia: v2Bahia,
+): Promise<BahiaResponse> => {
+  return (await fetchPOSTData(
+      `${bahiaApiUrl}/${installation_id}`,
+      v2Bahia,
+  )) as unknown as BahiaResponse;
+};
+
+export const editBahia = async (
+    installation_id: string,
+    document_id: string,
+    v2Bahia: v2Bahia,
+): Promise<BahiaResponse> => {
+  return (await fetchPUTData(
+      `${bahiaApiUrl}/${installation_id}/bahia/${document_id}`,
+      v2Bahia,
+  )) as unknown as BahiaResponse;
+};
+
+export const deleteBahia = async (
+    installation_id: string,
+    document_id: string,
+): Promise<BahiaResponse> => {
+  return (await fetchDELETEData(
+      `${bahiaApiUrl}/${installation_id}/bahia/${document_id}`,
+  )) as unknown as BahiaResponse;
 };

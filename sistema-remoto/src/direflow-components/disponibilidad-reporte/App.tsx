@@ -29,6 +29,10 @@ import styles from "./App.css";
 import ReportCSS from "./Cards/Report/Report.css";
 import SRCardCSS from "./Cards/SRCard/SRCard.css";
 import SRReportCSS from "./Cards/SRReport/style.css";
+import { ButtonSection } from "./Components/ButtonSection";
+import { DateRangeTime } from "../Common/DatePicker/DateRangeTime";
+import react_picker from "react-datepicker/dist/react-datepicker.css";
+import bootstrap from "bootstrap/dist/css/bootstrap.min.css";
 // import ModalCSS from "./Modal.css"
 
 interface props {}
@@ -134,10 +138,11 @@ class SRCalDisponibilidad extends Component<props, state> {
       calculating: false,
     });
     await fetch(
-      SRM_API_URL + "/disp-sRemoto/disponibilidad/" + this._range_time()
+      SRM_API_URL + "/disp-sRemoto/disponibilidad/" + this._range_time(),
     )
       .then((res) => res.json())
       .then((json) => {
+        console.log(json);
         if (json.success) {
           this.setState({
             report: json.report,
@@ -238,9 +243,13 @@ class SRCalDisponibilidad extends Component<props, state> {
 
   // descargar reporte Excel:
   _download_excel_report = async () => {
-    let url = `${SRM_API_URL}/sRemoto/disponibilidad/excel/${this._range_time()}?nid=${_.uniqueId(Math.random())}`;
-    let filename = `Reporte_${to_yyyy_mm_dd(this.state.ini_date)}@${to_yyyy_mm_dd(this.state.end_date)}.xlsx`;
-     
+    let url = `${SRM_API_URL}/sRemoto/disponibilidad/excel/${this._range_time()}?nid=${_.uniqueId(
+      Math.random(),
+    )}`;
+    let filename = `Reporte_${to_yyyy_mm_dd(
+      this.state.ini_date,
+    )}@${to_yyyy_mm_dd(this.state.end_date)}.xlsx`;
+
     this.setState({
       log: { estado: "Iniciando descarga de reporte, espere por favor" },
       loading: true,
@@ -262,12 +271,16 @@ class SRCalDisponibilidad extends Component<props, state> {
 
   // descargar reporte de tags:
   _download_tag_report = async () => {
-    let url = `${SRM_API_URL}/sRemoto/indisponibilidad/tags/excel/${this._range_time()}/${this.state.umbral}?nid=${_.uniqueId(Math.random())}`;
+    let url = `${SRM_API_URL}/sRemoto/indisponibilidad/tags/excel/${this._range_time()}/${
+      this.state.umbral
+    }?nid=${_.uniqueId(Math.random())}`;
     this.setState({
       log: { estado: "Iniciando descarga de reporte, espere por favor" },
       loading: true,
     });
-    let filename = `IndispTag_${to_yyyy_mm_dd(this.state.ini_date)}@${to_yyyy_mm_dd(this.state.end_date)}.xlsx`;
+    let filename = `IndispTag_${to_yyyy_mm_dd(
+      this.state.ini_date,
+    )}@${to_yyyy_mm_dd(this.state.end_date)}.xlsx`;
 
     await fetch(url).then((response) => {
       response.blob().then((blob) => {
@@ -396,7 +409,7 @@ class SRCalDisponibilidad extends Component<props, state> {
           e.preventDefault();
         }
     };
-
+    // <Styled styles={[styles, react_picker, bootstrap]} scoped={true}>
     return (
       <Styled
         styles={[
@@ -412,67 +425,10 @@ class SRCalDisponibilidad extends Component<props, state> {
         <div className="page-content">
           <Form.Group as={Row} className="sc-search">
             <Form.Label column sm="5" className="sc-pick-menu">
-              {/*<DateRangeTime
-                  last_month={true}
-                  onPickerChange={this.handle_picker_change}
-                ></DateRangeTime>*/}
-              <div
-                className="date-container"
-                onMouseLeave={(e) => {
-                  let class_name = e.target["className"];
-                  if (
-                    class_name === "" ||
-                    class_name === "rdrMonth" ||
-                    class_name === "rdrDays" ||
-                    class_name === "rdrYearPicker" ||
-                    class_name === "rdrDayHovered"
-                  ) {
-                    return;
-                  }
-                  this.setState({ show_date: false });
-                }}
-              >
-                <Button
-                  variant="outline-dark"
-                  className="btn-date"
-                  onClick={() => {
-                    this.setState({ show_date: !this.state.show_date });
-                  }}
-                >
-                  {!this.state.show_date ? "Seleccionar" : "Aceptar"}
-                </Button>
-                <div className="date-range">
-                <input
-                  className="date-input"
-                  value={this.state.ini_date_str}
-                  onChange={(e) => this.onChangeDate(e, "ini_date")}
-                />
-                <input
-                  className="date-input"
-                  value={this.state.end_date_str}
-                  onChange={(e) => this.onChangeDate(e, "end_date")}
-                />
-                </div>
-                <div
-                  className={
-                    this.state.show_date
-                      ? "date-range-show"
-                      : "date-range-no-show"
-                  }
-                >
-                  <DateRange
-                    locale={es}
-                    ranges={this.state.range}
-                    showMonthAndYearPickers={true}
-                    dateDisplayFormat={"yyyy MMM d"}
-                    onChange={this.handleSelect}
-                    months={1}
-                    direction="horizontal"
-                    fixedHeight={true}
-                    column="true"
-                  />
-                </div>
-              </div>
+              <DateRangeTime
+                last_month={true}
+                onPickerChange={this.handle_picker_change}
+              ></DateRangeTime>
             </Form.Label>
             <Form.Label column sm="1" className="sc-btn-search">
               <Button
@@ -495,77 +451,14 @@ class SRCalDisponibilidad extends Component<props, state> {
               />
             </Col>
           </Form.Group>
-          <Form.Group className="sc-btn-cal">
-            <Button
-              variant="outline-light"
-              className={
-                this.state.loading || this.state.calculating
-                  ? "btn-cal-disp btn-dis"
-                  : "btn-cal-disp"
-              }
-              onClick={() => this._cal_all("POST")}
-            >
-              <FontAwesomeIcon inverse icon={faPencilAlt} size="lg" /> CALCULAR
-              TODOS
-            </Button>
-            <Button
-              variant="outline-light"
-              className={
-                this.state.loading || this.state.calculating
-                  ? "btn-cal-disp btn-dis"
-                  : "btn-cal-disp"
-              }
-              onClick={() => this._cal_all("PUT")}
-            >
-              <FontAwesomeIcon inverse icon={faPenFancy} size="lg" />{" "}
-              RE-ESCRIBIR CÁLCULO
-            </Button>
-
-            <Button
-              variant="outline-light"
-              onClick={this._download_excel_report}
-              className={
-                this.state.loading || this.state.calculating
-                  ? "btn-cal-disp btn-dis"
-                  : "btn-cal-disp"
-              }
-              data-tip={
-                SRM_API_URL +
-                "/sRemoto/disponibilidad/json/" +
-                this._range_time()
-              }
-            >
-              <FontAwesomeIcon inverse icon={faFileExcel} size="lg" /> DESCARGAR
-            </Button>
-            <ReactTooltip />
-
-            <div
-              className={
-                this.state.loading || this.state.calculating
-                  ? "btn-cal-disp btn-dis"
-                  : "btn-cal-disp"
-              }
-            >
-              <Button
-                className={
-                  this.state.loading || this.state.calculating
-                    ? "btn-download-report btn-dis"
-                    : "btn-download-report"
-                }
-                variant="outline-light"
-                onClick={this._download_tag_report}
-              >
-                <FontAwesomeIcon inverse icon={faTag} size="lg" /> REPORTE TAGS
-              </Button>
-              <input
-                type="text"
-                onChange={this._updateUmbral}
-                className="input-report"
-                data-tip="Ingrese el umbral de indisponibilidad mínima a reportar"
-              ></input>
-            </div>
-            <ReactTooltip />
-          </Form.Group>
+          <ButtonSection
+            loading={this.state.loading || this.state.calculating}
+            calculateAll={this._cal_all}
+            downloadExcelReport={this._download_excel_report}
+            downloadTagReport={this._download_tag_report}
+            updateUmbral={this._updateUmbral}
+            rangeTime={this._range_time()}
+          ></ButtonSection>
           <div className="div-cards">
             {this.state.report === undefined ? (
               <></>

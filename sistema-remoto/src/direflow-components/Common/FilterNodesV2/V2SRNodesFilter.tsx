@@ -78,7 +78,7 @@ export const V2SRNodesFilter = (props: V2SRNodesFilterProps) => {
   }, []);
 
   useEffect(() => {
-    if (nodes.length == 0) {
+    if (nodes.length === 0) {
       setSelectedNode(undefined);
       return;
     }

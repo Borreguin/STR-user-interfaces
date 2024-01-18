@@ -4,31 +4,34 @@
   flex-direction: row;
   margin-top: 5px;
   margin-bottom: 3px;
+  justify-content: space-evenly;
+  align-items: center;
 }
 .gr-sc-block {
   min-height: 170px;
 }
 
 .gr-sc-padding {
-  padding-top: 7px;
+  padding: 7px;
 }
 
 .gr-sc-result {
-  min-width: 320px;
-  width: 40%;
+  min-width: 200px;
+  width: 32%;
 }
 .gr-sc-processing {
   min-width: 200px;
-  width: 30%;
+  width: 32%;
 }
 .gr-sc-novedades {
   min-width: 200px;
-  width: 30%;
+  width: 32%;
 }
 
 .gr-sc-subtitle {
   color: rgb(104, 104, 106) !important;
-  max-width: 250px;
+  max-width: 60%;
+  word-wrap: break-word;
   float: left;
   font-size: 10pt;
 }
@@ -303,3 +306,13 @@
   cursor: pointer;
 }
 
+
+.gr-sc-row {
+  display: flex;
+  flex-wrap: wrap;
+  margin-top: 5px;
+  margin-bottom: 3px;
+  justify-content: space-between;
+  align-items: center;
+  width: 100%
+}

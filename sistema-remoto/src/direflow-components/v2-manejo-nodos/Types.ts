@@ -1,0 +1,56 @@
+import * as _ from "lodash";
+
+export type UTR = {
+  id_utr: string;
+  utr_nombre: string;
+  utr_tipo: string;
+  utr_code: string;
+  activado: boolean;
+  longitude: number;
+  latitude: number;
+};
+
+export type Entity = {
+  id_entidad: string;
+  entidad_nombre: string;
+  entidad_tipo: string;
+  n_tags: number;
+  n_instalaciones: number;
+  n_bahias: number;
+  activado: boolean;
+};
+
+export type Node = {
+  _id: any;
+  id_node: string;
+  nombre: string;
+  tipo: string;
+  n_tags: number;
+  actualizado: string;
+  activado: boolean;
+  entidades: Array<Entity>;
+};
+
+export function new_node() {
+  return {
+    _id: null,
+    id_node: _.uniqueId("new_node"),
+    nombre: "",
+    tipo: "",
+    n_tags: 0,
+    actualizado: "",
+    activado: true,
+    entidades: [],
+  };
+}
+
+export function new_entity() {
+  return {
+    id_entidad: _.uniqueId("new_entity"),
+    entidad_nombre: "Ingrese nombre",
+    entidad_tipo: "Nueva entidad",
+    n_tags: 0,
+    n_instalaciones: 0,
+    activado: false,
+  };
+}

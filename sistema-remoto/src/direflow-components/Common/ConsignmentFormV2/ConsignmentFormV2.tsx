@@ -1,12 +1,12 @@
 import React from "react";
 import ReactJson from "react-json-view";
-import { selection } from "../../v2/common/constants";
+import { selection } from "../../v2-common/constants";
 import {
   summarizeEntity,
   summarizeInstallation,
   summarizeNode,
 } from "../V2Summarize";
-import { V2ConsignmentForm } from "../../v2/common/V2ConsignmentForm";
+import { V2ConsignmentForm } from "../../v2-common/V2ConsignmentForm";
 
 interface ConsignmentFormV2Props {
   toConsignment: Object;

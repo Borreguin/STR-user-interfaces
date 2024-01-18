@@ -253,19 +253,23 @@
   background-color: rgb(255, 255, 255);
   overflow: hidden;
   padding: 1px !important;
-  margin: 1px;
 }
 
 .date-container {
   display: flex;
   flex-direction: row;
   flex-wrap: wrap;
+  position: absolute;
+  z-index: 5000;
 }
 
 .date-input {
-  width: 130px;
+  min-width: 170px;
+  max-width: 35%;
+  text-align: center;
   height: 37px;
-  margin-left: 2px;
+  font-size: 11pt;
+  margin: 3px;
 }
 
 .sc-btn-cal {
@@ -380,4 +384,39 @@ h5 {
   border-top-left-radius: calc(.3rem - 1px);
   border-top-right-radius: calc(.3rem - 1px);
   font-size: 14pt
+}
+
+.date-selector{
+  display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    justify-content: flex-start;
+}
+
+.left-button{
+  background-color: rgba(143, 145, 143, 0.58);
+  margin: 3px;
+  max-width: 150px;
+  min-width: 90px;
+  width: 20%
+}
+
+.sc-date-picker{
+  background-color: rgba(208, 168, 37, 0.58);
+}
+
+.sc-search-node{
+    margin-right: 10px;
+}
+
+.sc-container{
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  justify-content: flex-start;
+}
+
+.search-input{
+  margin: 3px;
+  width: 100%;
 }

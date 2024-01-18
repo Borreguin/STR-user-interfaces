@@ -26,9 +26,9 @@ import {
   ConsignmentManagementV2,
 } from "./component-exports";
 import TemplateComp from "./direflow-components/zdireflow-navigate";
-import ConverterV2 from "./direflow-components/v2/ConverterV2/App";
-import NodeManagementV2 from "./direflow-components/v2/manejo-nodos-v2/App";
-import { InstallationAndBahiasManagement } from "./direflow-components/v2/manejo-bahias/App";
+import ConverterV2 from "./direflow-components/v2-converter/App";
+import NodeManagementV2 from "./direflow-components/v2-manejo-nodos/App";
+import { InstallationAndBahiasManagement } from "./direflow-components/v2-manejo-bahias/App";
 
 export const routes = [
   { path: "/", component: ZDireflowTemplate, description: "Inicio" },

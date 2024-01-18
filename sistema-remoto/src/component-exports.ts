@@ -11,16 +11,16 @@
 
 import ZDireflowNavigate from "./direflow-components/zdireflow-navigate/App";
 import ZDireflowTemplate from "./direflow-components/zdireflow-template/App";
-import NodeManagement from "./direflow-components/v1/manejo-nodos/App";
-import UTRandTagsManagement from "./direflow-components/v1/manejo-utr-tags/App";
-import SRBackupFiles from "./direflow-components/v1/versionamiento-nodos/App";
+import NodeManagement from "./direflow-components/v1-manejo-nodos/App";
+import UTRandTagsManagement from "./direflow-components/v1-manejo-utr-tags/App";
+import SRBackupFiles from "./direflow-components/v1-versionamiento-nodos/App";
 import SRCalDisponibilidad from "./direflow-components/disponibilidad-reporte/App";
-import ConsignacionesConsulta from "./direflow-components/v1/consignaciones-consulta/App";
-import ConsignacionesIngreso from "./direflow-components/v1/consignaciones-ingreso/App";
+import ConsignacionesConsulta from "./direflow-components/v1-consignaciones-consulta/App";
+import ConsignacionesIngreso from "./direflow-components/v1-consignaciones-ingreso/App";
 import TendenciaDisponibilidadAdquisicion from "./direflow-components/tendencia-disponibilidad-adquisicion/App";
-import ConverterV2 from "./direflow-components/v2/ConverterV2/App";
-import NodeManagementV2 from "./direflow-components/v2/manejo-nodos-v2/App";
-import ConsignmentManagementV2 from "./direflow-components/v2/consignaciones-ingreso-v2/App";
+import ConverterV2 from "./direflow-components/v2-converter/App";
+import NodeManagementV2 from "./direflow-components/v2-manejo-nodos/App";
+import ConsignmentManagementV2 from "./direflow-components/v2-consignaciones-ingreso/App";
 
 export {
   ZDireflowNavigate,

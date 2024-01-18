@@ -33,6 +33,8 @@ import { ButtonSection } from "./Components/ButtonSection";
 import { DateRangeTime } from "../Common/DatePicker/DateRangeTime";
 import react_picker from "react-datepicker/dist/react-datepicker.css";
 import bootstrap from "bootstrap/dist/css/bootstrap.min.css";
+import { DatePickSelector } from "./Components/DatePickSelector";
+import { SearchSection } from "./Components/SearchSection";
 // import ModalCSS from "./Modal.css"
 
 interface props {}
@@ -169,8 +171,8 @@ class SRCalDisponibilidad extends Component<props, state> {
     this.setState({ loading: false });
   };
 
-  _update_search = (e) => {
-    this.setState({ search: e.target.value.trim() });
+  _update_search = (text: string) => {
+    this.setState({ search: text.trim() });
   };
 
   _filter_reports = (e) => {
@@ -372,34 +374,9 @@ class SRCalDisponibilidad extends Component<props, state> {
     this._filter_reports(this.state.search);
   };
 
-  handleSelect = (range) => {
-    this.setState({
-      range: [range.selection],
-      ini_date: range.selection.startDate,
-      ini_date_str: to_yyyy_mm_dd_hh_mm_ss(range.selection.startDate),
-      end_date: range.selection.endDate,
-      end_date_str: to_yyyy_mm_dd_hh_mm_ss(range.selection.endDate),
-    });
-  };
-
-  onChangeDate = (e, id) => {
-    let dt = Date.parse(e.target.value);
-    let isIniDate = id === "ini_date";
-    let isEndDate = id === "end_date";
-    if (!isNaN(dt)) {
-      if (isIniDate) {
-        this.setState({ ini_date: new Date(dt) });
-      }
-      if (isEndDate) {
-        this.setState({ end_date: new Date(dt) });
-      }
-    }
-    if (isIniDate) {
-      this.setState({ ini_date_str: e.target.value });
-    }
-    if (isEndDate) {
-      this.setState({ end_date_str: e.target.value });
-    }
+  onChangeDate = (iniDate: Date, endDate: Date) => {
+    this.setState({ ini_date: iniDate });
+    this.setState({ end_date: endDate });
   };
 
   render() {
@@ -424,32 +401,19 @@ class SRCalDisponibilidad extends Component<props, state> {
       >
         <div className="page-content">
           <Form.Group as={Row} className="sc-search">
-            <Form.Label column sm="5" className="sc-pick-menu">
-              <DateRangeTime
-                last_month={true}
-                onPickerChange={this.handle_picker_change}
-              ></DateRangeTime>
-            </Form.Label>
-            <Form.Label column sm="1" className="sc-btn-search">
-              <Button
-                variant="outline-dark"
-                onClick={this._search_report_now}
-                disabled={this.state.loading || this.state.calculating}
-                className="btn-search"
-              >
-                Actualizar
-              </Button>
-            </Form.Label>
-
-            <Col sm="5" className="sc-search-input">
-              <Form.Control
-                type="text"
-                onBlur={this._update_search}
-                onChange={this._filter_reports}
-                placeholder="Nodo a buscar"
-                disabled={this.state.calculating}
+            <div className={"sc-search-node"}>
+              <SearchSection
+                buttonText={"Consultar"}
+                placeholder={"Buscar nodos"}
+                loading={this.state.loading}
+                onChangeText={this._filter_reports}
+                onClickSearch={this._search_report_now}
+                onUpdateSearch={this._update_search}
               />
-            </Col>
+            </div>
+            <div className="sc-date-picker">
+              <DatePickSelector onChange={this.onChangeDate} />
+            </div>
           </Form.Group>
           <ButtonSection
             loading={this.state.loading || this.state.calculating}

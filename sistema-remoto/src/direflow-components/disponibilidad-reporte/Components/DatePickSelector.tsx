@@ -35,6 +35,11 @@ export const DatePickSelector = (props: DatePickSelectorProps) => {
     setEndDateStr(toLocalString(endDate));
   }, [iniDate, endDate]);
 
+  useEffect(() => {
+    onChange(range.startDate, range.endDate);
+  }, [range]);
+
+  // input changes
   const onChangeDate = (e, id) => {
     let dt = parseSpanishDate(e.target.value);
     const isIniDate = id === "ini_date";

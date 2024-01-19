@@ -8,7 +8,6 @@ interface RowValueProps {
 
 export const RowValue = (props: RowValueProps) => {
   const { label, value, valueClassName } = props;
-  console.log("valueClassName", valueClassName);
   return (
     <div className="gr-sc-row">
       <div className="gr-sc-subtitle">{label}</div>

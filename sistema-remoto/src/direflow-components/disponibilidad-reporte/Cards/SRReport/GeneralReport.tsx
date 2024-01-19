@@ -4,22 +4,25 @@ import { Card } from "react-bootstrap";
 import "./style.css";
 import { Report } from "./Report";
 import { RowValue } from "./RowValue";
+import { documentVersion } from "../../../Common/CommonConstants";
 
 export interface GeneralReportProps {
   report: Report;
   calculating: boolean;
 }
 
-class SRGeneralReport extends Component<GeneralReportProps> {
+interface state {
+  isVersion2: boolean;
+}
+
+class SRGeneralReport extends Component<GeneralReportProps, state> {
   constructor(props) {
     super(props);
-    let tiempo_calculo_segundos = 0;
-    this.props.report.reportes_nodos.forEach((report) => {
-      tiempo_calculo_segundos = Math.max(
-        tiempo_calculo_segundos,
-        report.tiempo_calculo_segundos,
-      );
-    });
+    console.log("SRGeneralReport constructor", this.props.report);
+    this.state = {
+      isVersion2:
+        this.props.report?.documento === documentVersion.finalReportV2,
+    };
   }
 
   _format_date = () => {
@@ -32,6 +35,24 @@ class SRGeneralReport extends Component<GeneralReportProps> {
     } else {
       return percentage.toFixed(6);
     }
+  };
+
+  _get_processed_tags_number = () => {
+    return this.state.isVersion2
+      ? this.props.report.procesamiento.numero_tags_procesadas
+      : this.props.report.procesamiento.numero_tags_total;
+  };
+
+  _get_processed_utrs_or_instalaciones_number = () => {
+    return this.state.isVersion2
+      ? this.props.report.procesamiento.numero_instalaciones_procesadas
+      : this.props.report.procesamiento.numero_utrs_procesadas;
+  };
+
+  _get_failed_utrs_or_instalaciones_number = () => {
+    return this.state.isVersion2
+      ? this.props.report.novedades.instalaciones_fallidas
+      : this.props.report.novedades.utr_fallidas;
   };
 
   render() {
@@ -83,12 +104,28 @@ class SRGeneralReport extends Component<GeneralReportProps> {
               <div>
                 <RowValue
                   label={"Tags calculadas:"}
-                  value={"" + this.props.report.procesamiento.numero_tags_total}
+                  value={"" + this._get_processed_tags_number()}
                 />
+                {this.state.isVersion2 ? (
+                  <RowValue
+                    label={"Bahias calculadas:"}
+                    value={
+                      "" +
+                      this.props.report.procesamiento.numero_bahias_procesadas
+                    }
+                  />
+                ) : (
+                  <></>
+                )}
+
                 <RowValue
-                  label={"UTRs calculadas:"}
+                  label={
+                    this.state.isVersion2
+                      ? "Instalaciones calculadas"
+                      : "UTRs calculadas:"
+                  }
                   value={
-                    "" + this.props.report.procesamiento.numero_utrs_procesadas
+                    "" + this._get_processed_utrs_or_instalaciones_number()
                   }
                 />
                 <RowValue
@@ -124,9 +161,21 @@ class SRGeneralReport extends Component<GeneralReportProps> {
                   label={"Tags falladas:"}
                   value={"" + this.props.report.novedades.tags_fallidas}
                 />
+                {this.state.isVersion2 ? (
+                  <RowValue
+                    label={"Bahias falladas:"}
+                    value={"" + this.props.report.novedades.bahias_fallidas}
+                  />
+                ) : (
+                  <></>
+                )}
                 <RowValue
-                  label={"UTRs falladas:"}
-                  value={"" + this.props.report.novedades.utr_fallidas}
+                  label={
+                    this.state.isVersion2
+                      ? "Instalaciones falladas"
+                      : "UTRs falladas:"
+                  }
+                  value={"" + this._get_failed_utrs_or_instalaciones_number()}
                 />
                 <RowValue
                   label={"Entidades falladas:"}

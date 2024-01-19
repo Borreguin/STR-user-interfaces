@@ -397,8 +397,10 @@ h5 {
   background-color: rgba(143, 145, 143, 0.58);
   margin: 3px;
   max-width: 150px;
-  min-width: 90px;
-  width: 20%
+  min-width: 40px;
+  width: 20%;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 
 .sc-date-picker{
@@ -406,10 +408,10 @@ h5 {
 }
 
 .sc-search-node{
-    margin-right: 10px;
+    margin-right: 5px;
 }
 
-.sc-container{
+.search-container{
   display: flex;
   flex-direction: row;
   flex-wrap: wrap;

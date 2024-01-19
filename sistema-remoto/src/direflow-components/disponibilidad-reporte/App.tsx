@@ -1,21 +1,11 @@
 import React, { Component } from "react";
 import "bootstrap/dist/css/bootstrap.min.css";
 import { Spinner, Form, Row, Col, Button } from "react-bootstrap";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import {
-  faPencilAlt,
-  faPenFancy,
-  faTag,
-  faFileExcel,
-} from "@fortawesome/free-solid-svg-icons";
 import ReactJson from "react-json-view";
 import NodeReport from "./SRCalDisponibilidad_nodes";
-import ReactTooltip from "react-tooltip";
 import * as _ from "lodash";
 import ReactDateCSS from "react-date-range/dist/styles.css"; // main style file
 import ReactDateThemeCSS from "react-date-range/dist/theme/default.css"; // theme css file
-import { DateRange } from "react-date-range";
-import { es } from "date-fns/locale";
 import { Styled } from "direflow-component";
 import {
   get_last_month_dates,
@@ -30,11 +20,9 @@ import ReportCSS from "./Cards/Report/Report.css";
 import SRCardCSS from "./Cards/SRCard/SRCard.css";
 import SRReportCSS from "./Cards/SRReport/style.css";
 import { ButtonSection } from "./Components/ButtonSection";
-import { DateRangeTime } from "../Common/DatePicker/DateRangeTime";
-import react_picker from "react-datepicker/dist/react-datepicker.css";
-import bootstrap from "bootstrap/dist/css/bootstrap.min.css";
 import { DatePickSelector } from "./Components/DatePickSelector";
 import { SearchSection } from "./Components/SearchSection";
+import { documentVersion } from "../Common/CommonConstants";
 // import ModalCSS from "./Modal.css"
 
 interface props {}
@@ -55,6 +43,7 @@ interface state {
   msg: string;
   range: Object;
   show_date: boolean;
+  document: string;
 }
 
 // Pagina inicial de manejo de nodos:
@@ -86,17 +75,13 @@ class SRCalDisponibilidad extends Component<props, state> {
       msg: "",
       range: [range],
       show_date: false,
+      document: documentVersion.finalReportV2,
     };
   }
 
   async componentDidMount() {
     this._search_report_now();
   }
-
-  // permite manejar los cambios ocurridos en los hijos:
-  handle_picker_change = (ini_date, end_date) => {
-    this.setState({ ini_date: ini_date, end_date: end_date });
-  };
 
   // permite manejar cambios ocurridos en detalle de cálculo:
   handle_calculation_details = () => {
@@ -400,7 +385,7 @@ class SRCalDisponibilidad extends Component<props, state> {
         scoped={false}
       >
         <div className="page-content">
-          <Form.Group as={Row} className="sc-search">
+          <Form.Group as={Row} className={"sc-search"}>
             <div className={"sc-search-node"}>
               <SearchSection
                 buttonText={"Consultar"}

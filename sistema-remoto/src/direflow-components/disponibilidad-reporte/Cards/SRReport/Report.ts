@@ -11,13 +11,16 @@ export type Report = {
   tiempo_calculo_segundos: number;
   actualizado: string;
   tipo: string;
+  documento?: string;
 };
 
 export type Novedades = {
   tags_fallidas: number;
-  utr_fallidas: number;
   entidades_fallidas: number;
   nodos_fallidos: number;
+  utr_fallidas?: number; // for version 1
+  instalaciones_fallidas: number; // for version 2
+  bahias_fallidas: number; // for version 2
 };
 
 export type NovedadesDetalle = {
@@ -31,6 +34,9 @@ export type Procesamiento = {
   numero_utrs_procesadas: number;
   numero_entidades_procesadas: number;
   numero_nodos_procesados?: number;
+  numero_tags_procesadas?: number; // for version 2
+  numero_instalaciones_procesadas: number; // for version 2
+  numero_bahias_procesadas: number; // for version 2
 };
 
 export type SummaryReport = {
@@ -63,50 +69,49 @@ export type info = {
 };
 
 export type reporte_nodo = {
-  id_node: string,
-  id_report: string,
-  tipo: string,
-  nombre: string,
-  fecha_inicio: string,
-  fecha_final: string,
-  actualizado: string,
-  tiempo_calculo_segundos: number,
-  periodo_evaluacion_minutos: number,
-  disponibilidad_promedio_ponderada_porcentage: number,
-  tags_fallidas: Array<string>,
-  utr_fallidas: Array<string>,
-  entidades_fallidas: Array<string>,
-  ponderacion: number,
-  numero_tags_total: number,
-  reportes_entidades: Array<reporte_entidad>
-}
-
+  id_node: string;
+  id_report: string;
+  tipo: string;
+  nombre: string;
+  fecha_inicio: string;
+  fecha_final: string;
+  actualizado: string;
+  tiempo_calculo_segundos: number;
+  periodo_evaluacion_minutos: number;
+  disponibilidad_promedio_ponderada_porcentage: number;
+  tags_fallidas: Array<string>;
+  utr_fallidas: Array<string>;
+  entidades_fallidas: Array<string>;
+  ponderacion: number;
+  numero_tags_total: number;
+  reportes_entidades: Array<reporte_entidad>;
+};
 
 export type reporte_entidad = {
-  entidad_nombre: string,
-  entidad_tipo: string,
-  numero_tags: number,
-  reportes_utrs: Array<reporte_utr>,
-  disponibilidad_promedio_ponderada_porcentage: number,
-  disponibilidad_promedio_ponderada_minutos: number,
-  periodo_evaluacion_minutos: number,
-  ponderacion: number
-}
+  entidad_nombre: string;
+  entidad_tipo: string;
+  numero_tags: number;
+  reportes_utrs: Array<reporte_utr>;
+  disponibilidad_promedio_ponderada_porcentage: number;
+  disponibilidad_promedio_ponderada_minutos: number;
+  periodo_evaluacion_minutos: number;
+  ponderacion: number;
+};
 
 export type reporte_utr = {
-  id_utr: string,
-  nombre: string,
-  tipo: string,
-  tag_details: Array<tag_details>,
-  numero_tags: number,
-  indisponibilidad_acumulada_minutos: number,
-  consignaciones: [],
-  consignaciones_acumuladas_minutos: number,
-  disponibilidad_promedio_porcentage: number,
-  ponderacion: number
-}
+  id_utr: string;
+  nombre: string;
+  tipo: string;
+  tag_details: Array<tag_details>;
+  numero_tags: number;
+  indisponibilidad_acumulada_minutos: number;
+  consignaciones: [];
+  consignaciones_acumuladas_minutos: number;
+  disponibilidad_promedio_porcentage: number;
+  ponderacion: number;
+};
 
 export type tag_details = {
-  tag_name: string,
-  indisponible_minutos: number
-}
+  tag_name: string;
+  indisponible_minutos: number;
+};

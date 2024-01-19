@@ -19,7 +19,7 @@ export const SearchSection = (props: SearchSectionProps) => {
     onUpdateSearch,
   } = props;
   return (
-    <div className={"sc-container"}>
+    <div className={"search-container"}>
       <Button
         variant="outline-dark"
         onClick={() => onClickSearch()}
@@ -35,7 +35,7 @@ export const SearchSection = (props: SearchSectionProps) => {
           onBlur={(e) => onUpdateSearch(e.target.value)}
           placeholder={placeholder}
           disabled={loading}
-          className="search-input"
+          className={"search-input"}
         />
       </div>
     </div>

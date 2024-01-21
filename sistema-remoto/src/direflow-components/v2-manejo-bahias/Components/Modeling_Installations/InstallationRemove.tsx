@@ -6,6 +6,7 @@ export function InstallationRemove(props) {
   const { selectedEntityId, selectedInstallation, requestReload } = props;
   const [loading, setLoading] = useState(false);
   const [validated, setValidated] = useState(false);
+  const [msg, setMsg] = useState(undefined);
 
   const [deleteForm, setDeleteForm] = useState({
     instalacion_nombre: undefined,
@@ -13,7 +14,7 @@ export function InstallationRemove(props) {
     protocolo: undefined,
     latitud: 0,
     longitud: 0,
-    activado: undefined,
+    activado: selectedInstallation.activado,
     instalacion_ems_code: undefined,
   });
 
@@ -25,18 +26,22 @@ export function InstallationRemove(props) {
 
   const handleSubmit = (event) => {
     const form = event.currentTarget;
+    event.preventDefault();
     if (form.checkValidity() === false) {
-      event.preventDefault();
       event.stopPropagation();
     }
 
     setLoading(true);
     setValidated(true);
 
-    deleteInstallation(selectedEntityId, selectedInstallation._id).then(() => {
-      setLoading(false);
-      requestReload();
-    });
+    deleteInstallation(selectedEntityId, selectedInstallation._id).then(
+      (resp) => {
+        console.log("resp", resp);
+        setLoading(false);
+        setMsg(resp ? resp?.msg : "No defined");
+        requestReload();
+      },
+    );
   };
 
   return (
@@ -123,12 +128,16 @@ export function InstallationRemove(props) {
           type="checkbox"
           label="Activada"
           name="activado"
+          defaultChecked={deleteForm.activado || false}
           value={deleteForm.activado || false}
         />
       </Form.Group>
-      <Button variant="primary" type="submit" disabled={loading}>
-        Eliminar Instalación
-      </Button>
+      <div className={"sc-container"}>
+        <Button variant="danger" type="submit" disabled={loading}>
+          Eliminar {selectedInstallation.instalacion_nombre}
+        </Button>
+        <div>{msg && <div className={"sc-message"}>{msg}</div>}</div>
+      </div>
     </Form>
   );
 }

@@ -1,5 +1,5 @@
 import { Col, Form } from "react-bootstrap";
-import React, { useEffect, useState } from "react";
+import React, { memo, useEffect, useState } from "react";
 import { SelectOption } from "./model";
 import { v4 as uuidv4 } from "uuid";
 
@@ -64,6 +64,9 @@ const RenderSelection = (props: TypeSelector): JSX.Element => {
 
 interface TypeNameSelector {
   label: string;
+  selectedTypeAndName:
+    | { selectedType: SelectOption; selectedName: SelectOption }
+    | undefined;
   typeAndNameOptions: TypeAndNameOptions;
   onSelection: any;
 }
@@ -78,10 +81,14 @@ const renderAlert = (msg: string, type: string) => {
   );
 };
 
-export const TypeNameSelector = (props: TypeNameSelector): JSX.Element => {
-  const { label, typeAndNameOptions, onSelection } = props;
-  const [selectedType, setSelectedType] = useState<SelectOption>(undefined);
-  const [selectedName, setSelectedName] = useState<SelectOption>(undefined);
+const TypeNameSelectorComponent = (props: TypeNameSelector): JSX.Element => {
+  const { label, typeAndNameOptions, onSelection, selectedTypeAndName } = props;
+  const [selectedType, setSelectedType] = useState<SelectOption>(
+    selectedTypeAndName ? selectedTypeAndName.selectedType : undefined,
+  );
+  const [selectedName, setSelectedName] = useState<SelectOption>(
+    selectedTypeAndName ? selectedTypeAndName.selectedName : undefined,
+  );
   const [nameOptions, setNameOptions] = useState<SelectOption[]>([]);
   const [lastNameOptionId, setLastNameOptionId] = useState<string>("");
 
@@ -122,7 +129,6 @@ export const TypeNameSelector = (props: TypeNameSelector): JSX.Element => {
     if (selectedType === undefined || selectedName === undefined) {
       const toTypeSelect = typeAndNameOptions.typeOptions[0];
       setNameOptionsByType(toTypeSelect);
-
       return;
     }
     findTypeAndNameOptions();
@@ -160,8 +166,17 @@ export const TypeNameSelector = (props: TypeNameSelector): JSX.Element => {
       typeAndNameOptions.nameOptionsByType[toTypeSelect.id] !== undefined
     ) {
       setSelectedType(toTypeSelect);
-      setSelectedName(typeAndNameOptions.nameOptionsByType[toTypeSelect.id][0]);
-      setNameOptions(typeAndNameOptions.nameOptionsByType[toTypeSelect.id]);
+      const foundName = typeAndNameOptions.nameOptionsByType[
+        toTypeSelect.id
+      ].find((n) => n.id === selectedName?.id);
+      if (selectedName === undefined || foundName === undefined) {
+        setSelectedName(
+          typeAndNameOptions.nameOptionsByType[toTypeSelect.id][0],
+        );
+      }
+      let nameOptions = typeAndNameOptions.nameOptionsByType[toTypeSelect.id];
+      nameOptions.sort((a, b) => (a.value > b.value ? 1 : -1));
+      setNameOptions(nameOptions);
     }
   };
 
@@ -203,3 +218,5 @@ export const TypeNameSelector = (props: TypeNameSelector): JSX.Element => {
     </>
   );
 };
+
+export const TypeNameSelector = memo(TypeNameSelectorComponent);

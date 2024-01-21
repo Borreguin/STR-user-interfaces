@@ -43,7 +43,7 @@ interface V2SRNodesFilterProps {
   onFinishReload: Function;
 }
 
-export const V2SRNodesFilter = (props: V2SRNodesFilterProps) => {
+const V2SRNodesFilterComponent = (props: V2SRNodesFilterProps) => {
   const { onFinalChange, toReload, onFinishReload } = props;
   const [loading, setLoading] = useState(true);
   const [msg, setMsg] = useState(msgUpdateNodes);
@@ -62,6 +62,14 @@ export const V2SRNodesFilter = (props: V2SRNodesFilterProps) => {
   const [installations, setInstallations] = useState<Array<v2Installation>>([]);
   const [installationOptions, setInstallationOptions] =
     useState<TypeAndNameOptions>(undefined);
+
+  const [lastSelectedNode, setLastSelectedNode] = useState<v2Node>(undefined);
+  const [lastSelectedEntity, setLastSelectedEntity] =
+    useState<v2Entity>(undefined);
+  const [lastNodeTypeAndName, setLastNodeTypeAndName] = useState(undefined);
+  const [lastEntityTypeAndName, setLastEntityTypeAndName] = useState(undefined);
+  const [lastInstallationTypeAndName, setLastInstallationTypeAndName] =
+    useState(undefined);
 
   useEffect(() => {
     const iniData = () => {
@@ -82,17 +90,48 @@ export const V2SRNodesFilter = (props: V2SRNodesFilterProps) => {
       setSelectedNode(undefined);
       return;
     }
-    setSelectedNode(nodes[0]);
-    setNodeOptions(getNodeOptions(nodes));
+    if (lastSelectedNode !== undefined && lastSelectedEntity !== undefined) {
+      setLastValues();
+    } else {
+      setDefaultValues();
+    }
   }, [nodes]);
 
   useEffect(() => {
     if (toReload) {
       onUpdateRequest();
+    } else {
+      setLastValues();
     }
   }, [toReload]);
 
+  const setDefaultValues = () => {
+    setSelectedNode(nodes[0]);
+    setNodeOptions(getNodeOptions(nodes));
+  };
+
+  const setLastValues = () => {
+    const _node = nodes.find((n) => n._id === lastSelectedNode._id);
+    if (_node === undefined) {
+      setDefaultValues();
+      return;
+    }
+    setNodeOptions(getNodeOptions(nodes));
+    setSelectedNode(_node);
+    const _entity = _node.entidades.find(
+      (e) => e.id_entidad === lastSelectedEntity.id_entidad,
+    );
+    if (_entity !== undefined) {
+      setSelectedEntity(_entity);
+    } else {
+      setDefaultValues();
+    }
+    return;
+  };
+
   const onUpdateRequest = () => {
+    setLastSelectedNode(selectedNode);
+    setLastSelectedEntity(selectedEntity);
     setLoading(true);
     setMsg(msgUpdateNodes);
     getAllNodeInfo().then((response) => {
@@ -124,6 +163,7 @@ export const V2SRNodesFilter = (props: V2SRNodesFilterProps) => {
 
   const onSelectionNode = (nodeNameOption: SelectOption) => {
     const node = nodes.find((n) => n._id === nodeNameOption.id);
+    setLastSelectedNode(selectedNode);
     setSelectedNode(node);
     if (node.entidades.length === 0) {
       setEntityOptions({ typeOptions: [], nameOptionsByType: {} });
@@ -179,35 +219,52 @@ export const V2SRNodesFilter = (props: V2SRNodesFilterProps) => {
         key={"node"}
         label={"Nodo"}
         typeAndNameOptions={nodeOptions}
+        selectedTypeAndName={lastNodeTypeAndName}
         onSelection={(
-          _nodeTypeOption: SelectOption,
+          nodeTypeOption: SelectOption,
           nodeNameOption: SelectOption,
         ) => {
           onSelectionNode(nodeNameOption);
+          setLastNodeTypeAndName({
+            selectedType: nodeTypeOption,
+            selectedName: nodeNameOption,
+          });
         }}
       />
       <TypeNameSelector
         key={"entity"}
         label={"Entidad"}
         typeAndNameOptions={entityOptions}
+        selectedTypeAndName={lastEntityTypeAndName}
         onSelection={(
-          _entityTypeOption: SelectOption,
+          entityTypeOption: SelectOption,
           entityNameOption: SelectOption,
         ) => {
           onSelectionEntity(entityNameOption);
+          setLastEntityTypeAndName({
+            selectedType: entityTypeOption,
+            selectedName: entityNameOption,
+          });
         }}
       />
       <TypeNameSelector
         key={"installation"}
         label={"Instalación"}
         typeAndNameOptions={installationOptions}
+        selectedTypeAndName={lastInstallationTypeAndName}
         onSelection={(
-          _installationTypeOption: SelectOption,
+          installationTypeOption: SelectOption,
           installationNameOption: SelectOption,
         ) => {
           onSelectionInstallation(installationNameOption);
+          setLastInstallationTypeAndName({
+            selectedType: installationTypeOption,
+            selectedName: installationNameOption,
+          });
         }}
       />
     </Form>
   );
 };
+
+export const V2SRNodesFilter = React.memo(V2SRNodesFilterComponent);

@@ -130,7 +130,6 @@ export function BahiaAdministration(props) {
 
       {!bahia && (
         <Button
-          className="col-4"
           variant="primary"
           type="button"
           disabled={loading}
@@ -142,8 +141,8 @@ export function BahiaAdministration(props) {
       {bahia && (
         <Row>
           <Button
-            className="col-4"
-            variant="primary"
+            className="btn-half"
+            variant="warning"
             type="button"
             disabled={loading}
             onClick={handleEdit}
@@ -152,7 +151,7 @@ export function BahiaAdministration(props) {
           </Button>
           <br className="col" />
           <Button
-            className="col-4"
+            className="btn-half"
             variant="danger"
             type="button"
             disabled={loading}

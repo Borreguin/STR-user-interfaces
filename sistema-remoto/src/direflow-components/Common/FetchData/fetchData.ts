@@ -53,8 +53,10 @@ export const fetchDELETEData = async (url: string): Promise<any> => {
   return await fetch(url, {
     method: "DELETE",
   })
-    .then((res) => res.text()) // or res.json()
-    .then((res) => console.log(res))
+    .then((res) => handleResponse(res)) // or res.json()
+    .then((json) => {
+      return json;
+    })
     .catch((e) => handleError(url, e));
 };
 

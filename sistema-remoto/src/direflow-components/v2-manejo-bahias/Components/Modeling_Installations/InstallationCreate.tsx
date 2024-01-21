@@ -1,12 +1,13 @@
 import { Button, Col, Form, Row } from "react-bootstrap";
-import React, { useState } from "react";
+import React, { memo, useState } from "react";
 import { createNewInstallation } from "../../../Common/FetchData/V2SRFetchData";
 
-export function InstallationCreate(props) {
+function InstallationCreateComponent(props) {
   const { selectedEntity, requestReload } = props;
   const [loading, setLoading] = useState(false);
   const [validated, setValidated] = useState(false);
-  console.log(selectedEntity);
+  const [msg, setMsg] = useState(undefined);
+
   const [createForm, setCreateForm] = useState({
     instalacion_nombre: undefined,
     instalacion_tipo: undefined,
@@ -34,22 +35,26 @@ export function InstallationCreate(props) {
     }
 
     const form = event.currentTarget;
+    event.preventDefault();
     if (form.checkValidity() === false) {
-      event.preventDefault();
       event.stopPropagation();
     }
 
     setLoading(true);
     setValidated(true);
 
-    createNewInstallation(selectedEntity.id_entidad, formToSend).then(() => {
-      setLoading(false);
-      requestReload();
-    });
+    createNewInstallation(selectedEntity.id_entidad, formToSend).then(
+      (resp) => {
+        setLoading(false);
+        requestReload();
+        setMsg(resp.msg);
+        requestReload();
+      },
+    );
   };
 
   return (
-    <Form noValidate validated={validated} onSubmit={handleSubmit}>
+    <Form validated={validated} onSubmit={handleSubmit}>
       <Row className="mb-3">
         <Col>
           <Form.Group>
@@ -59,7 +64,7 @@ export function InstallationCreate(props) {
               placeholder="Ingresar EMS code"
               required
               name="instalacion_ems_code"
-              value={createForm.instalacion_ems_code}
+              value={createForm.instalacion_ems_code || ""}
               onChange={handleChange}
             />
           </Form.Group>
@@ -72,7 +77,7 @@ export function InstallationCreate(props) {
               placeholder="Ingresar Tipo"
               required
               name="instalacion_tipo"
-              value={createForm.instalacion_tipo}
+              value={createForm.instalacion_tipo || ""}
               onChange={handleChange}
             />
           </Form.Group>
@@ -87,7 +92,7 @@ export function InstallationCreate(props) {
               placeholder="Ingresar nombre"
               required
               name="instalacion_nombre"
-              value={createForm.instalacion_nombre}
+              value={createForm.instalacion_nombre || ""}
               onChange={handleChange}
             />
           </Form.Group>
@@ -100,7 +105,7 @@ export function InstallationCreate(props) {
               placeholder="Ingresar Protocolo"
               required
               name="protocolo"
-              value={createForm.protocolo}
+              value={createForm.protocolo || ""}
               onChange={handleChange}
             />
           </Form.Group>
@@ -113,9 +118,10 @@ export function InstallationCreate(props) {
             <Form.Label className="required">Latitud</Form.Label>
             <Form.Control
               type="number"
+              step="0.00001"
               required
               name="latitud"
-              value={createForm.latitud || 0}
+              value={createForm.latitud || ""}
               onChange={handleChange}
             />
           </Form.Group>
@@ -125,9 +131,10 @@ export function InstallationCreate(props) {
             <Form.Label className="required">Longitud</Form.Label>
             <Form.Control
               type="number"
+              step="0.00001"
               required
               name="longitud"
-              value={createForm.longitud || 0}
+              value={createForm.longitud || ""}
               onChange={handleChange}
             />
           </Form.Group>
@@ -139,12 +146,31 @@ export function InstallationCreate(props) {
           label="Activada"
           name="activado"
           value={createForm.activado || false}
-          onChange={handleChange}
+          onChange={() => {
+            setCreateForm((values) => ({
+              ...values,
+              activado: !createForm.activado,
+            }));
+          }}
         />
       </Form.Group>
-      <Button variant="primary" type="submit" disabled={loading}>
-        Crear Instalación
-      </Button>
+      <div className={"sc-container"}>
+        <Button variant="success" type="submit" disabled={loading}>
+          Crear Instalación
+        </Button>
+        <div>{msg && <div className={"sc-message"}>{msg}</div>}</div>
+      </div>
     </Form>
   );
 }
+
+const isEqual = (prevProps, nextProps) => {
+  return (
+    prevProps &&
+    nextProps &&
+    prevProps.selectedEntity &&
+    nextProps.selectedEntity &&
+    prevProps.selectedEntity.id_entidad === nextProps.selectedEntity.id_entidad
+  );
+};
+export const InstallationCreate = memo(InstallationCreateComponent, isEqual);

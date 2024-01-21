@@ -1,4 +1,9 @@
-import {v2Bahia, v2Entity, v2Installation, v2Node} from "../V2GeneralTypes";
+import { v2Bahia, v2Entity, v2Installation, v2Node } from "../V2GeneralTypes";
+
+export type SimpleResponse = {
+  success: boolean;
+  msg: string;
+};
 
 export type NodeResponse = {
   success: boolean;

@@ -254,4 +254,50 @@
 
 .bahias-container{
   max-height: 350px;
+  width: 100%;
+  border: 1px #000000;
+  padding: 7px;
+  border-radius: 4px;
+  background-color: rgba(157, 159, 162, 0.44);
+}
+
+.btn-new-bahia{
+  margin: 7px;
+  width: 95%;
+}
+
+.sc-message{
+  margin-left: 7px;
+  width: 100%;
+}
+
+.sc-container{
+  display: flex;
+    flex-direction: row;
+  flex-wrap: nowrap;
+  align-items: center;
+}
+
+.sc-new-bahia-container{
+  display: flex;
+    flex-direction: row;
+  align-items: center;
+  justify-content: center;
+}
+
+.sc-bahia-selector{
+  width: 40%;
+  margin: 7px;
+  max-width: 350px;
+}
+
+.sc-bahia-form{
+  width: 60%;
+  margin: 7px;
+  max-width: 400px;
+}
+
+.btn-half{
+  max-width: 40%!important;
+  margin: 7px;
 }

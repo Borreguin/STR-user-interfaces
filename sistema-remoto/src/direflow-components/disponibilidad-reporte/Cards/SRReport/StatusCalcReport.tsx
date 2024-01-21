@@ -6,8 +6,12 @@ import "./style.css";
 import { StatusReport } from "./Report";
 import { SRM_API_URL } from "../../../../Constantes";
 import { to_yyyy_mm_dd_hh_mm_ss } from "../../../Common/DatePicker/DateRange";
+import { MAX_N_TRIES, STATUS_INTERVAL_MS } from "../../Utils/constants";
+import { getStatusReport } from "../../../Common/FetchData/V2SRFetchData";
+import { StatusReportResponse } from "../../../Common/FetchData/model";
 
 type StatusCalcReportProps = {
+  generalReportId: string;
   ini_date: Date;
   end_date: Date;
   onFinish: Function;
@@ -20,6 +24,7 @@ type StatusCalcReportState = {
   isFetching: boolean;
   all_finished: boolean;
   isFinish: boolean;
+  nTries: number;
 };
 
 class StatusCalcReport extends Component<
@@ -31,12 +36,13 @@ class StatusCalcReport extends Component<
   constructor(props) {
     super(props);
     this.state = {
-      log: undefined,
+      log: { msg: "Obteniendo información del cálculo" },
       status: [],
       percentage: 0,
       isFetching: false,
       all_finished: false,
       isFinish: false,
+      nTries: 0,
     };
     this.abortController = new AbortController();
   }
@@ -49,7 +55,7 @@ class StatusCalcReport extends Component<
       return;
     }
     // consultar el estado del cálculo
-    this.timer = setInterval(() => this._inform_status(), 12000);
+    this.timer = setInterval(() => this._inform_status(), STATUS_INTERVAL_MS);
   }
 
   componentWillUnmount() {
@@ -60,16 +66,35 @@ class StatusCalcReport extends Component<
     } catch {}
   }
 
-  _handle_finish_report_status = async () => {
-    this.props.onFinish(this.state.log);
+  _checkNTries = (generalStatusReport: StatusReportResponse) => {
+    if (!generalStatusReport.success || !generalStatusReport.report) {
+      this.setState({ nTries: this.state.nTries + 1 });
+      if (this.state.nTries >= MAX_N_TRIES) {
+        this.props.onFinish(
+          { msg: "No se pudo obtener el estado del cálculo" },
+          false,
+        );
+      }
+      return false;
+    }
+    return true;
   };
 
   _inform_status = async () => {
+    if (this.props.generalReportId === undefined) {
+      return;
+    }
+    const generalStatusReport = await getStatusReport(
+      this.props.generalReportId,
+    );
+    if (!this._checkNTries(generalStatusReport)) {
+      return;
+    }
 
-    if (this.state.isFinish) { 
-      setTimeout(() => {
-        this._handle_finish_report_status();
-      }, 10000);
+    const statusReport = generalStatusReport.report as StatusReport;
+    if (statusReport.finish) {
+      this.props.onFinish({ msg: statusReport.msg }, !statusReport.fail);
+      return;
     }
 
     this.setState({ isFetching: true });
@@ -84,29 +109,8 @@ class StatusCalcReport extends Component<
           });
           this.setState({ status: json.status });
         }
-        this.setState({ isFetching: false, log: json }, () => { 
-          this._processing_percentage();
-          if (this.state.all_finished && !this.state.isFinish) {
-            this.setState({ percentage: 100, isFinish: true});
-            return;
-          }
-        }
-        );
       })
       .catch(console.log);
-  };
-
-  _processing_percentage = () => {
-    let p = 0;
-    let all_finished = true;
-    this.state.status.forEach((status_report) => {
-      p += status_report.percentage;
-      all_finished = all_finished && status_report.finish;
-    });
-    if (this.state.status.length > 0) {
-      p = p / this.state.status.length;
-    }
-    this.setState({ percentage: p, all_finished: all_finished});
   };
 
   _range_time = () => {

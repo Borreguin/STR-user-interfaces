@@ -18,7 +18,6 @@ interface state {
 class SRGeneralReport extends Component<GeneralReportProps, state> {
   constructor(props) {
     super(props);
-    console.log("SRGeneralReport constructor", this.props.report);
     this.state = {
       isVersion2:
         this.props.report?.documento === documentVersion.finalReportV2,

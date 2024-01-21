@@ -13,12 +13,14 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import ReactTooltip from "react-tooltip";
 import DetailReport from "./DetailReport";
 import ReactJson from "react-json-view";
-import * as _ from "lodash"
+import * as _ from "lodash";
 import { to_yyyy_mm_dd_hh_mm_ss } from "../../../Common/DatePicker/DateRange";
 import { SRM_API_URL } from "../../../../Constantes";
+import { documentVersion } from "../../../Common/CommonConstants";
 
 type IndReportProps = {
   report: SummaryReport;
+  document: string;
   calculating: boolean;
   ini_date: Date;
   end_date: Date;
@@ -44,7 +46,7 @@ class IndividualReport extends Component<IndReportProps, IndReportState> {
     super(props);
     let d = this._format_percentage(
       this.props.report.disponibilidad_promedio_ponderada_porcentage,
-      3
+      3,
     );
     this.tooltip = React.createRef();
     this.state = {
@@ -65,10 +67,9 @@ class IndividualReport extends Component<IndReportProps, IndReportState> {
   _format_percentage = (percentage: number, n: number) => {
     if (percentage === 100) {
       return "100";
-    } else if (percentage < 0) { 
+    } else if (percentage < 0) {
       return "----";
-    }
-    else {
+    } else {
       return "" + percentage.toFixed(n);
     }
   };
@@ -78,10 +79,14 @@ class IndividualReport extends Component<IndReportProps, IndReportState> {
   };
 
   _total_tags = () => {
-    return (
-      this.props.report.procesamiento.numero_tags_total +
-      this.props.report.novedades.tags_fallidas.length
-    );
+    console.log("document here code", this.props.document);
+    if (this.props.document !== documentVersion.finalReportV2) {
+      return (
+        this.props.report.procesamiento.numero_tags_total +
+        this.props.report.novedades.tags_fallidas.length
+      );
+    }
+    return 1000;
   };
 
   _porcentage_tags_cal = () => {
@@ -89,7 +94,7 @@ class IndividualReport extends Component<IndReportProps, IndReportState> {
     if (n > 0) {
       return this._format_percentage(
         (this.props.report.procesamiento.numero_tags_total / n) * 100,
-        1
+        1,
       );
     } else {
       return "-";
@@ -133,11 +138,13 @@ class IndividualReport extends Component<IndReportProps, IndReportState> {
         this.props.report.nombre +
         "? \n\n" +
         "Esta acción excluirá y eliminará el calculo de este nodo del reporte final. \nSi desea re-calcular este nodo, pulse el botón 'Re-calcular nodo'" +
-        "\n\nNOTA! Una vez eliminado el cálculo, la única manera de volver a realizar el cálculo de este nodo \nserá mediante el botón RE-ESCRIBIR CÁLCULO de todos los nodos."
+        "\n\nNOTA! Una vez eliminado el cálculo, la única manera de volver a realizar el cálculo de este nodo \nserá mediante el botón RE-ESCRIBIR CÁLCULO de todos los nodos.",
     );
     if (confirm) {
       this.setState({ calculating: true, disponibilidad: "---" });
-      let path = `${SRM_API_URL}/disp-sRemoto/disponibilidad/${this.props.report.tipo}/${this.props.report.nombre}/${this._range_time()}`;
+      let path = `${SRM_API_URL}/disp-sRemoto/disponibilidad/${
+        this.props.report.tipo
+      }/${this.props.report.nombre}/${this._range_time()}`;
       await fetch(path, {
         method: "DELETE",
         headers: { "Content-Type": "application/json" },
@@ -196,7 +203,9 @@ class IndividualReport extends Component<IndReportProps, IndReportState> {
   };
 
   _get_details_for_this_report = () => {
-    let path = `${SRM_API_URL}/disp-sRemoto/disponibilidad/${this.props.report.tipo}/${this.props.report.nombre}/${this._range_time()}`;
+    let path = `${SRM_API_URL}/disp-sRemoto/disponibilidad/${
+      this.props.report.tipo
+    }/${this.props.report.nombre}/${this._range_time()}`;
 
     fetch(path)
       .then((resp) => resp.json())
@@ -205,34 +214,46 @@ class IndividualReport extends Component<IndReportProps, IndReportState> {
         if (report.tags_fallidas_detalle !== undefined) {
           novedades["tags_fallidas_detalle"] = report.tags_fallidas_detalle;
         }
-        if (report.entidades_fallidas !== undefined && report.entidades_fallidas.length > 0) {
+        if (
+          report.entidades_fallidas !== undefined &&
+          report.entidades_fallidas.length > 0
+        ) {
           novedades["entidades_fallidas"] = report.entidades_fallidas;
         }
-        if (report.utr_fallidas !== undefined && report.utr_fallidas.length > 0) {
+        if (
+          report.utr_fallidas !== undefined &&
+          report.utr_fallidas.length > 0
+        ) {
           novedades["utr_fallidas"] = report.utr_fallidas;
         }
-        if (report.tags_fallidas !== undefined && report.tags_fallidas.length > 0) {
+        if (
+          report.tags_fallidas !== undefined &&
+          report.tags_fallidas.length > 0
+        ) {
           novedades["tags_fallidas"] = report.tags_fallidas;
         }
         this.setState({ report: report, log: novedades });
       });
   };
 
-  _download_log = (node_name) => { 
+  _download_log = (node_name) => {
     let file_name = node_name + ".log";
-    let url = `${SRM_API_URL}/files/file/output/${file_name}?nid=${_.uniqueId(Math.random())}`;
-      fetch(url).then((response) => {
-        response.blob().then((blob) => {
-          let url = window.URL.createObjectURL(blob);
-          let a = document.createElement("a");
-          a.href = url;
-          a.download = file_name;
-          a.click();
-        });
+    let url = `${SRM_API_URL}/files/file/output/${file_name}?nid=${_.uniqueId(
+      Math.random(),
+    )}`;
+    fetch(url).then((response) => {
+      response.blob().then((blob) => {
+        let url = window.URL.createObjectURL(blob);
+        let a = document.createElement("a");
+        a.href = url;
+        a.download = file_name;
+        a.click();
       });
-  }
+    });
+  };
 
   render() {
+    console.log("report", this.props.report);
     return (
       <Card>
         <Card.Header
@@ -269,7 +290,7 @@ class IndividualReport extends Component<IndReportProps, IndReportState> {
           <ReactTooltip />
 
           <div className="ir-processing">
-            <div className="ir-process-label"> Tags calculadas:</div>
+            <div className="ir-process-label"> Tags calculadas--</div>
             <div className="ir-process-value">
               {" "}
               {this._porcentage_tags_cal()}%
@@ -336,28 +357,33 @@ class IndividualReport extends Component<IndReportProps, IndReportState> {
           {this.state.report === undefined ? (
             <></>
           ) : (
-              <div>
+            <div>
               <Button
-            variant="outline-light"
-            data-tip="Descargar archivo Log"
-            className={
-              this.state.calculating || this.props.calculating
-                ? "btn-cal-disp-dis-small"
-                : "btn-cal-disp-small"
-            }
-               onClick={() => this._download_log(this.props.report.nombre)}
-          >
-            <FontAwesomeIcon icon={faDownload} inverse size="sm" />
-          </Button>
+                variant="outline-light"
+                data-tip="Descargar archivo Log"
+                className={
+                  this.state.calculating || this.props.calculating
+                    ? "btn-cal-disp-dis-small"
+                    : "btn-cal-disp-small"
+                }
+                onClick={() => this._download_log(this.props.report.nombre)}
+              >
+                <FontAwesomeIcon icon={faDownload} inverse size="sm" />
+              </Button>
               <ReactJson
-                  name="log"
-                  displayObjectSize={true}
-                  collapsed={true}
-                  iconStyle="circle"
-                  displayDataTypes={false}
-                  theme="monokai"
-                  src={this.state.log}
-                  style={{minWidth:"92%", float:"left", marginRight:"7px", marginTop:"7px"}}
+                name="log"
+                displayObjectSize={true}
+                collapsed={true}
+                iconStyle="circle"
+                displayDataTypes={false}
+                theme="monokai"
+                src={this.state.log}
+                style={{
+                  minWidth: "92%",
+                  float: "left",
+                  marginRight: "7px",
+                  marginTop: "7px",
+                }}
               />
             </div>
           )}

@@ -10,6 +10,7 @@ import {
   entityByIdUrl,
   installationApiUrl,
   nodeApiUrl,
+  statusReportApiUrl,
 } from "../FilterNodesV2/constants";
 import {
   BahiaResponse,
@@ -18,6 +19,7 @@ import {
   InstallationResponse,
   NodeResponse,
   SimpleResponse,
+  StatusReportResponse,
 } from "./model";
 import { v2Bahia, v2Installation } from "../V2GeneralTypes";
 
@@ -105,4 +107,10 @@ export const deleteBahia = async (
   return (await fetchDELETEData(
     `${bahiaApiUrl}/${installation_id}/bahia/${document_id}`,
   )) as unknown as BahiaResponse;
+};
+
+export const getStatusReport = async (report_id: string): Promise<any> => {
+  return (await fetchGETData(
+    `${statusReportApiUrl}${report_id}`,
+  )) as unknown as StatusReportResponse;
 };

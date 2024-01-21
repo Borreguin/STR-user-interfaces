@@ -44,6 +44,8 @@ interface state {
   range: Object;
   show_date: boolean;
   document: string;
+  general_report_id: string;
+  successFinish: boolean;
 }
 
 // Pagina inicial de manejo de nodos:
@@ -75,7 +77,9 @@ class SRCalDisponibilidad extends Component<props, state> {
       msg: "",
       range: [range],
       show_date: false,
-      document: documentVersion.finalReportV2,
+      document: undefined,
+      general_report_id: undefined,
+      successFinish: true,
     };
   }
 
@@ -89,11 +93,18 @@ class SRCalDisponibilidad extends Component<props, state> {
   };
 
   // cuando finaliza el cálculo
-  handle_finish_calculation = (calculation_log) => {
+  handle_finish_calculation = (
+    calculation_log: Object,
+    successFinish: boolean,
+  ) => {
     if (this.state.calculating) {
       this.setState({ calculating: false, log: calculation_log });
     }
-    this._search_report_now();
+    if (successFinish) {
+      this._search_report_now().then(() => {
+        this.setState({ loading: false });
+      });
+    }
   };
 
   // actualiza el valor del umbral a reportar:
@@ -129,10 +140,11 @@ class SRCalDisponibilidad extends Component<props, state> {
     )
       .then((res) => res.json())
       .then((json) => {
-        console.log(json);
+        console.log("summary report", json.report?.documento);
         if (json.success) {
           this.setState({
             report: json.report,
+            document: json.report?.documento,
           });
           this._filter_reports(this.state.search);
         } else {
@@ -302,6 +314,7 @@ class SRCalDisponibilidad extends Component<props, state> {
         mensaje: msg,
       },
       edited: true,
+      loading: true,
       calculating: true,
       msg: "",
     });
@@ -328,33 +341,29 @@ class SRCalDisponibilidad extends Component<props, state> {
     fetch(path, payload)
       .then((res) => res.json())
       .then((json) => {
-        this.setState({ loading: true });
-        if (!json.success) {
-          this.setState({
-            log: { error: json.msg },
-            edited: true,
-            calculating: false,
-            msg: json.msg,
-            loading: false,
-          });
-        } else {
+        if (json.success) {
           this.setState({
             log: { msg: json.msg },
             edited: true,
-            calculating: false,
-            loading: false,
-            report: json.report,
+            calculating: true,
             msg: json.msg,
+            general_report_id: json?.report_id,
+          });
+        } else {
+          this.setState({
+            log: { error: json.msg },
+            edited: true,
+            msg: json.msg,
+            calculating: false,
           });
         }
         this.setState({ loading: false });
       })
       .catch((error) => {
         // Dado que el cálculo puede tomar mas tiempo y causar un time-out
-        /*let msg =
+        let msg =
           "Ha fallado la conexión con la API de cálculo de disponibilidad";
-        this.setState({ log: { error: msg }, msg: msg });*/
-        // console.log(error);
+        this.setState({ log: { error: msg }, msg: msg });
       });
     this._filter_reports(this.state.search);
   };
@@ -446,6 +455,8 @@ class SRCalDisponibilidad extends Component<props, state> {
               <div className="sc-src-details">
                 <div className="subtitle-details">DETALLES DE CÁLCULO </div>
                 <NodeReport
+                  generalReportId={this.state.general_report_id}
+                  document={this.state.document}
                   reports={this.state.filtered_reports}
                   ini_date={this.state.ini_date}
                   end_date={this.state.end_date}

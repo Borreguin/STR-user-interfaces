@@ -1,4 +1,5 @@
 import { v2Bahia, v2Entity, v2Installation, v2Node } from "../V2GeneralTypes";
+import { StatusReport } from "../../disponibilidad-reporte/Cards/SRReport/Report";
 
 export type SimpleResponse = {
   success: boolean;
@@ -32,4 +33,10 @@ export type BahiaResponse = {
 export type CreateConsignmentResponse = {
   success: boolean;
   msg: string;
+};
+
+export type StatusReportResponse = {
+  success: boolean;
+  msg: string;
+  report: StatusReport;
 };

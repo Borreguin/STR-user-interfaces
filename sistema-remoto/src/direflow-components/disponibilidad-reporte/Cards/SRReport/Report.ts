@@ -35,8 +35,9 @@ export type Procesamiento = {
   numero_entidades_procesadas: number;
   numero_nodos_procesados?: number;
   numero_tags_procesadas?: number; // for version 2
-  numero_instalaciones_procesadas: number; // for version 2
-  numero_bahias_procesadas: number; // for version 2
+  numero_instalaciones_procesadas?: number; // for version 2
+  numero_bahias_procesadas?: number; // for version 2
+  numero_tags?: number; // for version 2
 };
 
 export type SummaryReport = {
@@ -88,6 +89,7 @@ export type reporte_nodo = {
 };
 
 export type reporte_entidad = {
+  reportes_instalaciones: Array<reporte_instalacion>;
   entidad_nombre: string;
   entidad_tipo: string;
   numero_tags: number;
@@ -105,10 +107,24 @@ export type reporte_utr = {
   tag_details: Array<tag_details>;
   numero_tags: number;
   indisponibilidad_acumulada_minutos: number;
-  consignaciones: [];
+  consignaciones: Array<any>;
   consignaciones_acumuladas_minutos: number;
   disponibilidad_promedio_porcentage: number;
   ponderacion: number;
+};
+
+export type reporte_instalacion = {
+  id_utr: string;
+  nombre: string;
+  tipo: string;
+  tag_details: Array<tag_details>;
+  numero_tags: number;
+  indisponibilidad_acumulada_minutos: number;
+  consignaciones_acumuladas_minutos: number;
+  disponibilidad_promedio_porcentage: number;
+  ponderacion: number;
+  consignaciones: Array<any>;
+  numero_bahias: number;
 };
 
 export type tag_details = {

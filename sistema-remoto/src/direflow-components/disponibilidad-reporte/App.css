@@ -264,12 +264,11 @@
 }
 
 .date-input {
-  min-width: 170px;
+  min-width: 150px;
   max-width: 35%;
   text-align: center;
   height: 37px;
-  font-size: 11pt;
-  margin: 3px;
+  font-size: 10pt;
 }
 
 .sc-btn-cal {
@@ -319,9 +318,11 @@ h5 {
 }
 
 .date-range {
-  display: flexbox;
-  flex-wrap: nowrap;
-  justify-content: start;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-evenly;
+    align-items: center;
+  max-width: 300px;
 }
 
 .card-group {

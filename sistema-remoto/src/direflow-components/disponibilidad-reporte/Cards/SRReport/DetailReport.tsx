@@ -5,14 +5,18 @@ import {
   reporte_entidad,
   reporte_utr,
   tag_details,
+  reporte_instalacion,
 } from "./Report";
 import { Card, Badge, CardGroup, Modal, Form } from "react-bootstrap";
 import ReactTooltip from "react-tooltip";
 import { Circle, Line } from "rc-progress";
 import DataTable from "react-data-table-component";
+import { documentVersion } from "../../../Common/CommonConstants";
+import { SmallCard } from "./SmallCard";
 
 type DetReportProps = {
   report: reporte_nodo;
+  document: string;
 };
 
 type DetReportState = {
@@ -46,6 +50,7 @@ class DetailReport extends Component<DetReportProps, DetReportState> {
       filter_tags: [],
       open: {},
     };
+    console.log("------> to work with: ", this.props.report);
   }
 
   _tooltip = (p: number, t: number) => {
@@ -69,40 +74,54 @@ class DetailReport extends Component<DetReportProps, DetReportState> {
     this.setState({ open: open });
   };
 
-  _render_utr_report = (utr: reporte_utr) => {
+  _render_utr_report = (utr: reporte_utr, ix: number) => {
     return (
-      <Card.Body
-        className="dr-utr-body"
-        key={utr.id_utr}
+      <div id={ix + utr.id_utr} key={ix} className={"small-card-container"}>
+        <SmallCard
+          ponderacion={utr.ponderacion}
+          tipo={utr.tipo}
+          nombre={utr.nombre}
+          n_tags={utr.numero_tags}
+          n_bahias={undefined}
+          n_consignaciones={utr.consignaciones.length}
+          disponibilidad={utr.disponibilidad_promedio_porcentage}
+          onNameShowModal={() => this._handleShow(utr)}
+        />
+      </div>
+    );
+  };
+
+  _render_installation_report = (
+    installation: reporte_instalacion,
+    ix: number,
+  ) => {
+    return (
+      <div
+        id={ix + installation.id_utr}
+        key={ix}
+        className={"s-card-installation-container"}
       >
-        <div className="dr-utr-description">
-          <Line className="dr-utr-bar" percent={utr.ponderacion * 100} />
-          <div>{utr.tipo}</div>
-          <div
-            className="dr-utr-label"
-            data-tip={this._tooltip(utr.ponderacion * 100, utr.numero_tags)}
-            data-html={true}
-            onClick={() => this._handleShow(utr)}
-          >
-            {utr.nombre}
-          </div>
-        </div>
-        <div className="dr-utr-disp">
-          {this._format_percentage(utr.disponibilidad_promedio_porcentage, 2)} %
-        </div>
-        <div className="dr-utr-disp">
-          <Badge variant="info">{utr.consignaciones.length} Consg.</Badge>
-        </div>
-        <ReactTooltip />
-      </Card.Body>
+        <SmallCard
+          ponderacion={installation.ponderacion}
+          tipo={installation.tipo}
+          nombre={installation.nombre}
+          n_tags={installation.numero_tags}
+          n_bahias={installation.numero_bahias}
+          n_consignaciones={installation.consignaciones.length}
+          disponibilidad={installation.disponibilidad_promedio_porcentage}
+          onNameShowModal={() => this._handleShow(installation)}
+        />
+      </div>
     );
   };
 
   _render_entity_report = (entity: reporte_entidad) => {
     return (
       <Card key={entity.entidad_nombre} className="dr-container" border="dark">
-        <Card.Header className="dr-entity-header"
-          onClick={() => this._open_close(entity.entidad_nombre)}>
+        <Card.Header
+          className={"dr-entity-header"}
+          onClick={() => this._open_close(entity.entidad_nombre)}
+        >
           <span>
             <Circle
               strokeWidth={15}
@@ -118,7 +137,7 @@ class DetailReport extends Component<DetReportProps, DetReportState> {
             className="dr-entity-name"
             data-tip={this._tooltip(
               entity.ponderacion * 100,
-              entity.numero_tags
+              entity.numero_tags,
             )}
             data-html={true}
           >
@@ -128,7 +147,7 @@ class DetailReport extends Component<DetReportProps, DetReportState> {
           <span className="dr-entity-disp">
             {this._format_percentage(
               entity.disponibilidad_promedio_ponderada_porcentage,
-              3
+              3,
             ) + " %"}
           </span>
         </Card.Header>
@@ -136,11 +155,21 @@ class DetailReport extends Component<DetReportProps, DetReportState> {
           className={
             this.state.open[entity.entidad_nombre] !== undefined &&
             this.state.open[entity.entidad_nombre]
-              ? " dr-utr-group "
-              : " dr-utr-group collapse"
+              ? "dr-utr-group "
+              : "dr-utr-group collapse"
           }
         >
-          {entity.reportes_utrs.map((utr) => this._render_utr_report(utr))}
+          <>
+            {this.props.document !== documentVersion.finalReportV2
+              ? entity.reportes_utrs
+                  .sort((b, a) => a.ponderacion - b.ponderacion)
+                  .map((utr, ix) => this._render_utr_report(utr, ix))
+              : entity.reportes_instalaciones
+                  .sort((b, a) => a.ponderacion - b.ponderacion)
+                  .map((installation, ix) =>
+                    this._render_installation_report(installation, ix),
+                  )}
+          </>
         </CardGroup>
       </Card>
     );
@@ -148,10 +177,9 @@ class DetailReport extends Component<DetReportProps, DetReportState> {
   _format_percentage = (percentage: number, n: number) => {
     if (percentage === 100) {
       return "100";
-    } else if ( percentage < 0) { 
+    } else if (percentage < 0) {
       return "---";
-    }
-    else {
+    } else {
       return "" + percentage.toFixed(n);
     }
   };
@@ -173,19 +201,16 @@ class DetailReport extends Component<DetReportProps, DetReportState> {
     });
     this.setState({ filter_tags: filter_tags });
   };
-  
-  
 
   render() {
-    
     return (
       <>
-        <CardGroup>
+        <CardGroup key={this.props.report.id_report}>
           {this.props.report.reportes_entidades === undefined ? (
             <></>
           ) : (
             this.props.report.reportes_entidades.map((entity) =>
-              this._render_entity_report(entity)
+              this._render_entity_report(entity),
             )
           )}
         </CardGroup>

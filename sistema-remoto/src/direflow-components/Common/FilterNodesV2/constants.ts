@@ -11,3 +11,9 @@ export const consignmentApiUrl =
   SRM_API_URL + "/admin-consignacion/v2/consignacion";
 
 export const statusReportApiUrl = SRM_API_URL + "/disp-sRemoto/estado/";
+
+export const detailedNodeReportApiUrl =
+  SRM_API_URL + "/disp-sRemoto/disponibilidad";
+
+export const detailedNodeReportByIdApiUrl =
+  SRM_API_URL + "/disp-sRemoto/disponibilidad/nodo/report-id/";

@@ -17,6 +17,10 @@ import * as _ from "lodash";
 import { to_yyyy_mm_dd_hh_mm_ss } from "../../../Common/DatePicker/DateRange";
 import { SRM_API_URL } from "../../../../Constantes";
 import { documentVersion } from "../../../Common/CommonConstants";
+import {
+  getDetailedNodeReport,
+  getDetailedNodeReportById,
+} from "../../../Common/FetchData/V2SRFetchData";
 
 type IndReportProps = {
   report: SummaryReport;
@@ -34,6 +38,7 @@ type IndReportState = {
   disponibilidad: string;
   deleted: boolean;
   report: reporte_nodo | undefined;
+  loading: boolean;
 };
 
 const styleHeader = {
@@ -57,6 +62,7 @@ class IndividualReport extends Component<IndReportProps, IndReportState> {
       deleted: false,
       edited: false,
       report: undefined,
+      loading: false,
     };
   }
 
@@ -79,23 +85,23 @@ class IndividualReport extends Component<IndReportProps, IndReportState> {
   };
 
   _total_tags = () => {
-    console.log("document here code", this.props.document);
     if (this.props.document !== documentVersion.finalReportV2) {
       return (
         this.props.report.procesamiento.numero_tags_total +
         this.props.report.novedades.tags_fallidas.length
       );
     }
-    return 1000;
+    return this.props.report.procesamiento.numero_tags;
   };
 
   _porcentage_tags_cal = () => {
     let n = this._total_tags();
+    const processedTags =
+      this.props.document !== documentVersion.finalReportV2
+        ? this.props.report.procesamiento.numero_tags_total
+        : this.props.report.procesamiento.numero_tags_procesadas;
     if (n > 0) {
-      return this._format_percentage(
-        (this.props.report.procesamiento.numero_tags_total / n) * 100,
-        1,
-      );
+      return this._format_percentage((processedTags / n) * 100, 1);
     } else {
       return "-";
     }
@@ -202,38 +208,48 @@ class IndividualReport extends Component<IndReportProps, IndReportState> {
       });
   };
 
-  _get_details_for_this_report = () => {
-    let path = `${SRM_API_URL}/disp-sRemoto/disponibilidad/${
-      this.props.report.tipo
-    }/${this.props.report.nombre}/${this._range_time()}`;
+  _get_detailed_report = async () => {
+    if (this.props.document === documentVersion.finalReportV2) {
+      return await getDetailedNodeReportById(this.props.report.id_report);
+    } else {
+      return await getDetailedNodeReport(
+        this.props.report.tipo,
+        this.props.report.nombre,
+        this._range_time(),
+      );
+    }
+  };
 
-    fetch(path)
-      .then((resp) => resp.json())
-      .then((report) => {
-        let novedades = {};
-        if (report.tags_fallidas_detalle !== undefined) {
-          novedades["tags_fallidas_detalle"] = report.tags_fallidas_detalle;
-        }
-        if (
-          report.entidades_fallidas !== undefined &&
-          report.entidades_fallidas.length > 0
-        ) {
-          novedades["entidades_fallidas"] = report.entidades_fallidas;
-        }
-        if (
-          report.utr_fallidas !== undefined &&
-          report.utr_fallidas.length > 0
-        ) {
-          novedades["utr_fallidas"] = report.utr_fallidas;
-        }
-        if (
-          report.tags_fallidas !== undefined &&
-          report.tags_fallidas.length > 0
-        ) {
-          novedades["tags_fallidas"] = report.tags_fallidas;
-        }
-        this.setState({ report: report, log: novedades });
+  _get_details_for_this_report = async () => {
+    this.setState({ loading: true });
+    const resp = await this._get_detailed_report();
+    this.setState({ loading: false });
+    if (resp.success === false) {
+      this.setState({
+        report: undefined,
+        log: { msg: resp.msg },
       });
+      return;
+    }
+    const report = resp.report;
+
+    let novedades = {};
+    if (report.tags_fallidas_detalle !== undefined) {
+      novedades["tags_fallidas_detalle"] = report.tags_fallidas_detalle;
+    }
+    if (
+      report.entidades_fallidas !== undefined &&
+      report.entidades_fallidas.length > 0
+    ) {
+      novedades["entidades_fallidas"] = report.entidades_fallidas;
+    }
+    if (report.utr_fallidas !== undefined && report.utr_fallidas.length > 0) {
+      novedades["utr_fallidas"] = report.utr_fallidas;
+    }
+    if (report.tags_fallidas !== undefined && report.tags_fallidas.length > 0) {
+      novedades["tags_fallidas"] = report.tags_fallidas;
+    }
+    this.setState({ report: report, log: novedades });
   };
 
   _download_log = (node_name) => {
@@ -250,6 +266,13 @@ class IndividualReport extends Component<IndReportProps, IndReportState> {
         a.click();
       });
     });
+  };
+
+  _get_n_failed_tags = () => {
+    if (this.props.document !== documentVersion.finalReportV2) {
+      return this.props.report.novedades.tags_fallidas.length;
+    }
+    return this.props.report.novedades.tags_fallidas;
   };
 
   render() {
@@ -283,14 +306,14 @@ class IndividualReport extends Component<IndReportProps, IndReportState> {
               </Badge>
             </div>
             <div className="ir-label">
-              <div className="ir-tipo">{this.props.report.tipo}</div>
-              <div>{this.props.report.nombre}</div>
+              <div className={"ir-tipo"}>{this.props.report.tipo}</div>
+              <div className={"ir-nombre"}>{this.props.report.nombre}</div>
             </div>
           </div>
           <ReactTooltip />
 
           <div className="ir-processing">
-            <div className="ir-process-label"> Tags calculadas--</div>
+            <div className="ir-process-label"> Tags calculadas:</div>
             <div className="ir-process-value">
               {" "}
               {this._porcentage_tags_cal()}%
@@ -304,11 +327,11 @@ class IndividualReport extends Component<IndReportProps, IndReportState> {
             </span>
 
             <span>
-              {this.props.report.novedades.tags_fallidas.length === 0 ? (
+              {this._get_n_failed_tags() === 0 ? (
                 <Badge variant="success">Completo</Badge>
               ) : (
                 <Badge variant="warning">
-                  {this.props.report.novedades.tags_fallidas.length}
+                  {this._get_n_failed_tags()}
                   {" tags sin calcular"}
                 </Badge>
               )}
@@ -346,17 +369,21 @@ class IndividualReport extends Component<IndReportProps, IndReportState> {
           className={this.state.open ? "collapse show" : "collapse"}
           style={{ padding: "5px" }}
         >
-          {this.state.open && this.state.report ? (
-            <DetailReport report={this.state.report} />
+          {this.state.open && this.state.report && !this.state.loading ? (
+            <DetailReport
+              report={this.state.report}
+              document={this.props.document}
+            />
           ) : (
+            <></>
+          )}
+          {(this.state.loading || this.props.calculating) && (
             <div>
               <Spinner animation="border" role="status" size="sm" />{" "}
               <span>Espere por favor, cargando...</span>{" "}
             </div>
           )}
-          {this.state.report === undefined ? (
-            <></>
-          ) : (
+          {this.state.report !== undefined && (
             <div>
               <Button
                 variant="outline-light"

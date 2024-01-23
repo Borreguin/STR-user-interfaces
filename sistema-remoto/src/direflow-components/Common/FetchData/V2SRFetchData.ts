@@ -7,6 +7,8 @@ import {
 import {
   bahiaApiUrl,
   consignmentApiUrl,
+  detailedNodeReportApiUrl,
+  detailedNodeReportByIdApiUrl,
   entityByIdUrl,
   installationApiUrl,
   nodeApiUrl,
@@ -109,8 +111,28 @@ export const deleteBahia = async (
   )) as unknown as BahiaResponse;
 };
 
-export const getStatusReport = async (report_id: string): Promise<any> => {
+export const getStatusReport = async (
+  report_id: string,
+): Promise<StatusReportResponse> => {
   return (await fetchGETData(
     `${statusReportApiUrl}${report_id}`,
+  )) as unknown as StatusReportResponse;
+};
+
+export const getDetailedNodeReport = async (
+  tipo: string,
+  nombre: string,
+  range: string,
+): Promise<any> => {
+  return (await fetchGETData(
+    `${detailedNodeReportApiUrl}/${tipo}/${nombre}/${range}`,
+  )) as unknown as any;
+};
+
+export const getDetailedNodeReportById = async (
+  report_id: string,
+): Promise<StatusReportResponse> => {
+  return (await fetchGETData(
+    `${detailedNodeReportByIdApiUrl}${report_id}`,
   )) as unknown as StatusReportResponse;
 };

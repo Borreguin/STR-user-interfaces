@@ -143,7 +143,7 @@ export function ConsignmentManagementV2(action: string) {
             toConsignment={toConsignment}
             selectedType={selectedType}
             headerLabel={formDescription}
-            buttonLabel={"Ingresar: " + formDescription}
+            buttonLabel={"Ingresar en " + formDescription}
             onSubmit={onSubmit}
           />
           <div>

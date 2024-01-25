@@ -86,12 +86,6 @@ export const parseSpanishDate = (dateString: string) => {
   const hours = parseInt(components[4], 10);
   const minutes = parseInt(components[5], 10);
   const seconds = parseInt(components[6], 10);
-  console.log("day: " + day);
-  console.log("month: " + month);
-  console.log("year: " + year);
-  console.log("hours: " + hours);
-  console.log("minutes: " + minutes);
-  console.log("seconds: " + seconds);
 
   // Create a new Date object
   return new Date(year, month, day, hours, minutes, seconds);

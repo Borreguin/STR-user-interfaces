@@ -69,7 +69,7 @@ export type info = {
   run_time_seconds?: number;
 };
 
-export type reporte_nodo = {
+export type NodeReport = {
   id_node: string;
   id_report: string;
   tipo: string;
@@ -85,11 +85,11 @@ export type reporte_nodo = {
   entidades_fallidas: Array<string>;
   ponderacion: number;
   numero_tags_total: number;
-  reportes_entidades: Array<reporte_entidad>;
+  reportes_entidades: Array<EntityReport>;
 };
 
-export type reporte_entidad = {
-  reportes_instalaciones: Array<reporte_instalacion>;
+export type EntityReport = {
+  reportes_instalaciones: Array<InstallationReport>;
   entidad_nombre: string;
   entidad_tipo: string;
   numero_tags: number;
@@ -98,6 +98,7 @@ export type reporte_entidad = {
   disponibilidad_promedio_ponderada_minutos: number;
   periodo_evaluacion_minutos: number;
   ponderacion: number;
+  document_id?: string; // for version 2
 };
 
 export type reporte_utr = {
@@ -113,21 +114,47 @@ export type reporte_utr = {
   ponderacion: number;
 };
 
-export type reporte_instalacion = {
-  id_utr: string;
+export type InstallationReport = {
+  periodo_efectivo_minutos: number;
+  numero_consignaciones_internas: number;
+  document_id: string;
+  instalacion_id: string;
   nombre: string;
   tipo: string;
   tag_details: Array<tag_details>;
   numero_tags: number;
   indisponibilidad_acumulada_minutos: number;
   consignaciones_acumuladas_minutos: number;
+  indisponibilidad_promedio_minutos: number;
   disponibilidad_promedio_porcentage: number;
   ponderacion: number;
   consignaciones: Array<any>;
   numero_bahias: number;
+  numero_tags_procesadas: number;
+  bahia_details: Array<any>;
+  periodo_evaluacion_minutos: number;
+  nota: string;
 };
 
 export type tag_details = {
   tag_name: string;
   indisponible_minutos: number;
+};
+
+export type BahiaReport = {
+  periodo_efectivo_minutos: number;
+  numero_tags_procesadas: number;
+  bahia_code: string;
+  bahia_nombre: string;
+  voltaje: number;
+  tags: Array<tag_details>;
+  numero_tags: number;
+  indisponibilidad_acumulada_minutos: number;
+  consignaciones_acumuladas_minutos: number;
+  indisponibilidad_promedio_minutos: number;
+  disponibilidad_promedio_porcentage: number;
+  ponderacion: number;
+  consignaciones: Array<any>;
+  periodo_evaluacion_minutos: number;
+  nota: string;
 };

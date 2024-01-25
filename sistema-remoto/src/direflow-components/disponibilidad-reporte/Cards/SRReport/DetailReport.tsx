@@ -1,11 +1,11 @@
 import React, { Component } from "react";
 import "./style.css";
 import {
-  reporte_nodo,
-  reporte_entidad,
+  NodeReport,
+  EntityReport,
   reporte_utr,
   tag_details,
-  reporte_instalacion,
+  InstallationReport,
 } from "./Report";
 import { Card, Badge, CardGroup, Modal, Form } from "react-bootstrap";
 import ReactTooltip from "react-tooltip";
@@ -13,9 +13,10 @@ import { Circle, Line } from "rc-progress";
 import DataTable from "react-data-table-component";
 import { documentVersion } from "../../../Common/CommonConstants";
 import { SmallCard } from "./SmallCard";
+import { formatPercentage } from "../../../Common/common-util";
 
 type DetReportProps = {
-  report: reporte_nodo;
+  report: NodeReport;
   document: string;
 };
 
@@ -50,13 +51,12 @@ class DetailReport extends Component<DetReportProps, DetReportState> {
       filter_tags: [],
       open: {},
     };
-    console.log("------> to work with: ", this.props.report);
   }
 
   _tooltip = (p: number, t: number) => {
     return (
       "<div>Ponderación: " +
-      this._format_percentage(p, 2) +
+      formatPercentage(p, 2) +
       "%</div>" +
       "<div>Tags: " +
       t +
@@ -92,30 +92,38 @@ class DetailReport extends Component<DetReportProps, DetReportState> {
   };
 
   _render_installation_report = (
-    installation: reporte_instalacion,
+    eReportId: string,
+    rInstallation: InstallationReport,
     ix: number,
   ) => {
+    const openInNewTab = (url: string) => {
+      window.open(url, "_blank", "noreferrer");
+    };
     return (
       <div
-        id={ix + installation.id_utr}
+        id={rInstallation.document_id}
         key={ix}
         className={"s-card-installation-container"}
       >
         <SmallCard
-          ponderacion={installation.ponderacion}
-          tipo={installation.tipo}
-          nombre={installation.nombre}
-          n_tags={installation.numero_tags}
-          n_bahias={installation.numero_bahias}
-          n_consignaciones={installation.consignaciones.length}
-          disponibilidad={installation.disponibilidad_promedio_porcentage}
-          onNameShowModal={() => this._handleShow(installation)}
+          ponderacion={rInstallation.ponderacion}
+          tipo={rInstallation.tipo}
+          nombre={rInstallation.nombre}
+          n_tags={rInstallation.numero_tags}
+          n_bahias={rInstallation.numero_bahias}
+          n_consignaciones={rInstallation.consignaciones.length}
+          disponibilidad={rInstallation.disponibilidad_promedio_porcentage}
+          onNameShowModal={() =>
+            openInNewTab(
+              `/bahia-report?nid=${this.props.report.id_report}&eid=${eReportId}&iid=${rInstallation.document_id}`,
+            )
+          }
         />
       </div>
     );
   };
 
-  _render_entity_report = (entity: reporte_entidad) => {
+  _render_entity_report = (entity: EntityReport) => {
     return (
       <Card key={entity.entidad_nombre} className="dr-container" border="dark">
         <Card.Header
@@ -145,7 +153,7 @@ class DetailReport extends Component<DetReportProps, DetReportState> {
           </span>
           <ReactTooltip />
           <span className="dr-entity-disp">
-            {this._format_percentage(
+            {formatPercentage(
               entity.disponibilidad_promedio_ponderada_porcentage,
               3,
             ) + " %"}
@@ -167,21 +175,16 @@ class DetailReport extends Component<DetReportProps, DetReportState> {
               : entity.reportes_instalaciones
                   .sort((b, a) => a.ponderacion - b.ponderacion)
                   .map((installation, ix) =>
-                    this._render_installation_report(installation, ix),
+                    this._render_installation_report(
+                      entity.document_id,
+                      installation,
+                      ix,
+                    ),
                   )}
           </>
         </CardGroup>
       </Card>
     );
-  };
-  _format_percentage = (percentage: number, n: number) => {
-    if (percentage === 100) {
-      return "100";
-    } else if (percentage < 0) {
-      return "---";
-    } else {
-      return "" + percentage.toFixed(n);
-    }
   };
 
   _handleClose = () => {

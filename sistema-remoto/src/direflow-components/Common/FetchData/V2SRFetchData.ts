@@ -19,6 +19,7 @@ import {
   CreateConsignmentResponse,
   EntityResponse,
   InstallationResponse,
+  NodeReportResponse,
   NodeResponse,
   SimpleResponse,
   StatusReportResponse,
@@ -131,8 +132,8 @@ export const getDetailedNodeReport = async (
 
 export const getDetailedNodeReportById = async (
   report_id: string,
-): Promise<StatusReportResponse> => {
+): Promise<NodeReportResponse> => {
   return (await fetchGETData(
     `${detailedNodeReportByIdApiUrl}${report_id}`,
-  )) as unknown as StatusReportResponse;
+  )) as unknown as NodeReportResponse;
 };

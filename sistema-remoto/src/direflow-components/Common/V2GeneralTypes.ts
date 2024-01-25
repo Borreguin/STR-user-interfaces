@@ -1,3 +1,8 @@
+export type DateRange = {
+  startDate: Date | string;
+  endDate: Date | string;
+};
+
 export type v2Entity = {
   id_entidad: string;
   document_id: string;

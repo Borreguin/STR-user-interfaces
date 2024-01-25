@@ -14,7 +14,7 @@ interface TypeSelector {
   onSelection: any;
 }
 
-const RenderSelection = (props: TypeSelector): JSX.Element => {
+export const RenderSelection = (props: TypeSelector): JSX.Element => {
   const { selectedOption, options, onSelection } = props;
   const [selectedValue, setSelectedValue] = useState<string>(
     selectedOption ? selectedOption.id : "",

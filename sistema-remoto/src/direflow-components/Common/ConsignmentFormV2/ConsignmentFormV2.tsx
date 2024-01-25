@@ -19,11 +19,11 @@ interface ConsignmentFormV2Props {
 const srcValueSelected = (value: any, selectedType: string) => {
   switch (selectedType) {
     case selection.node:
-      return summarizeNode(value, true);
+      return summarizeNode(value, false);
     case selection.entity:
-      return summarizeEntity(value, true);
+      return summarizeEntity(value, false);
     case selection.installation:
-      return summarizeInstallation(value, true);
+      return summarizeInstallation(value, false);
   }
 };
 
@@ -45,11 +45,12 @@ export const ConsignmentFormV2 = (props: ConsignmentFormV2Props) => {
         <div className={"consignment-element"}>
           <ReactJson
             name="Elemento a consignar"
-            indentWidth={1}
+            indentWidth={0}
             displayObjectSize={false}
             collapsed={false}
             iconStyle="circle"
             displayDataTypes={false}
+            quotesOnKeys={false}
             collapseStringsAfterLength={20}
             src={srcValueSelected(toConsignment, selectedType)}
           />

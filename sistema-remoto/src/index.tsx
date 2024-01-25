@@ -29,6 +29,7 @@ import TemplateComp from "./direflow-components/zdireflow-navigate";
 import ConverterV2 from "./direflow-components/v2-converter/App";
 import NodeManagementV2 from "./direflow-components/v2-manejo-nodos/App";
 import { InstallationAndBahiasManagement } from "./direflow-components/v2-manejo-bahias/App";
+import BahiaReport from "./direflow-components/v2-bahia-report/App";
 
 export const routes = [
   { path: "/", component: ZDireflowTemplate, description: "Inicio" },
@@ -87,6 +88,11 @@ export const routes = [
     path: "/consignaciones-ingreso-v2",
     component: ConsignmentManagementV2,
     description: "Ingreso de consignaciones V2",
+  },
+  {
+    path: "/bahia-report",
+    component: BahiaReport,
+    description: "Reporte de Bahias V2",
   },
 ];
 

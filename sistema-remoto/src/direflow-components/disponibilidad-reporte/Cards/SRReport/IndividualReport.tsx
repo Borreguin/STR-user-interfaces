@@ -1,6 +1,6 @@
 import React, { Component } from "react";
 import "./style.css";
-import { SummaryReport, reporte_nodo } from "./Report";
+import { SummaryReport, NodeReport } from "./Report";
 import { Card, Badge, Button, Spinner } from "react-bootstrap";
 import {
   faAngleDoubleUp,
@@ -37,7 +37,7 @@ type IndReportState = {
   log: Object;
   disponibilidad: string;
   deleted: boolean;
-  report: reporte_nodo | undefined;
+  report: NodeReport | undefined;
   loading: boolean;
 };
 

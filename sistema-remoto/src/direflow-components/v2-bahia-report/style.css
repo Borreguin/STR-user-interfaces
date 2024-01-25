@@ -1,0 +1,63 @@
+
+.bahia-report-container {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+}
+
+.custom-header{
+    display: flex;
+    align-items: center;
+    justify-content: space-evenly;
+;
+}
+.i-report-container{
+    width: 100%;
+}
+
+.i-selector{
+    width: 20%;
+    max-width: 200px;
+}
+
+.i-label{
+    width: 60%;
+    max-width: 500px;
+}
+
+.i-dateRange{
+    width: 40%;
+    max-width: 200px;
+    word-wrap: break-word;
+}
+
+.i-report{
+    width: 40%;
+    padding: 5px;
+    font-size: 10pt;
+    max-width: 290px;
+    border-radius: 5px;
+    border: 1px solid rgb(8, 8, 8);
+}
+
+.all-b{
+    display: flex;
+    align-items: center;
+    justify-content: space-evenly;
+flex-wrap: wrap;
+    width: 100%;
+}
+
+.b-report{
+    max-width: 200px;
+    padding: 2px;
+    font-size: 10pt;
+    border-radius: 5px;
+    border: 1px solid rgb(8, 8, 8);
+}
+
+.c-body-all{
+    display: flex;
+    justify-content: space-evenly;
+}

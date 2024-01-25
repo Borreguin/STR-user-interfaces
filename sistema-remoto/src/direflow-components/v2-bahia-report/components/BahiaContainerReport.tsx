@@ -3,7 +3,7 @@ import {
   EntityReport,
   InstallationReport,
 } from "../../disponibilidad-reporte/Cards/SRReport/Report";
-import { Card, Col, Form } from "react-bootstrap";
+import { Card } from "react-bootstrap";
 import { SelectOption } from "../../Common/FilterNodesV2/model";
 import { RenderSelection } from "../../Common/FilterNodesV2/TypeNameSelector";
 import ReactJson from "react-json-view";

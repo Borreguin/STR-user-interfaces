@@ -1,4 +1,4 @@
-import { Button, Col, Form } from "react-bootstrap";
+import { Button, Form } from "react-bootstrap";
 import React from "react";
 
 interface SearchSectionProps {

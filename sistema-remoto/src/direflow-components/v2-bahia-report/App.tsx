@@ -8,7 +8,6 @@ import {
   InstallationReport,
 } from "../disponibilidad-reporte/Cards/SRReport/Report";
 import { getDetailedNodeReportById } from "../Common/FetchData/V2SRFetchData";
-import { Spinner } from "react-bootstrap";
 import { SpinnerAndText } from "./components/Spinner";
 import { BahiaContainerReport } from "./components/BahiaContainerReport";
 import { DateRange } from "../Common/V2GeneralTypes";

@@ -7,9 +7,9 @@ import {
   tag_details,
   InstallationReport,
 } from "./Report";
-import { Card, Badge, CardGroup, Modal, Form } from "react-bootstrap";
+import { Card, CardGroup, Modal, Form } from "react-bootstrap";
 import ReactTooltip from "react-tooltip";
-import { Circle, Line } from "rc-progress";
+import { Circle } from "rc-progress";
 import DataTable from "react-data-table-component";
 import { documentVersion } from "../../../Common/CommonConstants";
 import { SmallCard } from "./SmallCard";

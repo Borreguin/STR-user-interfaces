@@ -1,6 +1,6 @@
 import React, { Component } from "react";
 import "bootstrap/dist/css/bootstrap.min.css";
-import { Spinner, Form, Row, Col, Button } from "react-bootstrap";
+import { Spinner, Form, Row } from "react-bootstrap";
 import ReactJson from "react-json-view";
 import NodeReport from "./SRCalDisponibilidad_nodes";
 import * as _ from "lodash";
@@ -299,7 +299,7 @@ class SRCalDisponibilidad extends Component<props, state> {
   // Realizar el cálculo de los nodos existentes en base de datos
   // El estado calculating permite identificar el momento en que se realiza los cálculos
   _cal_all = (method) => {
-    let msg = "";
+    let msg: string;
     let pcc =
       this.state.search === "" ? "todos los nodos" : this._nodes_names();
 
@@ -362,7 +362,8 @@ class SRCalDisponibilidad extends Component<props, state> {
       .catch((error) => {
         // Dado que el cálculo puede tomar mas tiempo y causar un time-out
         let msg =
-          "Ha fallado la conexión con la API de cálculo de disponibilidad";
+          "Ha fallado la conexión con la API de cálculo de disponibilidad " +
+          error;
         this.setState({ log: { error: msg }, msg: msg });
       });
     this._filter_reports(this.state.search);

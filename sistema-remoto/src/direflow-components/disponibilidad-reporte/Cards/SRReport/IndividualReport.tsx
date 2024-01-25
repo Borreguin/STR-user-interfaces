@@ -166,7 +166,7 @@ class IndividualReport extends Component<IndReportProps, IndReportState> {
   };
 
   _cal_disponibilidad = async (method) => {
-    let msg = "";
+    let msg: string;
     if (method === "POST") {
       msg = "Empezando cálculo del nodo: \n";
     } else {

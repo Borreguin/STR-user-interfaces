@@ -197,7 +197,7 @@
 
 .pr-status-node {
   width: 100%;
-  display: flexbox;
+  display: flex;
   margin-top: 5px;
   padding: 5px;
   background-color: rgb(223, 223, 223);

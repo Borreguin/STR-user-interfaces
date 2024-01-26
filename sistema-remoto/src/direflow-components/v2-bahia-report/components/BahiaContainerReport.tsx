@@ -3,13 +3,26 @@ import {
   EntityReport,
   InstallationReport,
 } from "../../disponibilidad-reporte/Cards/SRReport/Report";
-import { Card } from "react-bootstrap";
+import { Button, Card } from "react-bootstrap";
 import { SelectOption } from "../../Common/FilterNodesV2/model";
 import { RenderSelection } from "../../Common/FilterNodesV2/TypeNameSelector";
 import ReactJson from "react-json-view";
 import { DateRange } from "../../Common/V2GeneralTypes";
 import { IndividualBahiaReport } from "./IndividualBahiaReport";
 import { formatPercentage } from "../../Common/common-util";
+import {
+  lb_bahias_procesadas,
+  lb_consignaciones_bahias,
+  lb_consignaciones_instalacion,
+  lb_disp_promedio,
+  lb_indisp_promedio_minutos,
+  lb_periodo_consignado_nivel_instalacion_minutos,
+  lb_periodo_efectivo_minutos,
+  lb_periodo_evaluacion_minutos,
+  lb_ponderacion,
+  lb_tags_procesadas,
+} from "../../Common/common-constants";
+import { ConsignmentModal } from "./ConsignmentModal";
 
 interface BahiaReportProps {
   dateRange: DateRange;
@@ -26,6 +39,8 @@ export const BahiaContainerReport = (props: BahiaReportProps) => {
   const [selectedOption, setSelectedOption] =
     React.useState<SelectOption>(undefined);
   const [options, setOptions] = React.useState<SelectOption[]>([]);
+  const [showConsignments, setShowConsignments] =
+    React.useState<boolean>(false);
 
   useEffect(() => {
     filterInstallationReport();
@@ -55,20 +70,22 @@ export const BahiaContainerReport = (props: BahiaReportProps) => {
   const formatIReport = () => {
     return {
       [selectedIReport.tipo]: selectedIReport.nombre,
-      "Disponibilidad promedio": formatPercentage(
+      [lb_disp_promedio]: formatPercentage(
         selectedIReport.disponibilidad_promedio_porcentage,
         3,
       ),
-      Ponderacion: formatPercentage(selectedIReport.ponderacion, 3),
-      "Bahias procesadas": selectedIReport.bahia_details.length,
-      "Tags procesadas": selectedIReport.numero_tags_procesadas,
-      "Consignaciones instalación": selectedIReport.consignaciones.length,
-      "Consignaciones bahias": selectedIReport.numero_consignaciones_internas,
-      "Indisp. promedio minutos":
+      [lb_ponderacion]: formatPercentage(selectedIReport.ponderacion, 3),
+      [lb_bahias_procesadas]: selectedIReport.bahia_details.length,
+      [lb_tags_procesadas]: selectedIReport.numero_tags_procesadas,
+      [lb_consignaciones_instalacion]: selectedIReport.consignaciones.length,
+      [lb_consignaciones_bahias]:
+        selectedIReport.numero_consignaciones_internas,
+      [lb_indisp_promedio_minutos]:
         selectedIReport.indisponibilidad_promedio_minutos,
-      "Periodo evaluación minutos": selectedIReport.periodo_evaluacion_minutos,
-      "Periodo efectivo minutos": selectedIReport.periodo_efectivo_minutos,
-      "Periodo consignado a nivel instalación minutos":
+      [lb_periodo_evaluacion_minutos]:
+        selectedIReport.periodo_evaluacion_minutos,
+      [lb_periodo_efectivo_minutos]: selectedIReport.periodo_efectivo_minutos,
+      [lb_periodo_consignado_nivel_instalacion_minutos]:
         selectedIReport.consignaciones_acumuladas_minutos,
       Nota: selectedIReport.nota,
     };
@@ -80,7 +97,7 @@ export const BahiaContainerReport = (props: BahiaReportProps) => {
         <Card.Header className={"custom-header"}>
           <div className={"i-selector"}>
             <RenderSelection
-              key={`instalation`}
+              key={`installation`}
               selectedOption={selectedOption}
               options={options}
               onSelection={(option: SelectOption) => {
@@ -91,6 +108,14 @@ export const BahiaContainerReport = (props: BahiaReportProps) => {
           </div>
           <div className={"i-label"}>
             {selectedIReport.tipo} {selectedIReport.nombre}
+          </div>
+          <div>
+            {(selectedIReport.consignaciones.length > 0 ||
+              selectedIReport.numero_consignaciones_internas > 0) && (
+              <Button onClick={() => setShowConsignments(true)}>
+                Consignaciones
+              </Button>
+            )}
           </div>
           <div className={"i-dateRange"}>
             {dateRange.startDate} {dateRange.endDate}
@@ -120,6 +145,17 @@ export const BahiaContainerReport = (props: BahiaReportProps) => {
           </div>
         </Card.Body>
       </Card>
+      {(selectedIReport.consignaciones.length > 0 ||
+        selectedIReport.consignaciones_internas.length > 0) && (
+        <ConsignmentModal
+          title={`Consignaciones de ${selectedIReport.tipo} ${selectedIReport.nombre}`}
+          consignments={selectedIReport.consignaciones_internas.concat(
+            selectedIReport.consignaciones,
+          )}
+          show={showConsignments}
+          onClose={() => setShowConsignments(false)}
+        />
+      )}
     </div>
   );
 };

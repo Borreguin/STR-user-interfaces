@@ -260,7 +260,7 @@
   flex-direction: row;
   flex-wrap: wrap;
   position: absolute;
-  z-index: 5000;
+  z-index: 1000;
 }
 
 .date-input {

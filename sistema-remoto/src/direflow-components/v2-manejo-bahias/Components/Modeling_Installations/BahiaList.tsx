@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import { Button, Form } from "react-bootstrap";
 import { BahiaAdministration } from "./BahiaAdministration";
+import { getDescriptionBahia } from "../../../Common/common-util";
 
 export function BahiaList(props) {
   const { selectedInstallation } = props;
@@ -29,18 +30,24 @@ export function BahiaList(props) {
         </Button>
 
         <Form className="overflow-auto bahias-container">
-          {bahias?.map((bahia) => (
-            <Form.Check
-              type="radio"
-              label={bahia?.bahia_nombre}
-              name={bahia?.bahia_nombre}
-              defaultValue={bahia}
-              checked={bahiaSeleccionada === bahia}
-              onChange={() => handleRadioChange(bahia)}
-              id={bahia?.document_id}
-              key={bahia?.document_id}
-            />
-          ))}
+          {bahias
+            .sort(
+              (a, b) =>
+                parseFloat(getDescriptionBahia(a)) -
+                parseFloat(getDescriptionBahia(b)),
+            )
+            .map((bahia) => (
+              <Form.Check
+                type="radio"
+                label={getDescriptionBahia(bahia)}
+                name={getDescriptionBahia(bahia)}
+                defaultValue={bahia}
+                checked={bahiaSeleccionada === bahia}
+                onChange={() => handleRadioChange(bahia)}
+                id={bahia?.document_id}
+                key={bahia?.document_id}
+              />
+            ))}
         </Form>
       </div>
       <div className={"sc-bahia-form"}>

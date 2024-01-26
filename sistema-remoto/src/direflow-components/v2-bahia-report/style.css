@@ -4,6 +4,7 @@
     align-items: center;
     justify-content: center;
     width: 100%;
+    min-height: 400px;
 }
 
 .custom-header{
@@ -22,14 +23,15 @@
 }
 
 .i-label{
-    width: 60%;
+    width: 30%;
     max-width: 500px;
 }
 
 .i-dateRange{
-    width: 40%;
-    max-width: 200px;
+    width: 20%;
+    max-width: 150px;
     word-wrap: break-word;
+    font-size: 10pt;
 }
 
 .i-report{

@@ -67,7 +67,9 @@ const BahiaReport: FC<ConverterV2Props> = () => {
       return e.document_id === eid;
     });
     if (entityreport === undefined) {
-      setMsg("No se encontró la entidad");
+      setMsg(
+        "No se encontró la entidad, es posible que el reporte haya sido recalculado o eliminado. Regrese al nuevo reporte",
+      );
       return null;
     }
     setEntityReport(entityreport);
@@ -90,7 +92,11 @@ const BahiaReport: FC<ConverterV2Props> = () => {
         {loading && (
           <SpinnerAndText msg={"Cargando reporte..., espere por favor"} />
         )}
-        {msg !== undefined ? <div>{msg}</div> : <></>}
+        {msg !== undefined ? (
+          <div style={{ maxWidth: "60%" }}>{msg}</div>
+        ) : (
+          <></>
+        )}
         {found && (
           <BahiaContainerReport
             dateRange={dateRange}

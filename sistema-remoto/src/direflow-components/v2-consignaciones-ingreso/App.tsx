@@ -13,7 +13,11 @@ import {
 import react_picker from "react-datepicker/dist/react-datepicker.css";
 import { insertConsignment } from "../Common/FetchData/V2SRFetchData";
 import { V2ConsignmentFormValues } from "../v2-common/V2ConsignmentForm";
-import { ConsignmentRequest, ElementInfo } from "../Common/V2GeneralTypes";
+import {
+  ConsignmentRequest,
+  ElementInfo,
+  v2Bahia,
+} from "../Common/V2GeneralTypes";
 import { nameProperty, selection } from "../v2-common/constants";
 
 export const getSelectedButtonLabel = (selectedValues: any, label: string) => {
@@ -33,6 +37,7 @@ export function ConsignmentManagementV2(action: string) {
   const [formDescription, setFormDescription] = useState(undefined);
   const [msg, setMsg] = useState(undefined);
   const [success, setSuccess] = useState(false);
+  const [selectedBahias, setSelectedBahias] = useState([] as v2Bahia[]);
 
   useEffect(() => {
     if (
@@ -64,6 +69,26 @@ export function ConsignmentManagementV2(action: string) {
     }
   }, [selectedValues]);
 
+  console.log("toConsignment", toConsignment);
+  const renderBahiaConsignmentButton = () => {
+    const className =
+      selectedButton === selection.bahia ? "cons-button-active" : "cons-button";
+    return (
+      <Button
+        className={className}
+        onClick={() => {
+          setSelectedType(selection.bahia);
+          setSelectedButton(selection.bahia);
+          setFormDescription("Bahías a consignar");
+          setToConsignment(selectedValues[selection.installation]);
+        }}
+        active={selectedButton === selection.bahia}
+      >
+        BAHIAS
+      </Button>
+    );
+  };
+
   const renderConsignmentButton = (label: string) => {
     const name = getNameProperty(label);
     if (
@@ -93,15 +118,35 @@ export function ConsignmentManagementV2(action: string) {
     }
     return <></>;
   };
-  const onSubmit = (constForm: V2ConsignmentFormValues, toConsignment: any) => {
-    const element_id = getElementId(toConsignment);
+  const onSubmit = (constForm: V2ConsignmentFormValues) => {
+    if (selectedButton === selection.bahia) {
+      for (let bahia of selectedBahias) {
+        const element = {
+          bahia_code: bahia.bahia_code,
+          bahia_nombre: bahia.bahia_nombre,
+          voltaje: bahia.voltaje,
+          document_id: bahia.document_id,
+          created: bahia.created,
+        };
+        submitElementConsignment(constForm, element);
+      }
+    } else {
+      submitElementConsignment(constForm, toConsignment);
+    }
+  };
+
+  const submitElementConsignment = (
+    constForm: V2ConsignmentFormValues,
+    element: any,
+  ) => {
+    const element_id = getElementId(element);
     const iniDate = constForm.fecha_inicio;
     const endDate = constForm.fecha_final;
     const elementInfo: ElementInfo = {
       detalle: constForm.detalle,
       descripcion_corta: constForm.descripcion_corta,
       consignment_type: "Normal",
-      element: toConsignment,
+      element: element,
     };
     const body: ConsignmentRequest = {
       no_consignacion: constForm.no_consignacion,
@@ -115,6 +160,14 @@ export function ConsignmentManagementV2(action: string) {
       setMsg(response.msg);
       setSuccess(response.success);
     });
+  };
+
+  const buttonLabel = () => {
+    console.log("selectedButton", selectedBahias);
+    if (selectedButton === selection.bahia) {
+      return `Ingresar en [${selectedBahias.length}] bahías seleccionadas`;
+    }
+    return "Ingresar en " + formDescription;
   };
 
   return (
@@ -139,22 +192,24 @@ export function ConsignmentManagementV2(action: string) {
           {renderConsignmentButton(selection.node)}
           {renderConsignmentButton(selection.entity)}
           {renderConsignmentButton(selection.installation)}
-          <ConsignmentFormV2
-            toConsignment={toConsignment}
-            selectedType={selectedType}
-            headerLabel={formDescription}
-            buttonLabel={"Ingresar en " + formDescription}
-            onSubmit={onSubmit}
-          />
+          {renderBahiaConsignmentButton()}
           <div>
-            Los campos con (<span className="cons-mandatory">*</span>) son
-            mandatorios
+            <ConsignmentFormV2
+              toConsignment={toConsignment}
+              selectedType={selectedType}
+              headerLabel={formDescription}
+              buttonLabel={buttonLabel()}
+              onSubmit={onSubmit}
+              onBahiaSelection={(bahias: v2Bahia[]) =>
+                setSelectedBahias(bahias)
+              }
+            />
+            {!msg ? (
+              <></>
+            ) : (
+              <Alert variant={success ? "info" : "warning"}>{msg}</Alert>
+            )}
           </div>
-          {!msg ? (
-            <></>
-          ) : (
-            <Alert variant={success ? "info" : "warning"}>{msg}</Alert>
-          )}
         </div>
       </div>
     </Styled>

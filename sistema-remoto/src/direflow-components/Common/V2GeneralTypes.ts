@@ -29,6 +29,7 @@ export type v2Node = {
 };
 
 export type v2Bahia = {
+  document_id?: string;
   bahia_code: string;
   voltaje: number;
   bahia_nombre: string;

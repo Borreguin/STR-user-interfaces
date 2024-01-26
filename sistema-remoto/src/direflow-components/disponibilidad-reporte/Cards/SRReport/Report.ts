@@ -1,3 +1,5 @@
+import { Consignment } from "../../../Common/GeneralTypes";
+
 export type Report = {
   disponibilidad_promedio_ponderada_porcentage: number;
   disponibilidad_promedio_porcentage: number;
@@ -115,6 +117,7 @@ export type reporte_utr = {
 };
 
 export type InstallationReport = {
+  consignaciones_internas: Array<Consignment>;
   periodo_efectivo_minutos: number;
   numero_consignaciones_internas: number;
   document_id: string;
@@ -128,7 +131,7 @@ export type InstallationReport = {
   indisponibilidad_promedio_minutos: number;
   disponibilidad_promedio_porcentage: number;
   ponderacion: number;
-  consignaciones: Array<any>;
+  consignaciones: Array<Consignment>;
   numero_bahias: number;
   numero_tags_procesadas: number;
   bahia_details: Array<any>;

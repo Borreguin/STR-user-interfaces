@@ -104,6 +104,7 @@
   width: 100%;
   padding-left: 10px;
   padding-right: 10px;
+  padding-bottom: 10px;
 }
 
 .tab-container {
@@ -271,7 +272,6 @@
 }
 
 .cons-container {
-  height: 95vh;
   width: 100%;
   padding-top: 70px;
   padding-left: 10px;

@@ -396,6 +396,9 @@ class SRCalDisponibilidad extends Component<props, state> {
       >
         <div className="page-content">
           <Form.Group as={Row} className={"sc-search"}>
+            <div className="sc-date-picker">
+              <DatePickSelector onChange={this.onChangeDate} />
+            </div>
             <div className={"sc-search-node"}>
               <SearchSection
                 buttonText={"Consultar"}
@@ -405,9 +408,6 @@ class SRCalDisponibilidad extends Component<props, state> {
                 onClickSearch={this._search_report_now}
                 onUpdateSearch={this._update_search}
               />
-            </div>
-            <div className="sc-date-picker">
-              <DatePickSelector onChange={this.onChangeDate} />
             </div>
           </Form.Group>
           <ButtonSection

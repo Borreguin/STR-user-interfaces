@@ -21,6 +21,7 @@ import TendenciaDisponibilidadAdquisicion from "./direflow-components/tendencia-
 import ConverterV2 from "./direflow-components/v2-converter/App";
 import NodeManagementV2 from "./direflow-components/v2-manejo-nodos/App";
 import ConsignmentManagementV2 from "./direflow-components/v2-consignaciones-ingreso/App";
+import ConsignmentsViewV2 from "./direflow-components/v2-consignaciones-consulta/App";
 
 export {
   ZDireflowNavigate,
@@ -35,4 +36,5 @@ export {
   ConverterV2,
   NodeManagementV2,
   ConsignmentManagementV2,
+  ConsignmentsViewV2,
 };

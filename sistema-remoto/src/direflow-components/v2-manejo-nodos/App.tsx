@@ -161,6 +161,10 @@ class NodeManagementV2 extends Component<
             >
               <FontAwesomeIcon inverse icon={faPlusCircle} size="lg" />
             </Button>
+            <div>
+              Por favor guarde los cambios antes de subir un archivo de
+              configuración
+            </div>
             <div style={{ marginLeft: "15px" }}>{this._notification()}</div>
           </Form.Group>
           <div className="div-cards">

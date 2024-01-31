@@ -61,15 +61,16 @@ export class DateRangeTime extends React.Component<
         ini_date: r.first_day_month,
         end_date: r.last_day_month,
       };
-    }
-    if (
-      this.props.ini_date !== undefined &&
-      this.props.end_date !== undefined
-    ) {
-      this.state = {
-        ini_date: this.props.ini_date,
-        end_date: this.props.end_date,
-      };
+    } else {
+      if (
+        this.props.ini_date !== undefined &&
+        this.props.end_date !== undefined
+      ) {
+        this.state = {
+          ini_date: this.props.ini_date,
+          end_date: this.props.end_date,
+        };
+      }
     }
     this.handle_picker_change();
     this.start_date = this.state.ini_date;

@@ -24,6 +24,7 @@ import {
   ConsignacionesIngreso,
   TendenciaDisponibilidadAdquisicion,
   ConsignmentManagementV2,
+  ConsignmentsViewV2,
 } from "./component-exports";
 import TemplateComp from "./direflow-components/zdireflow-navigate";
 import ConverterV2 from "./direflow-components/v2-converter/App";
@@ -93,6 +94,11 @@ export const routes = [
     path: "/bahia-report",
     component: BahiaReport,
     description: "Reporte de Bahias V2",
+  },
+  {
+    path: "/consulta-consignaciones-v2",
+    component: ConsignmentsViewV2,
+    description: "Consulta de consignaciones V2",
   },
 ];
 

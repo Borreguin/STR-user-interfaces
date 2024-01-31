@@ -25,6 +25,7 @@ import {
   StatusReportResponse,
 } from "./model";
 import { v2Bahia, v2Installation } from "../V2GeneralTypes";
+import { ConsignmentRequest } from "../GeneralTypes";
 
 export const getAllNodeInfo = async (): Promise<NodeResponse> => {
   const response = (await fetchGETData(nodeApiUrl)) as unknown as NodeResponse;
@@ -136,4 +137,34 @@ export const getDetailedNodeReportById = async (
   return (await fetchGETData(
     `${detailedNodeReportByIdApiUrl}${report_id}`,
   )) as unknown as NodeReportResponse;
+};
+
+export const getConsignmentsByIdAndRange = async (
+  element_id: string,
+  ini_date: string,
+  end_date: string,
+): Promise<any> => {
+  return (await fetchGETData(
+    `${consignmentApiUrl}/${element_id}/${ini_date}/${end_date}`,
+  )) as unknown as any;
+};
+
+export const deleteConsignment = async (
+  element_id: string,
+  consignment_id: string,
+): Promise<any> => {
+  return (await fetchDELETEData(
+    `${consignmentApiUrl}/${element_id}/${consignment_id}`,
+  )) as unknown as any;
+};
+
+export const editConsignment = async (
+  element_id: string,
+  consignment_id: string,
+  consignment: ConsignmentRequest,
+): Promise<any> => {
+  return (await fetchPUTData(
+    `${consignmentApiUrl}/${element_id}/${consignment_id}`,
+    consignment,
+  )) as unknown as any;
 };

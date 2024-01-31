@@ -58,6 +58,7 @@ export type InstallationElement = {
   activado: boolean;
   instalacion_id: string;
   document_id: string;
+  bahias?: Array<BahiaElement>;
 };
 
 export type NodeElement = {
@@ -84,6 +85,7 @@ export type BahiaElement = {
   bahia_code: string;
   voltaje: number;
   activado: boolean;
+  document_id?: string;
 };
 
 export type Element = NodeElement &
@@ -106,4 +108,18 @@ export type Consignment = {
   id_consignacion: string;
   responsable: string;
   detalle: ConsignmentDetail;
+};
+
+export type selectedElements = {
+  selectedNode: NodeElement;
+  selectedEntity: EntityElement;
+  selectedInstallation: InstallationElement;
+};
+
+export type ConsignmentRequest = {
+  no_consignacion: string;
+  responsable: string;
+  fecha_inicio: string;
+  fecha_final: string;
+  element_info: ConsignmentDetail;
 };

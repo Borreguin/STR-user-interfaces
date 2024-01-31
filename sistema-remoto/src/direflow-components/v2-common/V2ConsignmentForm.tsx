@@ -1,12 +1,17 @@
 import React, { useEffect, useState } from "react";
 import { Card, Col, Form, Row } from "react-bootstrap";
 import { to_yyyy_mm_dd_hh_mm_ss } from "../Common/DatePicker/DateRange";
-import { DateRangeTime } from "../Common/DatePicker/DateRangeTime";
+import {
+  DateRangeTime,
+  get_last_month_dates,
+} from "../Common/DatePicker/DateRangeTime";
+import { getCurrentUser } from "../Common/common-util";
 
 interface V2ConsignmentFormProps {
   headerLabel: string;
   buttonLabel: string;
   onSubmit: Function;
+  initialValues?: V2ConsignmentFormValues | undefined;
 }
 
 export interface V2ConsignmentFormValues {
@@ -19,21 +24,18 @@ export interface V2ConsignmentFormValues {
 }
 
 export const V2ConsignmentForm = (props: V2ConsignmentFormProps) => {
-  const { headerLabel, buttonLabel, onSubmit } = props;
+  const { headerLabel, buttonLabel, onSubmit, initialValues } = props;
 
   const [consForm, setConsForm] = useState({
-    no_consignacion: undefined,
-    fecha_inicio: undefined,
-    fecha_final: undefined,
-    detalle: "",
-    descripcion_corta: "",
-    responsable:
-      localStorage.getItem("userRole") +
-      " | " +
-      localStorage.getItem("userDisplayName"),
+    no_consignacion: !initialValues ? undefined : initialValues.no_consignacion,
+    fecha_inicio: !initialValues ? undefined : initialValues.fecha_inicio,
+    fecha_final: !initialValues ? undefined : initialValues.fecha_final,
+    detalle: !initialValues ? "" : initialValues.detalle,
+    descripcion_corta: !initialValues ? "" : initialValues.descripcion_corta,
+    responsable: getCurrentUser(),
   } as V2ConsignmentFormValues);
   const [validatedForm, setValidatedForm] = useState({
-    no_consignacion: false,
+    no_consignacion: true,
     fecha_inicio: true,
     fecha_final: true,
   });
@@ -53,6 +55,19 @@ export const V2ConsignmentForm = (props: V2ConsignmentFormProps) => {
   };
 
   useEffect(() => {
+    if (initialValues !== undefined) {
+      setValidated(true);
+    }
+  }, [initialValues]);
+
+  useEffect(() => {
+    for (const key of toCheck) {
+      const isValid = checkForm(key, consForm[key]);
+      setValidatedForm((values) => ({
+        ...values,
+        [key]: isValid,
+      }));
+    }
     setValidated(isValidForm());
   }, [consForm]);
 
@@ -93,6 +108,7 @@ export const V2ConsignmentForm = (props: V2ConsignmentFormProps) => {
                 type="text"
                 placeholder="Ingrese código"
                 name="no_consignacion"
+                defaultValue={consForm.no_consignacion}
                 onChange={handleChange}
               />
             </Col>
@@ -103,7 +119,16 @@ export const V2ConsignmentForm = (props: V2ConsignmentFormProps) => {
               </Form.Label>
               <br></br>
               <DateRangeTime
-                last_month={true}
+                ini_date={
+                  initialValues?.fecha_inicio === undefined
+                    ? get_last_month_dates().first_day_month
+                    : new Date(initialValues.fecha_inicio)
+                }
+                end_date={
+                  initialValues?.fecha_final === undefined
+                    ? get_last_month_dates().last_day_month
+                    : new Date(initialValues.fecha_final)
+                }
                 onPickerChange={(ini: Date, end: Date) => {
                   setConsForm((values) => ({
                     ...values,
@@ -119,6 +144,7 @@ export const V2ConsignmentForm = (props: V2ConsignmentFormProps) => {
                 type="text"
                 placeholder="Ingrese descripción corta"
                 name="descripcion_corta"
+                defaultValue={consForm.descripcion_corta}
                 onChange={handleChange}
               />
             </Col>
@@ -129,6 +155,7 @@ export const V2ConsignmentForm = (props: V2ConsignmentFormProps) => {
                 aria-label="With textarea"
                 placeholder="Ingrese detalles"
                 name="detalle"
+                defaultValue={consForm.detalle}
                 onChange={handleChange}
               />
             </Col>

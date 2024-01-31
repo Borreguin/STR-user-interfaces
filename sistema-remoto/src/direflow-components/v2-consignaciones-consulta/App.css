@@ -1,0 +1,41 @@
+.update_label{
+  min-width: 100%;
+  min-height: 40px;
+}
+.btn-actualizar{
+  float: right;
+  margin-top: 7px;
+}
+
+.cons-container {
+  height: 95vh;
+  width: 100%;
+  padding: 15px 10px 10px;
+  overflow: scroll;
+}
+.cons-header{
+  padding: 4px;
+}
+
+.consignacion_block{
+  min-width: 330px;
+  margin: 2px;
+  border: 1px solid rgba(131, 127, 127, 0.774) !important;
+}
+.consignacion-title{
+  color: rgb(10, 10, 100);
+}
+.consignacion_label{
+  min-width: 120px;
+  font-size: 10pt;
+  font-style: oblique;
+}
+
+.consg_descrip{
+  min-width: 100px;
+  float: left;
+}
+
+.consignacion_buttons{
+  float: right;
+}

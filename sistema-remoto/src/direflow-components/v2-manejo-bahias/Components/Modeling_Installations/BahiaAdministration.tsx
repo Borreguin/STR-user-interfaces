@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { Button, Form, Row } from "react-bootstrap";
+import { Alert, Button, Form, Row } from "react-bootstrap";
 import {
   createNewBahia,
   deleteBahia,
@@ -7,10 +7,11 @@ import {
 } from "../../../Common/FetchData/V2SRFetchData";
 
 export function BahiaAdministration(props) {
-  const { bahia, selectedInstalationId } = props;
+  const { bahia, selectedInstalationId, requestReload } = props;
 
   const [loading, setLoading] = useState(false);
   const [validated, setValidated] = useState(false);
+  const [msg, setMsg] = useState(undefined);
 
   const [bahiaForm, setBahiaForm] = useState({
     bahia_code: undefined,
@@ -25,20 +26,24 @@ export function BahiaAdministration(props) {
     });
   }, [bahia]);
 
-  const handleCreate = (event) => {
+  const handleSubmit = (event) => {
+    let formToSend = bahiaForm;
+
     const form = event.currentTarget;
+    event.preventDefault();
     if (form.checkValidity() === false) {
-      event.preventDefault();
       event.stopPropagation();
     }
 
     setLoading(true);
     setValidated(true);
 
-    createNewBahia(selectedInstalationId, bahiaForm).then((response) => {
+    createNewBahia(selectedInstalationId, formToSend).then((response) => {
       setLoading(false);
-      console.error(response);
-      // requestReload();
+      setMsg(response.msg);
+      if (response.success) {
+        requestReload();
+      }
     });
   };
 
@@ -54,9 +59,11 @@ export function BahiaAdministration(props) {
 
     editBahia(selectedInstalationId, bahia.document_id, bahiaForm).then(
       (response) => {
-        console.error(response);
         setLoading(false);
-        // requestReload();
+        if (response.success) {
+          requestReload();
+        }
+        setMsg(response.msg);
       },
     );
   };
@@ -72,9 +79,11 @@ export function BahiaAdministration(props) {
     setValidated(true);
 
     deleteBahia(selectedInstalationId, bahia.document_id).then((response) => {
-      console.error(response);
       setLoading(false);
-      // requestReload();
+      if (response.success) {
+        requestReload();
+      }
+      setMsg(response.msg);
     });
   };
 
@@ -85,13 +94,15 @@ export function BahiaAdministration(props) {
   };
 
   return (
-    <Form noValidate validated={validated}>
+    <Form validated={validated} onSubmit={handleSubmit}>
       <Form.Group>
-        <Form.Label className="required">Codigo Bahia</Form.Label>
+        <Form.Label className="required">Código Bahia</Form.Label>
         <Form.Control
           type="text"
           placeholder="Codigo"
+          required
           name="bahia_code"
+          value={bahiaForm.bahia_code || ""}
           onChange={handleChange}
           defaultValue={bahiaForm.bahia_code}
         />
@@ -101,14 +112,16 @@ export function BahiaAdministration(props) {
         <Form.Control
           type="text"
           placeholder="Nombre"
+          required
           name="bahia_nombre"
+          value={bahiaForm.bahia_nombre || ""}
           onChange={handleChange}
           defaultValue={bahiaForm.bahia_nombre}
         />
       </Form.Group>
 
       <Form.Group>
-        <Form.Label className="required">Voltaje</Form.Label>
+        <Form.Label>Voltaje</Form.Label>
         <Form.Control
           type="number"
           placeholder="Voltaje"
@@ -123,18 +136,16 @@ export function BahiaAdministration(props) {
           type="checkbox"
           label="Activada"
           name="activado"
-          onChange={handleChange}
+          checked={bahiaForm.activado || false}
+          onChange={() =>
+            setBahiaForm({ ...bahiaForm, activado: !bahiaForm.activado })
+          }
           value={bahiaForm.activado || false}
         />
       </Form.Group>
 
       {!bahia && (
-        <Button
-          variant="primary"
-          type="button"
-          disabled={loading}
-          onClick={handleCreate}
-        >
+        <Button variant="primary" type="submit" disabled={loading}>
           Crear Bahia
         </Button>
       )}
@@ -161,6 +172,7 @@ export function BahiaAdministration(props) {
           </Button>
         </Row>
       )}
+      {msg && <Alert variant="info">{msg}</Alert>}
     </Form>
   );
 }

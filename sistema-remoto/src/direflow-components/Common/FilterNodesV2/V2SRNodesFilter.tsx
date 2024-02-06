@@ -62,10 +62,14 @@ const V2SRNodesFilterComponent = (props: V2SRNodesFilterProps) => {
   const [installations, setInstallations] = useState<Array<v2Installation>>([]);
   const [installationOptions, setInstallationOptions] =
     useState<TypeAndNameOptions>(undefined);
+  const [selectedInstallation, setSelectedInstallation] =
+    useState<v2Installation>(undefined);
 
   const [lastSelectedNode, setLastSelectedNode] = useState<v2Node>(undefined);
   const [lastSelectedEntity, setLastSelectedEntity] =
     useState<v2Entity>(undefined);
+  const [lastSelectedInstallation, setLastSelectedInstallation] =
+    useState<v2Installation>(undefined);
   const [lastNodeTypeAndName, setLastNodeTypeAndName] = useState(undefined);
   const [lastEntityTypeAndName, setLastEntityTypeAndName] = useState(undefined);
   const [lastInstallationTypeAndName, setLastInstallationTypeAndName] =
@@ -132,6 +136,7 @@ const V2SRNodesFilterComponent = (props: V2SRNodesFilterProps) => {
   const onUpdateRequest = () => {
     setLastSelectedNode(selectedNode);
     setLastSelectedEntity(selectedEntity);
+    setLastSelectedInstallation(selectedInstallation);
     setLoading(true);
     setMsg(msgUpdateNodes);
     getAllNodeInfo().then((response) => {
@@ -191,6 +196,17 @@ const V2SRNodesFilterComponent = (props: V2SRNodesFilterProps) => {
         const options = getInstallationOptions(_installations);
         setInstallationOptions(options);
         setInstallations(_installations);
+        if (lastSelectedInstallation !== undefined) {
+          const _installation = _installations.find(
+            (n) => n.instalacion_id === lastSelectedInstallation.instalacion_id,
+          );
+          setSelectedInstallation(_installation);
+          onFinalChange({
+            selectedNode,
+            selectedEntity,
+            selectedInstallation: _installation,
+          });
+        }
       }
     });
   };
@@ -199,6 +215,7 @@ const V2SRNodesFilterComponent = (props: V2SRNodesFilterProps) => {
     const installation = installations.find(
       (n) => n.instalacion_id === installationNameOption.id,
     );
+    setSelectedInstallation(installation);
     onFinalChange({
       selectedNode,
       selectedEntity,

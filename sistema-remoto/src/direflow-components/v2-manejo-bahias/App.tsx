@@ -26,7 +26,7 @@ export function InstallationAndBahiasManagement() {
               <V2SRNodesFilter
                 onFinalChange={(values: any) => {
                   setSelectedValues(values);
-                  console.log(values);
+                  console.log("check me selected values", values);
                 }}
                 toReload={toReload}
                 onFinishReload={() => setToReload(false)}

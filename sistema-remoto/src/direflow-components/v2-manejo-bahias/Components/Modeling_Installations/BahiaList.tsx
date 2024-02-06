@@ -1,13 +1,19 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Button, Form } from "react-bootstrap";
 import { BahiaAdministration } from "./BahiaAdministration";
 import { getDescriptionBahia } from "../../../Common/common-util";
 
 export function BahiaList(props) {
-  const { selectedInstallation } = props;
+  const { selectedInstallation, requestReload } = props;
   const { bahias } = selectedInstallation;
+  console.log("BahiaList", bahias.length);
 
   const [bahiaSeleccionada, setBahiaSeleccionada] = useState(null);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    setLoading(false);
+  }, [selectedInstallation, bahias]);
 
   const handleRadioChange = (value) => {
     setBahiaSeleccionada(value);
@@ -16,6 +22,7 @@ export function BahiaList(props) {
   const handleEdit = () => {
     setBahiaSeleccionada(null);
   };
+  if (loading) return <div>Loading...</div>;
 
   return (
     <div className={"sc-new-bahia-container"}>
@@ -55,6 +62,9 @@ export function BahiaList(props) {
           <BahiaAdministration
             bahia={bahiaSeleccionada}
             selectedInstalationId={selectedInstallation._id}
+            requestReload={() => {
+              requestReload();
+            }}
           ></BahiaAdministration>
         }
       </div>

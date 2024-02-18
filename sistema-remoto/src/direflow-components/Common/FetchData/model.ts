@@ -49,3 +49,9 @@ export type NodeReportResponse = {
   msg: string;
   report: NodeReport;
 };
+
+export type ReportStartResponse = {
+  success: boolean;
+  msg: string;
+  report_id: string;
+};

@@ -17,3 +17,5 @@ export const detailedNodeReportApiUrl =
 
 export const detailedNodeReportByIdApiUrl =
   SRM_API_URL + "/disp-sRemoto/disponibilidad/nodo/report-id/";
+
+export const overviewReportApiUrl = `${SRM_API_URL}/disp-sRemoto/disponibilidad/nodos/`;

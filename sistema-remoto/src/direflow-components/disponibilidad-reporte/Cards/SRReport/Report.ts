@@ -43,6 +43,7 @@ export type Procesamiento = {
 };
 
 export type SummaryReport = {
+  id_node: string;
   id_report: string;
   actualizado: string;
   nombre: string;

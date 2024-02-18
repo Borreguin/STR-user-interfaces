@@ -12,6 +12,7 @@ import {
   entityByIdUrl,
   installationApiUrl,
   nodeApiUrl,
+  overviewReportApiUrl,
   statusReportApiUrl,
 } from "../FilterNodesV2/constants";
 import {
@@ -21,11 +22,13 @@ import {
   InstallationResponse,
   NodeReportResponse,
   NodeResponse,
+  ReportStartResponse,
   SimpleResponse,
   StatusReportResponse,
 } from "./model";
 import { v2Bahia, v2Installation } from "../V2GeneralTypes";
 import { ConsignmentRequest } from "../GeneralTypes";
+import { IdsRequest } from "./requestModel";
 
 export const getAllNodeInfo = async (): Promise<NodeResponse> => {
   const response = (await fetchGETData(nodeApiUrl)) as unknown as NodeResponse;
@@ -167,4 +170,24 @@ export const editConsignment = async (
     `${consignmentApiUrl}/${element_id}/${consignment_id}`,
     consignment,
   )) as unknown as any;
+};
+
+export const overwriteNodeReport = async (
+  range: string,
+  idsRequest: IdsRequest,
+): Promise<ReportStartResponse> => {
+  return (await fetchPUTData(
+    `${overviewReportApiUrl}${range}`,
+    idsRequest,
+  )) as unknown as ReportStartResponse;
+};
+
+export const deleteNodeReport = async (
+  range: string,
+  idsRequest: IdsRequest,
+): Promise<ReportStartResponse> => {
+  return (await fetchDELETEData(
+    `${overviewReportApiUrl}${range}`,
+    idsRequest,
+  )) as unknown as ReportStartResponse;
 };

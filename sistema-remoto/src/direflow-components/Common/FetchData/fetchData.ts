@@ -49,9 +49,16 @@ export const fetchPUTData = async (url: string, body: any): Promise<JSON> => {
     .catch((e) => handleError(url, e));
 };
 
-export const fetchDELETEData = async (url: string): Promise<any> => {
+export const fetchDELETEData = async (
+  url: string,
+  body: Object = {},
+): Promise<any> => {
   return await fetch(url, {
     method: "DELETE",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify(body),
   })
     .then((res) => handleResponse(res)) // or res.json()
     .then((json) => {

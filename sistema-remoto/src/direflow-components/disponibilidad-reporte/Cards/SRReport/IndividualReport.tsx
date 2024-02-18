@@ -18,9 +18,13 @@ import { to_yyyy_mm_dd_hh_mm_ss } from "../../../Common/DatePicker/DateRange";
 import { SRM_API_URL } from "../../../../Constantes";
 import { documentVersion } from "../../../Common/CommonConstants";
 import {
+  deleteNodeReport,
   getDetailedNodeReport,
   getDetailedNodeReportById,
+  getStatusReport,
+  overwriteNodeReport,
 } from "../../../Common/FetchData/V2SRFetchData";
+import { CHECK_STATUS_INTERVAL_MS, MAX_N_TRIES } from "../../Utils/constants";
 
 type IndReportProps = {
   report: SummaryReport;
@@ -35,6 +39,7 @@ type IndReportState = {
   open: boolean;
   calculating: boolean;
   log: Object;
+  msg: string;
   disponibilidad: string;
   deleted: boolean;
   report: NodeReport | undefined;
@@ -63,6 +68,7 @@ class IndividualReport extends Component<IndReportProps, IndReportState> {
       edited: false,
       report: undefined,
       loading: false,
+      msg: "Cargando...",
     };
   }
 
@@ -144,25 +150,52 @@ class IndividualReport extends Component<IndReportProps, IndReportState> {
         this.props.report.nombre +
         "? \n\n" +
         "Esta acción excluirá y eliminará el calculo de este nodo del reporte final. \nSi desea re-calcular este nodo, pulse el botón 'Re-calcular nodo'" +
-        "\n\nNOTA! Una vez eliminado el cálculo, la única manera de volver a realizar el cálculo de este nodo \nserá mediante el botón RE-ESCRIBIR CÁLCULO de todos los nodos.",
+        "\n\nNOTA! Una vez eliminado el cálculo, la única manera de volver a realizar el cálculo de este nodo \nserá mediante el botón RE-ESCRIBIR CÁLCULO de todos los nodos." +
+        "\n\nImportante: La acción re-escribir y eliminar cálculo sólo funciona en reportes nuevos (V2)",
     );
     if (confirm) {
       this.setState({ calculating: true, disponibilidad: "---" });
-      let path = `${SRM_API_URL}/disp-sRemoto/disponibilidad/${
-        this.props.report.tipo
-      }/${this.props.report.nombre}/${this._range_time()}`;
-      await fetch(path, {
-        method: "DELETE",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ nodos: [this.props.report.nombre] }),
-      })
-        .then((res) => res.json())
-        .then((json) => {
-          this.setState({ log: json, calculating: false, deleted: true });
-          this.handle_changes_report();
-        })
-        .catch(console.log);
+      const body = { nodos: [this.props.report.id_node] };
+      this.setState({ calculating: true });
+      const reportStartResponse = await deleteNodeReport(
+        this._range_time(),
+        body,
+      );
+      if (reportStartResponse.success) {
+        this.handle_changes_report();
+      } else {
+        this.setState({ msg: reportStartResponse.msg });
+      }
     }
+  };
+
+  _getStatusReport = (reportId: string, nTries = 1) => {
+    if (nTries >= MAX_N_TRIES) {
+      this.setState({ calculating: false });
+      this.handle_changes_report();
+      return;
+    }
+    getStatusReport(reportId).then((response) => {
+      if (response.success) {
+        this.setState({
+          msg: `${response.report.msg}`,
+        });
+        if (response.report.processing) {
+          this.setState({ calculating: true });
+          setTimeout(() => {
+            this._getStatusReport(reportId, 0);
+          }, CHECK_STATUS_INTERVAL_MS);
+        }
+        if (response.report.finish) {
+          this.setState({ calculating: false });
+          this.handle_changes_report();
+        }
+      } else {
+        setTimeout(() => {
+          this._getStatusReport(reportId, nTries + 1);
+        }, CHECK_STATUS_INTERVAL_MS);
+      }
+    });
   };
 
   _cal_disponibilidad = async (method) => {
@@ -179,33 +212,29 @@ class IndividualReport extends Component<IndReportProps, IndReportState> {
         message: msg + this.props.report.nombre,
       },
       calculating: true,
+      loading: true,
       disponibilidad: "---",
     });
-    let path = `${SRM_API_URL}/disp-sRemoto/disponibilidad/nodos/${this._range_time()}`;
-    let payload = {
-      method: method,
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ nodos: [this.props.report.nombre] }),
-    };
 
-    await fetch(path, payload)
-      .then((res) => res.json())
-      .then((json) => {
-        if (!json.success) {
-          this.setState({ log: json.msg, calculating: false });
-        } else {
-          delete json.report;
-          json["estado"] = "Finalizado";
-          this.setState({ log: json, calculating: false, open: false });
-          this.handle_changes_report();
-        }
-      })
-      .catch(() => {
-        this.setState({
-          log: { estado: "error", msg: "No es posible conectar con la API" },
-          calculating: false,
-        });
-      });
+    const body = { nodos: [this.props.report.id_node] };
+
+    const reportStartResponse = await overwriteNodeReport(
+      this._range_time(),
+      body,
+    );
+    if (reportStartResponse.success) {
+      this.setState({ calculating: true, open: false });
+      setTimeout(() => {
+        this._getStatusReport(reportStartResponse.report_id);
+      }, CHECK_STATUS_INTERVAL_MS);
+    } else {
+      this.setState({ calculating: false, open: false });
+    }
+    this.setState({
+      report: undefined,
+      log: { msg: reportStartResponse.msg },
+      loading: false,
+    });
   };
 
   _get_detailed_report = async () => {
@@ -221,6 +250,7 @@ class IndividualReport extends Component<IndReportProps, IndReportState> {
   };
 
   _get_details_for_this_report = async () => {
+    if (this.state.calculating) return;
     this.setState({ loading: true });
     const resp = await this._get_detailed_report();
     this.setState({ loading: false });
@@ -276,7 +306,6 @@ class IndividualReport extends Component<IndReportProps, IndReportState> {
   };
 
   render() {
-    console.log("report", this.props.report);
     return (
       <Card>
         <Card.Header
@@ -312,31 +341,45 @@ class IndividualReport extends Component<IndReportProps, IndReportState> {
           </div>
           <ReactTooltip />
 
-          <div className="ir-processing">
-            <div className="ir-process-label"> Tags calculadas:</div>
-            <div className="ir-process-value">
-              {" "}
-              {this._porcentage_tags_cal()}%
-            </div>
-            <div className="ir-process-label"> Total:</div>
-            <div className="ir-process-value"> {this._total_tags()}</div>
-          </div>
-          <div className="ir-summary">
-            <span className="ir-date">
-              {this._format_date(this.props.report.actualizado)}
-            </span>
+          {this.state.calculating ? (
+            <>
+              <Spinner
+                animation="border"
+                role="status"
+                size="sm"
+                style={{ margin: "10px" }}
+              />
+              <span>{this.state.msg}</span>
+            </>
+          ) : (
+            <>
+              <div className="ir-processing">
+                <div className="ir-process-label"> Tags calculadas:</div>
+                <div className="ir-process-value">
+                  {" "}
+                  {this._porcentage_tags_cal()}%
+                </div>
+                <div className="ir-process-label"> Total:</div>
+                <div className="ir-process-value"> {this._total_tags()}</div>
+              </div>
+              <div className="ir-summary">
+                <span className="ir-date">
+                  {this._format_date(this.props.report.actualizado)}
+                </span>
 
-            <span>
-              {this._get_n_failed_tags() === 0 ? (
-                <Badge variant="success">Completo</Badge>
-              ) : (
-                <Badge variant="warning">
-                  {this._get_n_failed_tags()}
-                  {" tags sin calcular"}
-                </Badge>
-              )}
-            </span>
-          </div>
+                <span>
+                  {this._get_n_failed_tags() === 0 ? (
+                    <Badge variant="success">Completo</Badge>
+                  ) : (
+                    <Badge variant="warning">
+                      {this._get_n_failed_tags()}
+                      {" tags sin calcular"}
+                    </Badge>
+                  )}
+                </span>
+              </div>
+            </>
+          )}
 
           <Button
             data-tip="Eliminar cálculo"

@@ -22,7 +22,6 @@ type NodeReportState = {
 class NodeReport extends Component<NodeReportProps, NodeReportState> {
   constructor(props) {
     super(props);
-    console.log("NodeReport constructor", props.document);
     this.state = {
       finish: false,
       log: undefined,

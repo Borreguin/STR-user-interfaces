@@ -69,7 +69,23 @@ export function ConsignmentManagementV2(action: string) {
     }
   }, [selectedValues]);
 
-  console.log("toConsignment", toConsignment);
+  const shouldRenderEntityButton = () => {
+    if (
+      selectedValues === undefined ||
+      selectedValues === null ||
+      !selectedValues[selection.entity] ||
+      !selectedValues[selection.node] ||
+      !selectedValues[selection.entity][nameProperty.entity_name] ||
+      !selectedValues[selection.node][nameProperty.node_name]
+    ) {
+      return false;
+    }
+    return (
+      selectedValues[selection.entity][nameProperty.entity_name] !==
+      selectedValues[selection.node][nameProperty.node_name]
+    );
+  };
+
   const renderBahiaConsignmentButton = () => {
     const className =
       selectedButton === selection.bahia ? "cons-button-active" : "cons-button";
@@ -163,7 +179,6 @@ export function ConsignmentManagementV2(action: string) {
   };
 
   const buttonLabel = () => {
-    console.log("selectedButton", selectedBahias);
     if (selectedButton === selection.bahia) {
       return `Ingresar en [${selectedBahias.length}] bahías seleccionadas`;
     }
@@ -190,7 +205,8 @@ export function ConsignmentManagementV2(action: string) {
             </Tab>
           </Tabs>
           {renderConsignmentButton(selection.node)}
-          {renderConsignmentButton(selection.entity)}
+          {shouldRenderEntityButton() &&
+            renderConsignmentButton(selection.entity)}
           {renderConsignmentButton(selection.installation)}
           {renderBahiaConsignmentButton()}
           <div>

@@ -48,9 +48,10 @@ class NodeReport extends Component<NodeReportProps, NodeReportState> {
         {this.props.reports === undefined || this.props.calculating ? (
           <></>
         ) : (
-          this.props.reports.map((report) => (
+          this.props.reports.map((report, ix) => (
             <IndividualReport
-              key={report.id_report}
+              key={report.id_report + ix}
+              id={report.id_report}
               report={report}
               document={this.props.document}
               calculating={this.props.calculating}

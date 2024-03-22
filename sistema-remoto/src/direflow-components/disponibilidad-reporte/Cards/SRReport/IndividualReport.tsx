@@ -377,6 +377,17 @@ class IndividualReport extends Component<IndReportProps, IndReportState> {
                     </Badge>
                   )}
                 </span>
+                {this.props.report.numero_consignaciones &&
+                this.props.report.numero_consignaciones > 0 ? (
+                  <div className="ir-consignacion">
+                    <Badge variant={"info"}>
+                      Consig:
+                      {" " + this.props.report.numero_consignaciones}
+                    </Badge>
+                  </div>
+                ) : (
+                  <></>
+                )}
               </div>
             </>
           )}

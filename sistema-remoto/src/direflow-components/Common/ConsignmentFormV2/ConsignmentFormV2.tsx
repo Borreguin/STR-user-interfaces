@@ -7,15 +7,16 @@ import {
   summarizeNode,
 } from "../V2Summarize";
 import { V2ConsignmentForm } from "../../v2-common/V2ConsignmentForm";
-import { BahiaList } from "../../v2-manejo-bahias/Components/Modeling_Installations/BahiaList";
 import { BahiaChecker } from "../BahiaChecher/BahiaChecker";
 import { v2Bahia } from "../V2GeneralTypes";
+import { Alert } from "react-bootstrap";
 
 interface ConsignmentFormV2Props {
   toConsignment: Object;
   selectedType: string;
   headerLabel: string;
   buttonLabel: string;
+  msg: string;
   onSubmit: Function;
   onBahiaSelection?: Function;
 }
@@ -37,6 +38,7 @@ export const ConsignmentFormV2 = (props: ConsignmentFormV2Props) => {
     selectedType,
     headerLabel,
     buttonLabel,
+    msg,
     onSubmit,
     onBahiaSelection,
   } = props;
@@ -51,10 +53,6 @@ export const ConsignmentFormV2 = (props: ConsignmentFormV2Props) => {
 
   const handleOnBahiaSelection = (bahias: v2Bahia[]) => {
     onBahiaSelection(bahias);
-  };
-
-  const onRequestReload = () => {
-    console.log("ConsignmentFormV2: onRequestReload");
   };
 
   return (
@@ -92,6 +90,7 @@ export const ConsignmentFormV2 = (props: ConsignmentFormV2Props) => {
             Los campos con (<span className="cons-mandatory">*</span>) son
             mandatorios
           </div>
+          {!msg ? <></> : <Alert variant={"info"}>{msg}</Alert>}
         </div>
       </div>
     </div>

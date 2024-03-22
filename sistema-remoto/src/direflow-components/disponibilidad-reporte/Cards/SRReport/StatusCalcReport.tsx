@@ -97,7 +97,7 @@ class StatusCalcReport extends Component<
       return;
     }
 
-    this.setState({ isFetching: true });
+    this.setState({ isFetching: true, percentage: statusReport.percentage });
     let path =
       SRM_API_URL + "/disp-sRemoto/estado/disponibilidad/" + this._range_time();
     await fetch(path, { signal: this.abortController.signal })
@@ -130,7 +130,7 @@ class StatusCalcReport extends Component<
           role="status"
           size="sm"
         />
-        <div className="pr-label"> Procesando:</div>
+        <div className="pr-label">Procesando:</div>
         <div className="pr-bar">
           <ProgressBar
             now={this.state.percentage}
@@ -181,8 +181,6 @@ class StatusCalcReport extends Component<
         {this.state.isFetching
           ? this._render_processing_average()
           : this._render_processing_average()}
-        <br></br>
-        <br></br>
         {this.state.isFetching ? this._render_status() : this._render_status()}
       </div>
     );

@@ -75,7 +75,7 @@ export const BahiaContainerReport = (props: BahiaReportProps) => {
         3,
       ),
       [lb_ponderacion]: formatPercentage(selectedIReport.ponderacion, 3),
-      [lb_bahias_procesadas]: selectedIReport.bahia_details.length,
+      [lb_bahias_procesadas]: selectedIReport.numero_bahias_procesadas,
       [lb_tags_procesadas]: selectedIReport.numero_tags_procesadas,
       [lb_consignaciones_instalacion]: selectedIReport.consignaciones.length,
       [lb_consignaciones_bahias]:

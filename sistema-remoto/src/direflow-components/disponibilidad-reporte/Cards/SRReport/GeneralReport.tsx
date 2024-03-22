@@ -140,6 +140,13 @@ class SRGeneralReport extends Component<GeneralReportProps, state> {
                     "" + this.props.report.procesamiento.numero_nodos_procesados
                   }
                 />
+                {this.props.report.numero_consignaciones !== null &&
+                  this.props.report.numero_consignaciones > 0 && (
+                    <RowValue
+                      label={"Consignaciones:"}
+                      value={"" + this.props.report.numero_consignaciones}
+                    />
+                  )}
               </div>
               <br></br>
               <div className="gr-sc-footer">

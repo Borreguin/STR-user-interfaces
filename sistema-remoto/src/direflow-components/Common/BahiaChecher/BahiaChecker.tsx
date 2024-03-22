@@ -12,7 +12,8 @@ export const BahiaChecker = (props: BahiaCheckerProps) => {
   const [bahiasSeleccionadas, setBahiasSeleccionadas] = React.useState({});
 
   useEffect(() => {
-    const bahiasArray = Object.values(bahiasSeleccionadas);
+    let bahiasArray = Object.values(bahiasSeleccionadas);
+    bahiasArray = bahiasArray.filter((bahia) => bahia !== undefined);
     onSelection(bahiasArray);
   }, [bahiasSeleccionadas]);
 

@@ -2,6 +2,7 @@ import { Line } from "rc-progress";
 import { Badge } from "react-bootstrap";
 import ReactTooltip from "react-tooltip";
 import React from "react";
+import { ConsignmentModal } from "../../../v2-bahia-report/components/ConsignmentModal";
 
 interface SmallCardProps {
   ponderacion: number;
@@ -9,7 +10,7 @@ interface SmallCardProps {
   nombre: string;
   n_tags: number;
   n_bahias: number;
-  n_consignaciones: number;
+  consignaciones: Array<any>;
   disponibilidad: number;
   onNameShowModal: Function;
 }
@@ -21,11 +22,11 @@ export const SmallCard = (props: SmallCardProps) => {
     nombre,
     n_tags,
     n_bahias,
-    n_consignaciones,
+    consignaciones,
     disponibilidad,
     onNameShowModal,
   } = props;
-
+  const [showConsignments, setShowConsignments] = React.useState(false);
   const _tooltip = (p: number, t: number) => {
     const div_bahias = n_bahias ? "<div>Bahías: " + n_bahias + "</div>" : "";
     return (
@@ -45,8 +46,24 @@ export const SmallCard = (props: SmallCardProps) => {
     }
   };
 
+  const handleOnClickConsignments = () => {
+    if (n_bahias > 0 && consignaciones.length > 0) {
+      onNameShowModal();
+    }
+  };
+
   return (
     <div className="dr-utr-body">
+      {consignaciones.length === 0 ? (
+        <></>
+      ) : (
+        <ConsignmentModal
+          title={`Consignaciones de ${nombre}`}
+          consignments={consignaciones}
+          show={showConsignments}
+          onClose={() => setShowConsignments(false)}
+        />
+      )}
       <div className={"dr-body"}>
         <div className="dr-utr-description">
           <Line className="dr-utr-bar" percent={ponderacion * 100} />
@@ -65,10 +82,14 @@ export const SmallCard = (props: SmallCardProps) => {
         </div>
       </div>
       <br />
-      <div className={"dr-consignacion"}>
-        <Badge variant="info">{n_consignaciones} Consg.</Badge>
+      <div
+        className={"dr-consignacion"}
+        data-tip={"Click para ver detalles"}
+        onClick={() => setShowConsignments(true)}
+      >
+        <Badge variant="info">{consignaciones.length} Consg.</Badge>
+        <ReactTooltip />
       </div>
-
       <ReactTooltip />
     </div>
   );

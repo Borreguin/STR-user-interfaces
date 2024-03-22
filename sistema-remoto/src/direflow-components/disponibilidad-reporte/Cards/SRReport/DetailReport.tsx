@@ -14,6 +14,7 @@ import DataTable from "react-data-table-component";
 import { documentVersion } from "../../../Common/CommonConstants";
 import { SmallCard } from "./SmallCard";
 import { formatPercentage } from "../../../Common/common-util";
+import { ConsignmentsAndPercentage } from "./ConsignmentsAndPercentage";
 
 type DetReportProps = {
   report: NodeReport;
@@ -26,6 +27,7 @@ type DetReportState = {
   search: string;
   filter_tags: Array<tag_details>;
   open: object;
+  showConsignments: boolean;
 };
 
 let columns = [
@@ -50,6 +52,7 @@ class DetailReport extends Component<DetReportProps, DetReportState> {
       search: "",
       filter_tags: [],
       open: {},
+      showConsignments: false,
     };
   }
 
@@ -83,7 +86,7 @@ class DetailReport extends Component<DetReportProps, DetReportState> {
           nombre={utr.nombre}
           n_tags={utr.numero_tags}
           n_bahias={undefined}
-          n_consignaciones={utr.consignaciones.length}
+          consignaciones={utr.consignaciones}
           disponibilidad={utr.disponibilidad_promedio_porcentage}
           onNameShowModal={() => this._handleShow(utr)}
         />
@@ -111,7 +114,9 @@ class DetailReport extends Component<DetReportProps, DetReportState> {
           nombre={rInstallation.nombre}
           n_tags={rInstallation.numero_tags}
           n_bahias={rInstallation.numero_bahias}
-          n_consignaciones={rInstallation.consignaciones.length}
+          consignaciones={rInstallation.consignaciones.concat(
+            rInstallation.consignaciones_internas,
+          )}
           disponibilidad={rInstallation.disponibilidad_promedio_porcentage}
           onNameShowModal={() =>
             openInNewTab(
@@ -123,41 +128,47 @@ class DetailReport extends Component<DetReportProps, DetReportState> {
     );
   };
 
-  _render_entity_report = (entity: EntityReport) => {
+  _render_description = (entity: EntityReport) => {
     return (
-      <Card key={entity.entidad_nombre} className="dr-container" border="dark">
+      <div className="dr-description">
+        <span>
+          <Circle
+            strokeWidth={15}
+            className="dr-ponderacion"
+            percent={entity.ponderacion * 100}
+            strokeColor="#2db7f5"
+            trailColor="gray"
+            trailWidth={15}
+          />
+        </span>
+        <span className="dr-entity-type">{entity.entidad_tipo}:</span>
+        <span
+          className="dr-entity-name"
+          data-tip={this._tooltip(entity.ponderacion * 100, entity.numero_tags)}
+          data-html={true}
+        >
+          {entity.entidad_nombre}
+        </span>
+        <ReactTooltip />
+      </div>
+    );
+  };
+
+  _render_entity_report = (entity: EntityReport, ix: number) => {
+    console.log("-------->", entity);
+    return (
+      <Card
+        id={entity.document_id + ix}
+        key={entity.document_id}
+        className="dr-container"
+        border="dark"
+      >
         <Card.Header
           className={"dr-entity-header"}
           onClick={() => this._open_close(entity.entidad_nombre)}
         >
-          <span>
-            <Circle
-              strokeWidth={15}
-              className="dr-ponderacion"
-              percent={entity.ponderacion * 100}
-              strokeColor="#2db7f5"
-              trailColor="gray"
-              trailWidth={15}
-            />
-          </span>
-          <span className="dr-entity-type">{entity.entidad_tipo}:</span>{" "}
-          <span
-            className="dr-entity-name"
-            data-tip={this._tooltip(
-              entity.ponderacion * 100,
-              entity.numero_tags,
-            )}
-            data-html={true}
-          >
-            {entity.entidad_nombre}
-          </span>
-          <ReactTooltip />
-          <span className="dr-entity-disp">
-            {formatPercentage(
-              entity.disponibilidad_promedio_ponderada_porcentage,
-              3,
-            ) + " %"}
-          </span>
+          {this._render_description(entity)}
+          <ConsignmentsAndPercentage entity={entity} />
         </Card.Header>
         <CardGroup
           className={
@@ -212,8 +223,8 @@ class DetailReport extends Component<DetReportProps, DetReportState> {
           {this.props.report.reportes_entidades === undefined ? (
             <></>
           ) : (
-            this.props.report.reportes_entidades.map((entity) =>
-              this._render_entity_report(entity),
+            this.props.report.reportes_entidades.map((entity, ix) =>
+              this._render_entity_report(entity, ix),
             )
           )}
         </CardGroup>

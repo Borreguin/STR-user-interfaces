@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import { Styled } from "direflow-component";
 import styles from "./App.css";
 import bootstrap from "bootstrap/dist/css/bootstrap.min.css";
-import { Alert, Button, Tab, Tabs } from "react-bootstrap";
+import { Button, Tab, Tabs } from "react-bootstrap";
 import { V2SRNodesFilter } from "../Common/FilterNodesV2/V2SRNodesFilter";
 import { ConsignmentFormV2 } from "../Common/ConsignmentFormV2/ConsignmentFormV2";
 import {
@@ -28,7 +28,7 @@ export const getSelectedButtonLabel = (selectedValues: any, label: string) => {
   return undefined;
 };
 
-export function ConsignmentManagementV2(action: string) {
+export function ConsignmentManagementV2() {
   const [selectedValues, setSelectedValues] = useState({});
   const [toReload, setToReload] = useState(false);
   const [toConsignment, setToConsignment] = useState(undefined);
@@ -215,16 +215,12 @@ export function ConsignmentManagementV2(action: string) {
               selectedType={selectedType}
               headerLabel={formDescription}
               buttonLabel={buttonLabel()}
+              msg={msg}
               onSubmit={onSubmit}
               onBahiaSelection={(bahias: v2Bahia[]) =>
                 setSelectedBahias(bahias)
               }
             />
-            {!msg ? (
-              <></>
-            ) : (
-              <Alert variant={success ? "info" : "warning"}>{msg}</Alert>
-            )}
           </div>
         </div>
       </div>

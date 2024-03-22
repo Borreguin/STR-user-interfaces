@@ -1,6 +1,7 @@
 import { Consignment } from "../../../Common/GeneralTypes";
 
 export type Report = {
+  numero_consignaciones: number;
   disponibilidad_promedio_ponderada_porcentage: number;
   disponibilidad_promedio_porcentage: number;
   fecha_final: string;
@@ -43,6 +44,7 @@ export type Procesamiento = {
 };
 
 export type SummaryReport = {
+  numero_consignaciones: number | null;
   id_node: string;
   id_report: string;
   actualizado: string;
@@ -92,6 +94,9 @@ export type NodeReport = {
 };
 
 export type EntityReport = {
+  consignaciones_internas?: Array<Consignment>;
+  consignaciones?: Array<Consignment>;
+  disponibilidad_promedio_porcentage: number;
   reportes_instalaciones: Array<InstallationReport>;
   entidad_nombre: string;
   entidad_tipo: string;
@@ -118,6 +123,7 @@ export type reporte_utr = {
 };
 
 export type InstallationReport = {
+  numero_bahias_procesadas: number;
   consignaciones_internas: Array<Consignment>;
   periodo_efectivo_minutos: number;
   numero_consignaciones_internas: number;

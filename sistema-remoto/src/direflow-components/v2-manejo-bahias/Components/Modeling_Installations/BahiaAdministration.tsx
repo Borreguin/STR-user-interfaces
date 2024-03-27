@@ -18,6 +18,7 @@ export function BahiaAdministration(props) {
     bahia_nombre: undefined,
     voltaje: undefined,
     activado: undefined,
+    tags: [],
   });
 
   useEffect(() => {

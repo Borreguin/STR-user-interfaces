@@ -77,6 +77,12 @@ class DetailReport extends Component<DetReportProps, DetReportState> {
     this.setState({ open: open });
   };
 
+  _handle_close = (entidad_nombre: string) => {
+    let open = this.state.open;
+    open[entidad_nombre] = true;
+    this.setState({ open: open });
+  };
+
   _render_utr_report = (utr: reporte_utr, ix: number) => {
     return (
       <div id={ix + utr.id_utr} key={ix} className={"small-card-container"}>
@@ -155,7 +161,6 @@ class DetailReport extends Component<DetReportProps, DetReportState> {
   };
 
   _render_entity_report = (entity: EntityReport, ix: number) => {
-    console.log("-------->", entity);
     return (
       <Card
         id={entity.document_id + ix}
@@ -168,7 +173,10 @@ class DetailReport extends Component<DetReportProps, DetReportState> {
           onClick={() => this._open_close(entity.entidad_nombre)}
         >
           {this._render_description(entity)}
-          <ConsignmentsAndPercentage entity={entity} />
+          <ConsignmentsAndPercentage
+            entity={entity}
+            onConsignmentClick={() => this._handle_close(entity.entidad_nombre)}
+          />
         </Card.Header>
         <CardGroup
           className={

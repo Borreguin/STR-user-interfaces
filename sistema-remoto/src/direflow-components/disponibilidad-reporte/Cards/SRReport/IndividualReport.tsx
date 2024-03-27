@@ -284,7 +284,7 @@ class IndividualReport extends Component<IndReportProps, IndReportState> {
 
   _download_log = (node_name) => {
     let file_name = node_name + ".log";
-    let url = `${SRM_API_URL}/files/file/output/${file_name}?nid=${_.uniqueId(
+    let url = `${SRM_API_URL}/files/-/file/OUTPUT_MOTOR/${file_name}?nid=${_.uniqueId(
       Math.random(),
     )}`;
     fetch(url).then((response) => {

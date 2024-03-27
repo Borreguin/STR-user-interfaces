@@ -4,13 +4,13 @@ import { InstallationEdit } from "./InstallationEdit";
 import { InstallationRemove } from "./InstallationRemove";
 import { InstallationCreate } from "./InstallationCreate";
 import { BahiaList } from "./BahiaList";
+import { TagManager } from "../../../Common/TagManager/TagManager";
 
 export function InstallationActionContainer(props: any) {
   const { selectedValues, requestReload } = props;
-
   return (
     <Tabs
-      defaultActiveKey="admin-bahias"
+      defaultActiveKey="admin-tags"
       id="uncontrolled-installation-tab"
       className="mb-3"
       transition={false}
@@ -44,6 +44,14 @@ export function InstallationActionContainer(props: any) {
             requestReload={requestReload}
             selectedInstallation={selectedValues.selectedInstallation}
           ></BahiaList>
+        )}
+      </Tab>
+      <Tab eventKey="admin-tags" title="Administrar Tags">
+        {selectedValues?.selectedInstallation && (
+          <TagManager
+            selectedValues={selectedValues}
+            requestReload={requestReload}
+          ></TagManager>
         )}
       </Tab>
     </Tabs>

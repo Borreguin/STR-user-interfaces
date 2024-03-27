@@ -6,7 +6,6 @@ import { getDescriptionBahia } from "../../../Common/common-util";
 export function BahiaList(props) {
   const { selectedInstallation, requestReload } = props;
   const { bahias } = selectedInstallation;
-  console.log("BahiaList", bahias.length);
 
   const [bahiaSeleccionada, setBahiaSeleccionada] = useState(null);
   const [loading, setLoading] = useState(true);

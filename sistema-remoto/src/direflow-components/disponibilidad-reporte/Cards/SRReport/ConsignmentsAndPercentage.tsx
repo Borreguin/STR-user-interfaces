@@ -7,10 +7,11 @@ import { Consignment } from "../../../Common/GeneralTypes";
 
 type ComponentProps = {
   entity: EntityReport;
+  onConsignmentClick: Function;
 };
 
 export const ConsignmentsAndPercentage = (props: ComponentProps) => {
-  const { entity } = props;
+  const { entity, onConsignmentClick } = props;
   const [consignments, setConsignments] = React.useState<Array<Consignment>>(
     [],
   );
@@ -48,7 +49,10 @@ export const ConsignmentsAndPercentage = (props: ComponentProps) => {
             title={`Consignaciones de ${entity.entidad_tipo} ${entity.entidad_nombre}`}
             consignments={consignments}
             show={showConsignments}
-            onClose={() => setShowConsignments(false)}
+            onClose={() => {
+              setShowConsignments(false);
+              onConsignmentClick();
+            }}
           />
         </div>
       ) : (

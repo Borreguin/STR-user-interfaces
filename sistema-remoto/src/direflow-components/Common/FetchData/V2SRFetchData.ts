@@ -13,7 +13,9 @@ import {
   installationApiUrl,
   nodeApiUrl,
   overviewReportApiUrl,
+  searchTagsApiUrl,
   statusReportApiUrl,
+  tagValuesApiUrl,
 } from "../FilterNodesV2/constants";
 import {
   BahiaResponse,
@@ -25,9 +27,10 @@ import {
   ReportStartResponse,
   SimpleResponse,
   StatusReportResponse,
+  TagValuesResponse,
 } from "./model";
 import { v2Bahia, v2Installation } from "../V2GeneralTypes";
-import { ConsignmentRequest } from "../GeneralTypes";
+import { ConsignmentRequest, TAG } from "../GeneralTypes";
 import { IdsRequest } from "./requestModel";
 
 export const getAllNodeInfo = async (): Promise<NodeResponse> => {
@@ -190,4 +193,22 @@ export const deleteNodeReport = async (
     `${overviewReportApiUrl}${range}`,
     idsRequest,
   )) as unknown as ReportStartResponse;
+};
+
+export const getTagValues = async (
+  tagList: Array<TAG>,
+): Promise<TagValuesResponse> => {
+  return (await fetchPOSTData(tagValuesApiUrl, {
+    tags: tagList,
+  })) as unknown as TagValuesResponse;
+};
+
+export const searchTags = async (
+  search: string,
+  regex: string,
+): Promise<TagValuesResponse> => {
+  const uri = `${searchTagsApiUrl}/${search}`;
+  return (await fetchPOSTData(uri, {
+    regex,
+  })) as unknown as TagValuesResponse;
 };

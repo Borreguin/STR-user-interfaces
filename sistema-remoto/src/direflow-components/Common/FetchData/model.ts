@@ -3,6 +3,7 @@ import {
   NodeReport,
   StatusReport,
 } from "../../disponibilidad-reporte/Cards/SRReport/Report";
+import { TagValue } from "../GeneralTypes";
 
 export type SimpleResponse = {
   success: boolean;
@@ -54,4 +55,10 @@ export type ReportStartResponse = {
   success: boolean;
   msg: string;
   report_id: string;
+};
+
+export type TagValuesResponse = {
+  success: boolean;
+  msg: string;
+  tags: Array<TagValue>;
 };

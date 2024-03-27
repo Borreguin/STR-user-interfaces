@@ -49,6 +49,7 @@ export type SelectedID = {
 };
 
 export type InstallationElement = {
+  _id?: string;
   instalacion_tipo: string;
   instalacion_nombre: string;
   instalacion_ems_code: string;
@@ -80,6 +81,7 @@ export type EntityElement = {
 };
 
 export type BahiaElement = {
+  tags?: Array<TAG>;
   bahia_nombre: string;
   bahia_tipo: string;
   bahia_code: string;
@@ -122,4 +124,11 @@ export type ConsignmentRequest = {
   fecha_inicio: string;
   fecha_final: string;
   element_info: ConsignmentDetail;
+};
+
+export type TagValue = {
+  id: string;
+  name: string;
+  value: number | string | null;
+  timestamp: string;
 };

@@ -302,3 +302,90 @@
   max-width: 40%!important;
   margin: 7px;
 }
+
+.chk-section{
+  overflow: scroll;
+  border: 1px solid rgb(0, 0, 0) !important;
+  padding: 7px;
+  height: 400px;
+  min-width:330px;
+}
+
+.chk-values{
+  font-size: 10pt !important;
+  max-width: 350px;
+}
+
+.check-boxes-container
+{
+  display: flex;
+  justify-content: space-evenly;
+  width: 100%;
+  margin-top: 20px;
+}
+
+.direction-button{
+  margin: 5px;
+  min-width: 40px;
+}
+
+.centralbutton{
+  margin: 5px;
+  width: 100%;
+}
+
+.buttons-direction{
+  display: flex;
+  flex-direction: column;
+  justify-content: start;
+    align-items: center;
+}
+
+.chk-buttons{
+  margin: 5px;
+}
+
+.chk-button-container{
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.chk-search-section{
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.filter-container{
+  display: flex;
+}
+
+.select-bahia{
+  min-width: 200px;
+  max-width: 250px;
+  margin: 7px;
+}
+
+.btns-cotainer{
+  display: flex;
+  justify-content: space-evenly;
+  align-items: center;
+}
+
+.filter-input{
+  margin: 5px;
+  max-width: 400px;
+}
+
+.chk-title{
+  font-weight: bold;
+  margin-top: 20px;
+  margin-left: 5px;
+}
+
+.ft-bahia-selector{
+  display: flex;
+    justify-content: start;
+    align-items: center;
+}

@@ -19,3 +19,6 @@ export const detailedNodeReportByIdApiUrl =
   SRM_API_URL + "/disp-sRemoto/disponibilidad/nodo/report-id/";
 
 export const overviewReportApiUrl = `${SRM_API_URL}/disp-sRemoto/disponibilidad/nodos/`;
+export const tagValuesApiUrl = `${SRM_API_URL}/admin-sRemoto/v2/tags/values`;
+
+export const searchTagsApiUrl = `${SRM_API_URL}/admin-sRemoto/v2/tags/search`;

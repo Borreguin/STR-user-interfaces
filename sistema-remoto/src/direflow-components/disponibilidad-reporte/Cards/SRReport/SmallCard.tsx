@@ -46,11 +46,11 @@ export const SmallCard = (props: SmallCardProps) => {
     }
   };
 
-  const handleOnClickConsignments = () => {
-    if (n_bahias > 0 && consignaciones.length > 0) {
-      onNameShowModal();
-    }
-  };
+  // const handleOnClickConsignments = () => {
+  //   if (n_bahias > 0 && consignaciones.length > 0) {
+  //     onNameShowModal();
+  //   }
+  // };
 
   return (
     <div className="dr-utr-body">

@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { BahiaElement, selectedElements, TAG } from "../GeneralTypes";
+import { BahiaElement, selectedElements } from "../GeneralTypes";
 import { Button, Card, Col, Form, Row } from "react-bootstrap";
 import { searchTags } from "../FetchData/V2SRFetchData";
 import { CheckBoxMapType } from "./CheckBoxSection";

@@ -7,6 +7,7 @@ import { TypeAndNameOptions, TypeNameSelector } from "./TypeNameSelector";
 import { SelectOption } from "./model";
 import { v2Entity, v2Installation, v2Node } from "../V2GeneralTypes";
 import { getOptions } from "./utils";
+import { selection } from "../../v2-common/constants";
 
 const renderLoading = (msg: string) => {
   return (
@@ -205,6 +206,7 @@ const V2SRNodesFilterComponent = (props: V2SRNodesFilterProps) => {
             selectedNode,
             selectedEntity,
             selectedInstallation: _installation,
+            [selection.nodes]: nodes,
           });
         }
       }
@@ -220,6 +222,7 @@ const V2SRNodesFilterComponent = (props: V2SRNodesFilterProps) => {
       selectedNode,
       selectedEntity,
       selectedInstallation: installation,
+      [selection.nodes]: nodes,
     });
   };
 

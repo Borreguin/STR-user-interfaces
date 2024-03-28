@@ -3,6 +3,7 @@ export enum selection {
   entity = "selectedEntity",
   installation = "selectedInstallation",
   bahia = "selectedBahia",
+  nodes = "Nodos EMS",
 }
 
 export enum nameProperty {
@@ -10,6 +11,7 @@ export enum nameProperty {
   entity_name = "entidad_nombre",
   installation_name = "instalacion_nombre",
   bahia_name = "bahia_nombre",
+  nodes_name = "EMS",
 }
 
 export enum typeProperty {

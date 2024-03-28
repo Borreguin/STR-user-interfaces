@@ -2,11 +2,7 @@ import React, { useEffect, useState } from "react";
 import { CheckBoxMapType, CheckBoxSection } from "./CheckBoxSection";
 import { ButtonSection } from "./ButtonSection";
 import { selectedElements, TAG } from "../GeneralTypes";
-import {
-  editBahia,
-  getTagValues,
-  searchTags,
-} from "../FetchData/V2SRFetchData";
+import { editBahia, getTagValues } from "../FetchData/V2SRFetchData";
 import { TagValuesResponse } from "../FetchData/model";
 import { FilterOptions } from "./FilterOptions";
 import { filterExpression } from "./constants";
@@ -15,12 +11,6 @@ interface TagManagerProps {
   selectedValues: selectedElements;
   requestReload?: Function;
 }
-
-type bahiaOption = {
-  bahia_code: string;
-  bahia_nombre: string;
-};
-
 export function TagManager(props: TagManagerProps) {
   const { selectedValues, requestReload } = props;
   const bahias = selectedValues.selectedInstallation.bahias;

@@ -10,6 +10,8 @@ export const getNameProperty = (_type: string) => {
       return nameProperty.installation_name;
     case selection.bahia:
       return nameProperty.bahia_name;
+    case selection.nodes:
+      return nameProperty.nodes_name;
   }
 };
 
@@ -26,9 +28,13 @@ export const getTypeProperty = (_type: string) => {
 
 export const getDescription = (values: any, _type: string) => {
   if (!values) return "";
-  const type = values[getTypeProperty(_type)];
-  const name = values[getNameProperty(_type)];
-  return `${type} ${name}`;
+  if (values[getTypeProperty(_type)] && values[getNameProperty(_type)]) {
+    const type = values[getTypeProperty(_type)];
+    const name = values[getNameProperty(_type)];
+    return `${type} ${name}`;
+  } else {
+    return _type;
+  }
 };
 
 export const getElementId = (element: any) => {

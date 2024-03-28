@@ -1,4 +1,4 @@
-import { v2Bahia } from "./V2GeneralTypes";
+import { v2Bahia, v2Node } from "./V2GeneralTypes";
 import { BahiaElement } from "./GeneralTypes";
 
 export const formatPercentage = (percentage: number, n: number) => {
@@ -16,6 +16,10 @@ export const getDescriptionBahia = (bahia: v2Bahia) => {
     return `${bahia.bahia_nombre}`;
   }
   return `${bahia.voltaje} - ${bahia.bahia_nombre}`;
+};
+
+export const getDescriptionNode = (node: v2Node) => {
+  return `${node.tipo} - ${node.nombre}`;
 };
 
 export const getElementValues = (selectedValue: any) => {

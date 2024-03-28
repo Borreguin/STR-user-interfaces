@@ -9,9 +9,9 @@ import { InstallationActionContainer } from "./Components/Modeling_Installations
 export function InstallationAndBahiasManagement() {
   const [selectedValues, setSelectedValues] = useState({});
   const [toReload, setToReload] = useState(false);
-  const requestReload = () => {
-    setToReload(true);
-  };
+  // const requestReload = () => {
+  //   setToReload(true);
+  // };
 
   return (
     <Styled styles={[styles, bootstrap]} scoped={false}>
